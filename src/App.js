@@ -1,17 +1,26 @@
-import './App.css';
-import TopHeader from './TopHeader';
-import StartButton from './StartButton';
+import React, { Component } from 'react';
+import TopHeader from './components/TopHeader';
+import StartButton from './components/StartButton';
+import MapBox from './components/MapBox';
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <TopHeader
-      gameMode="RUNNING"
-      >
-      </TopHeader>
-      <StartButton></StartButton>
-    </div>
-  );
+
+class App extends Component {
+
+  render(){
+    return (
+      <div>
+        <div className="App">
+          <TopHeader
+          gameMode="RUNNING"
+          >
+          </TopHeader>
+          <StartButton></StartButton>
+        </div>
+        <MapBox></MapBox>
+      </div>
+    )
+  }
 }
 
 export default App;
