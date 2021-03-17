@@ -86,43 +86,6 @@ const map = new mapboxgl.Map({
   localIdeographFontFamily: "'Noto Sans CJK JP', 'Noto Sans', sans-serif"
 });
 
-function setupGeoLine() {
-  map.addSource('route', {
-    'type': 'geojson',
-    'data': {
-      'type': 'Feature',
-      'properties': {},
-      'geometry': {
-        'type': 'LineString',
-        'coordinates': []
-      }
-    }
-  });
-  map.addLayer({
-    'id': 'route',
-    'type': 'line',
-    'source': 'route',
-    'layout': {
-      'line-join': 'round',
-      'line-cap': 'round'
-    },
-    'paint': {
-      'line-color': '#888',
-      'line-width': 4
-    }
-  });
-}
-
-function updateGeoLine(coordinates) {
-  map.getSource('route').setData({
-    'type': 'Feature',
-    'properties': {},
-    'geometry': {
-      'type': 'LineString',
-      'coordinates': coordinates
-    }
-  });
-}
 
 function onGeolocate(pos) {
   userTrack.addGeolocate(pos);
@@ -141,3 +104,19 @@ map.on('load', () => {
   </div>
 </body>
 </html>
+
+バックエンド(今までのログ確認時のみ？)
+↓
+緯度軽度の二次元配列を受け取って地図に描画する
+↑
+位置情報を取得して二次元配列に保存&DBに保存する(フロント)
+
+
+displayRouteLog みたいな関数にわける
+
+array
+
+displayRouteLog(array)
+
+setupgeoLine のみに統合して
+更新した配列をぽんぽんなげれば同じ動作になるはず
