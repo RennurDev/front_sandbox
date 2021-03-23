@@ -7,6 +7,8 @@ import initializeGeoLine from '../functions/InitializeGeoLine';
 
 // アクセストークン
 // TODO: env系で管理する
+// mapboxgl.accessToken = 'pk.eyJ1IjoiaGF0YWtlNTExNTIyIiwiYSI6ImNrbTA5OHA2bDBxOGwycHE3aGc4NG0zMHcifQ.FzXi8T5KcCXCqMjGBTnV7A'; // 自分の
+mapboxgl.accessToken = 'pk.eyJ1IjoiaXNub3QiLCJhIjoiY2tkemV4MnR2MXRyMDJ4a2pzd2h1eHg1ayJ9.ALgtUeaHBDuvqvOR7008vA';
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
