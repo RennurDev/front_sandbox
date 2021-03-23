@@ -3,10 +3,10 @@ import mapboxgl from 'mapbox-gl'
 import '../App.css'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import drawGeoLine from '../functions/DrawGeoLine';
+import initializeGeoLine from '../functions/InitializeGeoLine';
 
 // アクセストークン
 // TODO: env系で管理する
-mapboxgl.accessToken = 'pk.eyJ1IjoiaGF0YWtlNTExNTIyIiwiYSI6ImNrbTA5OHA2bDBxOGwycHE3aGc4NG0zMHcifQ.FzXi8T5KcCXCqMjGBTnV7A';
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
@@ -14,12 +14,6 @@ const geolocate = new mapboxgl.GeolocateControl({
   },
   trackUserLocation: true // ユーザの位置情報追跡
 });
-
-
-// function onGeolocate(pos) {
-//   userTrack.addGeolocate(pos);
-//   updateGeoLine(userTrack.getUserTrack());
-// }
 
 
 export default class MapBox extends Component {
@@ -47,6 +41,7 @@ export default class MapBox extends Component {
     const elapseTime = this.previous_location !== undefined ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
 
     if (this.previous_location === undefined) {
+      console.log(geolocate)
       this._add(geolocate) // 測り始め
       this.previous_location = geolocate;
     } else if (elapseTime > this.min_duration) {
@@ -66,7 +61,10 @@ export default class MapBox extends Component {
   }
   
   onGeolocate(position) {
-    console.log(this);
+    console.log(this.history.length);
+    if(this.history.length === 0) {
+      initializeGeoLine(this.map)
+    }
     this.addGeolocate(position)
     drawGeoLine(this.history, this.map)
   }
@@ -74,6 +72,7 @@ export default class MapBox extends Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
+      center: [-96, 37.8],
       style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
       zoom: 8 // おそらく
     })
