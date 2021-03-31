@@ -7,19 +7,18 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "gulp": "^4.0.2",
     "history": "^5.0.0",
     "mapbox-gl": "^2.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "4.0.2",
-    "web-vitals": "^1.0.1"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
-    "start": "node server/server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eject": "react-scripts eject",
-    "postinstall": "gulp browserify"
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -38,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "web-vitals": "^1.1.1"
   }
 }

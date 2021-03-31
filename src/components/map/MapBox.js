@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl'
-import '../App.css'
 import 'mapbox-gl/dist/mapbox-gl.css';
-import drawGeoLine from '../lib/DrawGeoLine';
-import initializeGeoLine from '../lib/InitializeGeoLine';
+import drawGeoLine from '../../lib/DrawGeoLine';
+import initializeGeoLine from '../../lib/InitializeGeoLine';
 
 // アクセストークン
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ANOTHER_API_KEY;
