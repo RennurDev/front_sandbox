@@ -4,7 +4,7 @@ export default class Profile extends Component {
   render() {
     return(
       <div>
-        <p>this is profile content</p>
+        <p>I AM NAKAMURA TAIKI</p>
       </div>
     )
   }
