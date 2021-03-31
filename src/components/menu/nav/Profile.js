@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { Button } from '@material-ui/core';
 
 export default class Profile extends Component {
   render() {
     return(
       <div>
-        <button>profile</button>
+        <Button color="secondary" fullWidth="true">
+          profile
+        </Button>
       </div>
     )
   }
