@@ -37,7 +37,7 @@ export default class MapBox extends Component {
 
   _add(geolocate) {
     if (this._hasProperty(geolocate, 'timestamp')) {
-      console.log(geolocate)
+      //console.log(geolocate)
       this.history.push([geolocate.coords.longitude, geolocate.coords.latitude])
     }
   }
@@ -46,7 +46,7 @@ export default class MapBox extends Component {
     const elapseTime = this.state.isStarted !== false ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
 
     if (this.state.isStarted) {
-      console.log(geolocate)
+      //console.log(geolocate)
       this._add(geolocate) // 測り始め
       this.previous_location = geolocate;
     } else if (elapseTime > this.min_duration) {
@@ -69,6 +69,7 @@ export default class MapBox extends Component {
     console.log(this.history.length);
     if(this.history.length === 0) {
       initializeGeoLine(this.map)
+      this.previous_location = position;
     }
     this.addGeolocate(position)
     drawGeoLine(this.history, this.map)
