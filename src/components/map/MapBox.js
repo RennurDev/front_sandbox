@@ -10,7 +10,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ANOTHER_API_KEY;
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
-    enableHighAccuracy: false // 高精度な位置情報取得
+    enableHighAccuracy: true // 高精度な位置情報取得
   },
   trackUserLocation: true // ユーザの位置情報追跡
 });
@@ -77,7 +77,7 @@ export default class MapBox extends Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      center: [23, 37.8],
+      center: [-96, 37.8],
       style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
       zoom: 8 // おそらく
     })
