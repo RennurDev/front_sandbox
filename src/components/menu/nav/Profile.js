@@ -5,7 +5,7 @@ export default class Profile extends Component {
   render() {
     return(
       <div>
-        <Button color="secondary" fullWidth="true">
+        <Button color="secondary" fullWidth={true}>
           profile
         </Button>
       </div>

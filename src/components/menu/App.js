@@ -18,7 +18,7 @@ export default class App extends Component {
   
   render() {
     let {selectedContent} = this.state;
-    const selectProfile = () => this.setState({ selectedContent: 'Profile' })
+    const selectProfile = () => this.setState({selectedContent: 'Profile'})
     const selectLogs = () => this.setState({selectedContent: 'Logs'})
     return(
       <div>

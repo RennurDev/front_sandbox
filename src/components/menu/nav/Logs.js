@@ -5,7 +5,7 @@ export default class Logs extends Component {
   render() {
     return(
       <div>
-        <Button color="primary" fullWidth="true">
+        <Button color="primary" fullWidth={true}>
           logs
         </Button>
       </div>
