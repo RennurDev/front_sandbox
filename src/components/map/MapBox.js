@@ -3,13 +3,14 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import drawGeoLine from '../../lib/DrawGeoLine';
 import initializeGeoLine from '../../lib/InitializeGeoLine';
+import RecordTrigger from './RecordTrigger';
 
 // アクセストークン
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ANOTHER_API_KEY;
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
-    enableHighAccuracy: true // 高精度な位置情報取得
+    enableHighAccuracy: false // 高精度な位置情報取得
   },
   trackUserLocation: true // ユーザの位置情報追跡
 });
@@ -20,7 +21,8 @@ export default class MapBox extends Component {
     super(props)
     this.state = {
       history: [],
-      area: ''
+      area: '',
+      isStarted: false,
     }
     this.history = []
     this.previous_location = undefined
@@ -41,9 +43,9 @@ export default class MapBox extends Component {
   }
   
   addGeolocate(geolocate) {
-    const elapseTime = this.previous_location !== undefined ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
+    const elapseTime = this.state.isStarted !== false ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
 
-    if (this.previous_location === undefined) {
+    if (this.state.isStarted) {
       console.log(geolocate)
       this._add(geolocate) // 測り始め
       this.previous_location = geolocate;
@@ -75,10 +77,11 @@ export default class MapBox extends Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      center: [-96, 37.8],
+      center: [23, 37.8],
       style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
       zoom: 8 // おそらく
     })
+ 
     this.map.addControl(geolocate);
     geolocate.on('geolocate', this.onGeolocate);
   }
@@ -88,9 +91,19 @@ export default class MapBox extends Component {
   }
   
   render() {
-     return (
+    let isStarted = this.state.isStarted
+    const btnContent = isStarted ? 'RECORD' : 'START'
+    const btnColor = !isStarted ? 'primary' : 'secondary'
+    const selectBtn = () => this.setState({isStarted: !this.state.isStarted})
+    return (
         <div>
           <div className={'mapContainer'} ref={e => this.mapContainer = e}/>
+          <RecordTrigger 
+            onClick={selectBtn}
+            btnContent={btnContent}
+            btnColor={btnColor}
+          >
+          </RecordTrigger>
         </div>
      )
   }
