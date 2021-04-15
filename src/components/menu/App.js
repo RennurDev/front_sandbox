@@ -1,47 +1,47 @@
 import React, { Component } from 'react';
-import Profile from './nav/Profile';
-import Logs from './nav/Logs';
+// import Profile from './nav/Profile';
+// import Logs from './nav/Logs';
 
 import ProfileContent from './content/Profile';
 import LogsContent from './content/Logs';
 
-import Grid from '@material-ui/core/Grid';
+import { //Grid,
+        BottomNavigation,
+        BottomNavigationAction,
+ } from '@material-ui/core';
+
+import PersonIcon from '@material-ui/icons/Person';
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 export default class App extends Component {
   constructor(props){
     super(props);
 
     this.state = {
-      selectedContent: '',
+      value: '',
     }
   }
   
   render() {
-    let {selectedContent} = this.state;
-    const selectProfile = () => this.setState({selectedContent: 'Profile'})
-    const selectLogs = () => this.setState({selectedContent: 'Logs'})
+    const { value } = this.state;
+    const handleChange = (event, value) => {
+      this.setState({ value });
+    };
     return(
       <div>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <div onClick={selectProfile}>
-              <Profile></Profile>
-            </div>
-          </Grid>
-          <Grid item xs={6}>
-            <div onClick={selectLogs}>
-              <Logs></Logs>
-            </div>
-          </Grid>
-        </Grid>
+        <BottomNavigation value={ value } onChange={handleChange}>
+          <BottomNavigationAction label="Profile" value="Profile" icon={<PersonIcon />} />
+          <BottomNavigationAction label="Logs" value="Logs" icon={<TimelineIcon />} />
+        </BottomNavigation>
 
-        {selectedContent === 'Profile' ? 
+        {this.state.value === 'Profile' ? 
          <ProfileContent></ProfileContent>
          : 
-         selectedContent === 'Logs' 
+         this.state.value === 'Logs' 
          ? <LogsContent></LogsContent> 
          : 
          null}
+        
       </div>
     )
   }
