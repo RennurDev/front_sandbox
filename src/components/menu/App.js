@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
-// import Profile from './nav/Profile';
-// import Logs from './nav/Logs';
-
 import ProfileContent from './content/Profile';
 import LogsContent from './content/Logs';
-
-import { //Grid,
-        BottomNavigation,
-        BottomNavigationAction,
- } from '@material-ui/core';
-
-import PersonIcon from '@material-ui/icons/Person';
-import TimelineIcon from '@material-ui/icons/Timeline';
+import Navigation from './nav/Navigation';
 
 export default class App extends Component {
   constructor(props){
@@ -23,16 +13,13 @@ export default class App extends Component {
   }
   
   render() {
-    const { value } = this.state;
-    const handleChange = (event, value) => {
+    const { value } = this.state; //これ{}無いと動かん理由わからん
+    const handleChange = (event, value) => { //eventも引数に必要な理由？
       this.setState({ value });
     };
     return(
       <div>
-        <BottomNavigation value={ value } onChange={handleChange}>
-          <BottomNavigationAction label="Profile" value="Profile" icon={<PersonIcon />} />
-          <BottomNavigationAction label="Logs" value="Logs" icon={<TimelineIcon />} />
-        </BottomNavigation>
+        <Navigation value={ value } handleChange = { handleChange }/>
 
         {this.state.value === 'Profile' ? 
          <ProfileContent></ProfileContent>
