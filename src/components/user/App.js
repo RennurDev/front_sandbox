@@ -78,7 +78,26 @@ class App extends Component {
       .catch((error) => {
         console.log(error)
       })
-}
+  }
+  
+  handleDestroy() {
+    let body = {
+      user: {
+        id: this.state.form.id
+      }
+    }
+    let id = this.state.form.id
+    const url = RAILS_API_ENDPOINT + '/users/' + id
+    axios
+      .delete(url, body)
+      .then((results) => {
+        const data = results.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   render(){
     const {state} = this.state
     return (
@@ -132,6 +151,21 @@ class App extends Component {
                 color="secondary" fullWidth={true}
               >
                 UPDATE
+              </Button>
+            </Grid>
+            {/* ユーザー削除 */}
+            <Grid item xs={2}>
+              <TextField value={this.state.form.id}
+                onChange={e=>this.handleChange(e, 'id')} 
+              />
+            </Grid>
+            <Grid itm xs={3}>
+              <Button
+                onClick={() => this.handleDestroy()}
+                variant="outlined"
+                color="danger" fullWidth={true}
+              >
+                DELETE
               </Button>
             </Grid>
           </Grid>
