@@ -20,7 +20,6 @@ export default class MapBox extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      history: [],
       area: '',
       isStarted: false,
     }
@@ -29,6 +28,7 @@ export default class MapBox extends Component {
     this.min_duration = 2
 
     this.onGeolocate = this.onGeolocate.bind(this) // これないと動かない
+    this.onClick = this.onClick.bind(this);
   }
 
   _hasProperty(obj, prop) {
@@ -64,6 +64,24 @@ export default class MapBox extends Component {
     }
     return t
   }
+
+  onClick() {
+    let isStarted = this.state.isStarted
+    console.log(isStarted);
+
+    if(isStarted) { //Record時の処理
+      console.log(this.history);
+      //responseが帰ってきたらhistoryを初期化
+      if (true) {
+        this.history = []
+      }
+    } else { //Start時の処理
+      //ここで描画レイヤーの初期化
+      console.log(this.history);
+    }
+
+    this.setState({isStarted: !isStarted})
+  }
   
   onGeolocate(position) {
     console.log(this.history.length);
@@ -95,12 +113,12 @@ export default class MapBox extends Component {
     let isStarted = this.state.isStarted
     const btnContent = isStarted ? 'RECORD' : 'START'
     const btnColor = !isStarted ? 'primary' : 'secondary'
-    const selectBtn = () => this.setState({isStarted: !this.state.isStarted})
+    const onClick = this.onClick
     return (
         <div>
           <div className={'mapContainer'} ref={e => this.mapContainer = e}/>
           <RecordTrigger 
-            onClick={selectBtn}
+            onClick={onClick}
             btnContent={btnContent}
             btnColor={btnColor}
           >

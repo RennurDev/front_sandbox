@@ -1,4 +1,9 @@
 export default function InitializeGeoLine(map) {
+  try { //既にSource, Layerが作成されていた場合の処理。
+      map.removeLayer('route');
+      map.removeSource('route');
+  } catch(e) {}
+
   map.addSource('route', {
     'type': 'geojson',
     'data': {
