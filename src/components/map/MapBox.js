@@ -20,7 +20,6 @@ export default class MapBox extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      //history: [],
       area: '',
       isStarted: false,
     }
