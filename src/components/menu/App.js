@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProfileContent from './content/Profile';
-import LogsContent from './content/Logs';
+import TracksContent from './content/Tracks';
+import SettingContent from './content/Setting';
 import Navigation from './nav/Navigation';
 
 export default class App extends Component {
@@ -24,10 +25,14 @@ export default class App extends Component {
         {this.state.value === 'Profile' ? 
          <ProfileContent></ProfileContent>
          : 
-         this.state.value === 'Logs' 
-         ? <LogsContent></LogsContent> 
-         : 
-         null}
+         this.state.value === 'Tracks' ?
+         <TracksContent></TracksContent> 
+         :
+         this.state.value === 'Setting' ?
+         <SettingContent></SettingContent>
+         :
+         null
+        }
         
       </div>
     )
