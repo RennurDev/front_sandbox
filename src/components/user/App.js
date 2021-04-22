@@ -20,15 +20,10 @@ class App extends Component {
 
   componentDidMount() { 
     axios
-      .get(RAILS_API_ENDPOINT+'/users')
+      .get(RAILS_API_ENDPOINT + '/users')
       .then((results) => {
         const data = results.data
-        console.log(data)
         this.setState({lists: data})
-        // this.setState({
-        //   name: data.name,
-        //   createdAt: data.created_at
-        // })
       })
       .catch((error) => {
         console.log(error);
@@ -47,13 +42,16 @@ class App extends Component {
   }
 
   handleCreate() {
-    let body = {user:{name: this.state.form.name}}
-    console.log(body)
+    let body = {
+      user:{
+        name: this.state.form.name
+      }
+    }
+    const url = RAILS_API_ENDPOINT + '/users'
     axios
-      .post(RAILS_API_ENDPOINT+'/users', body)
+      .post(url, body)
       .then((results) => {
         const data = results.data
-        console.log(data)
       })
       .catch((error) => {
         console.log(error);
@@ -69,7 +67,6 @@ class App extends Component {
     }
     let id = this.state.form.id
     const url = RAILS_API_ENDPOINT + '/users/'+ id
-    console.log(url)
     axios
       .put(url, body)
       .then((results) => {
@@ -99,7 +96,6 @@ class App extends Component {
   }
 
   render(){
-    const {state} = this.state
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -170,7 +166,6 @@ class App extends Component {
             </Grid>
           </Grid>
         </form>
-        {state}
         <p>Forget Name?(sorry, but I can do nothing.)</p>
       </div>
     )
