@@ -15,7 +15,6 @@ const geolocate = new mapboxgl.GeolocateControl({
   trackUserLocation: true // ユーザの位置情報追跡
 });
 
-
 export default class MapBox extends Component {
   constructor(props) {
     super(props)
