@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 
 import Grid from '@material-ui/core/Grid';
 
-export default class Logs extends Component {
+export default class Tracks extends Component {
   render() {
     return(
       <div>
