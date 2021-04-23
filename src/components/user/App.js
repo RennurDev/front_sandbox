@@ -57,25 +57,6 @@ class App extends Component {
         console.log(error);
       })
   }
-
-  handleUpdate() {
-    let body = {
-      user:{
-        id: this.state.form.id,
-        name: this.state.form.name
-      }
-    }
-    let id = this.state.form.id
-    const url = RAILS_API_ENDPOINT + '/users/'+ id
-    axios
-      .put(url, body)
-      .then((results) => {
-        const data = results.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
   
   handleDestroy() {
     let body = {
@@ -105,7 +86,7 @@ class App extends Component {
                 return (
                   <div>
                     <Grid container spaceing={0}>
-                      <Grid item xs={4}>{list.id}</Grid>
+                      <Grid item xs={2}>{list.id}</Grid>
                       <Grid item xs={4}>{list.name}</Grid>
                       <Grid item xs={4}>{list.created_at}</Grid>
                     </Grid>
@@ -127,26 +108,6 @@ class App extends Component {
                 color="primary" fullWidth={true}
               >
                 CREATE
-              </Button>
-            </Grid>
-            {/* ユーザー編集 */}
-            <Grid item xs={2}>
-              <TextField value={this.state.form.id}
-                onChange={e=>this.handleChange(e, 'id')} 
-              />
-            </Grid>
-            <Grid item xs={7}>
-              <TextField value={this.state.form.name}
-                onChange={e=>this.handleChange(e, 'name')}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                onClick={()=>this.handleUpdate()}
-                variant="outlined"
-                color="secondary" fullWidth={true}
-              >
-                UPDATE
               </Button>
             </Grid>
             {/* ユーザー削除 */}

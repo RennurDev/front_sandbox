@@ -13,10 +13,13 @@ export default class Setting extends Component {
             <h1>Edit Profile</h1>
           </Grid>
           <Grid item xs={9}>
-              <TextField fullWidth={true}/>
+                <TextField value={this.props.form.name}
+                    onChange={e=>this.props.handleChange(e, 'name')}
+                fullWidth={true}/>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="outlined" color="primary" fullWidth={true}>
+            <Button variant="outlined" color="primary" fullWidth={true}
+            onClick = {this.props.handleUpdate}>
               Update
             </Button>
           </Grid>
