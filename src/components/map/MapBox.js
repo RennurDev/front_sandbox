@@ -32,17 +32,59 @@ export default class MapBox extends Component {
     //watchPositionの実行idを管理
     this.watch_id = -1
 
-    this.onGeolocate = this.onGeolocate.bind(this) // これないと動かない
+    this.onPosition = this.onPosition.bind(this)
     this.onClick = this.onClick.bind(this);
     this.setMap = this.setMap.bind(this);
   }
 
-  _hasProperty(obj, prop) {
-    return Object.prototype.hasOwnProperty.call(obj, prop)
+  _add(position) {
+    this.history.push([position.coords.longitude, position.coords.latitude])
   }
 
-  _add(geolocate) {
-    this.history.push([geolocate.coords.longitude, geolocate.coords.latitude])
+  onPosition(position) {
+    console.log("watched")
+    if(this.history.length === 0) {
+      this.previous_location = position;
+      this._add(position)
+    } else {
+      this.addPositionToHistory(position)
+    }
+
+    drawGeoLine(this.history, this.map)
+  }
+
+  addPositionToHistory(position) {
+    
+    const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp)/1000)
+    //console.log(elapseTime)
+    //console.log(this.min_duration)
+
+    if (elapseTime > this.min_duration) {
+      this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
+      this.previous_location = position
+    } else {
+      return;
+    }
+  }
+
+  onClick() {
+    let isStarted = this.state.isStarted
+
+    if(isStarted) { //Record時の処理
+      navigator.geolocation.clearWatch(this.watch_id);
+      //responseが帰ってきたらhistoryを初期化
+      if (true) {
+        this.history = []
+      }
+    } else { //Start時の処理
+      //ここで描画レイヤーの初期化
+      initializeGeoLine(this.map);
+      //console.log(this.history);
+      this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
+      console.log("id: "+ this.watch_id)
+    }
+
+    this.setState({isStarted: !isStarted})
   }
 
   setMap(position){ // 現在地取得
@@ -62,57 +104,15 @@ export default class MapBox extends Component {
     this.map.addControl(geolocate);
   }
 
-  addGeolocate(position) {
-    console.log("position.timestamp: "+ position.timestamp)
-    console.log("previous timestamp: "+this.previous_location.timestamp)
-
-    const elapseTime = this.state.isStarted === true ? parseInt((position.timestamp - this.previous_location.timestamp)) : 0
-    console.log(elapseTime)
-    if (elapseTime > this.min_duration) {
-      this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
-      this.previous_location = position
-    } else {
-      return;
-    }
-  }
-
-  onClick() {
-    let isStarted = this.state.isStarted
-
-    if(isStarted) { //Record時の処理
-      console.log(this.history);
-      console.log("id: " + this.watch_id);
-      navigator.geolocation.clearWatch(this.watch_id);
-      //responseが帰ってきたらhistoryを初期化
-      if (true) {
-        this.history = []
-      }
-    } else { //Start時の処理
-      //ここで描画レイヤーの初期化
-      initializeGeoLine(this.map);
-      //console.log(this.history);
-      this.watch_id = navigator.geolocation.watchPosition(this.onGeolocate);
-      console.log("id: "+ this.watch_id)
-    }
-
-    this.setState({isStarted: !isStarted})
-  }
-  
-  onGeolocate(position) {
-    if(this.history.length === 0) {
-      this.previous_location = position;
-      this.history.push([position.coords.longitude, position.coords.latitude])
-    }
-    this.addGeolocate(position)
-    drawGeoLine(this.history, this.map)
-  }
-
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(this.setMap)
   }
 
   componentWillUnmount() {
-    this.map.remove()
+    try {
+      this.map.remove()
+    } catch(e) {//mapのロードに失敗した場合の例外処理
+    }
   }
   
   render() {

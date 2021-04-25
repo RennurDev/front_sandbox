@@ -116,11 +116,11 @@ class App extends Component {
                 onChange={e=>this.handleChange(e, 'id')} 
               />
             </Grid>
-            <Grid itm xs={3}>
+            <Grid item xs={3}>
               <Button
                 onClick={() => this.handleDestroy()}
                 variant="outlined"
-                color="danger" fullWidth={true}
+                color="secondary" fullWidth={true}
               >
                 DELETE
               </Button>
