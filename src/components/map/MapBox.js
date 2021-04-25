@@ -26,31 +26,38 @@ export default class MapBox extends Component {
     this.previous_location = undefined
     this.min_duration = 2
 
-    this.onGeolocate = this.onGeolocate.bind(this) // これないと動かない
+    this.onPosition = this.onPosition.bind(this)
     this.onClick = this.onClick.bind(this);
   }
 
-  _hasProperty(obj, prop) {
-    return Object.prototype.hasOwnProperty.call(obj, prop)
+  _add(position) {
+    this.history.push([position.coords.longitude, position.coords.latitude])
   }
 
-  _add(geolocate) {
-    if (this._hasProperty(geolocate, 'timestamp')) {
-      //console.log(geolocate)
-      this.history.push([geolocate.coords.longitude, geolocate.coords.latitude])
+  onPosition(position) {
+    console.log("watched")
+    if(this.history.length === 0) {
+      this.previous_location = position;
+      this._add(position)
+    } else {
+      this.addPositionToHistory(position)
     }
+
+    drawGeoLine(this.history, this.map)
   }
   
   addGeolocate(geolocate) {
     const elapseTime = this.state.isStarted !== false ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
 
-    if (this.state.isStarted) {
-      //console.log(geolocate)
-      this._add(geolocate) // 測り始め
-      this.previous_location = geolocate;
-    } else if (elapseTime > this.min_duration) {
-      this._add(geolocate) // 経過時間が設定した制限時間をこえたらヒストリ追加
-      this.previous_location = geolocate
+  addPositionToHistory(position) {
+    
+    const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp)/1000)
+    //console.log(elapseTime)
+    //console.log(this.min_duration)
+
+    if (elapseTime > this.min_duration) {
+      this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
+      this.previous_location = position
     } else {
       return;
     }
@@ -69,27 +76,33 @@ export default class MapBox extends Component {
     console.log(isStarted);
 
     if(isStarted) { //Record時の処理
-      console.log(this.history);
+      navigator.geolocation.clearWatch(this.watch_id);
       //responseが帰ってきたらhistoryを初期化
       if (true) {
         this.history = []
       }
     } else { //Start時の処理
       //ここで描画レイヤーの初期化
-      console.log(this.history);
+      initializeGeoLine(this.map);
+      //console.log(this.history);
+      this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
     }
 
-    this.setState({isStarted: !isStarted})
-  }
-  
-  onGeolocate(position) {
-    console.log(this.history.length);
-    if(this.history.length === 0) {
-      initializeGeoLine(this.map)
-      this.previous_location = position;
-    }
-    this.addGeolocate(position)
-    drawGeoLine(this.history, this.map)
+  setMap(position){ // 現在地取得
+    this.setState({
+      current_pos: {
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+      }
+    })
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer,
+      center: [this.state.current_pos.lng, this.state.current_pos.lat],
+      style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
+      zoom: 16
+    })
+
+    this.map.addControl(geolocate);
   }
 
   componentDidMount() {
@@ -105,7 +118,10 @@ export default class MapBox extends Component {
   }
 
   componentWillUnmount() {
-    this.map.remove()
+    try {
+      this.map.remove()
+    } catch(e) {//mapのロードに失敗した場合の例外処理
+    }
   }
   
   render() {
