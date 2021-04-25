@@ -21,20 +21,13 @@ export default class MapBox extends Component {
     this.state = {
       area: '',
       isStarted: false,
-      current_pos: {
-        lng: 0,
-        lat: 0,
-      }
     }
     this.history = []
     this.previous_location = undefined
     this.min_duration = 2
-    //watchPositionの実行idを管理
-    this.watch_id = -1
 
     this.onPosition = this.onPosition.bind(this)
     this.onClick = this.onClick.bind(this);
-    this.setMap = this.setMap.bind(this);
   }
 
   _add(position) {
@@ -52,6 +45,9 @@ export default class MapBox extends Component {
 
     drawGeoLine(this.history, this.map)
   }
+  
+  addGeolocate(geolocate) {
+    const elapseTime = this.state.isStarted !== false ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
 
   addPositionToHistory(position) {
     
@@ -67,8 +63,17 @@ export default class MapBox extends Component {
     }
   }
 
+  getUserTrack() {
+    const t = []
+    for (const item of this.history) {
+      t.push([item.coords.longitude, item.coords.latitude])
+    }
+    return t
+  }
+
   onClick() {
     let isStarted = this.state.isStarted
+    console.log(isStarted);
 
     if(isStarted) { //Record時の処理
       navigator.geolocation.clearWatch(this.watch_id);
@@ -81,11 +86,7 @@ export default class MapBox extends Component {
       initializeGeoLine(this.map);
       //console.log(this.history);
       this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
-      console.log("id: "+ this.watch_id)
     }
-
-    this.setState({isStarted: !isStarted})
-  }
 
   setMap(position){ // 現在地取得
     this.setState({
@@ -105,7 +106,15 @@ export default class MapBox extends Component {
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(this.setMap)
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer,
+      center: [-96, 37.8],
+      style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
+      zoom: 8 // おそらく
+    })
+ 
+    this.map.addControl(geolocate);
+    geolocate.on('geolocate', this.onGeolocate);
   }
 
   componentWillUnmount() {
