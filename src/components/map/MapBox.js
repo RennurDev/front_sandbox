@@ -21,13 +21,20 @@ export default class MapBox extends Component {
     this.state = {
       area: '',
       isStarted: false,
+      current_pos: {
+        lng: 0,
+        lat: 0,
+      }
     }
     this.history = []
     this.previous_location = undefined
-    this.min_duration = 2
+    this.min_duration = 2000
+    //watchPositionの実行idを管理
+    this.watch_id = -1
 
     this.onPosition = this.onPosition.bind(this)
     this.onClick = this.onClick.bind(this);
+    this.setMap = this.setMap.bind(this);
   }
 
   _add(position) {
@@ -45,15 +52,13 @@ export default class MapBox extends Component {
 
     drawGeoLine(this.history, this.map)
   }
-  
-  addGeolocate(geolocate) {
-    const elapseTime = this.state.isStarted !== false ? parseInt((geolocate.timestamp - this.previous_location.timestamp)) : 0
 
   addPositionToHistory(position) {
     
-    const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp)/1000)
-    //console.log(elapseTime)
-    //console.log(this.min_duration)
+    const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
+    console.log(elapseTime)
+    console.log(this.min_duration)
+    console.log(this.history.length)
 
     if (elapseTime > this.min_duration) {
       this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
@@ -63,19 +68,11 @@ export default class MapBox extends Component {
     }
   }
 
-  getUserTrack() {
-    const t = []
-    for (const item of this.history) {
-      t.push([item.coords.longitude, item.coords.latitude])
-    }
-    return t
-  }
-
   onClick() {
     let isStarted = this.state.isStarted
-    console.log(isStarted);
 
     if(isStarted) { //Record時の処理
+      console.log(this.history)
       navigator.geolocation.clearWatch(this.watch_id);
       //responseが帰ってきたらhistoryを初期化
       if (true) {
@@ -87,6 +84,9 @@ export default class MapBox extends Component {
       //console.log(this.history);
       this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
     }
+
+    this.setState({isStarted: !isStarted})
+  }
 
   setMap(position){ // 現在地取得
     this.setState({
@@ -106,15 +106,7 @@ export default class MapBox extends Component {
   }
 
   componentDidMount() {
-    this.map = new mapboxgl.Map({
-      container: this.mapContainer,
-      center: [-96, 37.8],
-      style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
-      zoom: 8 // おそらく
-    })
- 
-    this.map.addControl(geolocate);
-    geolocate.on('geolocate', this.onGeolocate);
+    navigator.geolocation.getCurrentPosition(this.setMap)
   }
 
   componentWillUnmount() {
