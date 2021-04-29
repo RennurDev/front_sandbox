@@ -56,9 +56,6 @@ export default class MapBox extends Component {
   addPositionToHistory(position) {
     
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
-    console.log(elapseTime)
-    console.log(this.min_duration)
-    console.log(this.history.length)
 
     if (elapseTime > this.min_duration) {
       this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
