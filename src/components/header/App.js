@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import UserInfo from './UserInfo';
+import UserLocation from './UserLocation';
 
 export default class App extends Component {
   render() {
     return (
       <div>
-        <UserInfo></UserInfo>
+        <UserLocation />
       </div>
     )
   }

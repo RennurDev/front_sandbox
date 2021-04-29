@@ -7,7 +7,7 @@ export default class UserInfo extends Component {
       <div>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <p>TAIKI NAKAMURA</p>
+            <p>御茶ノ水</p>
           </Grid>
         </Grid>
         
