@@ -28,7 +28,7 @@ export default class MapBox extends Component {
     }
     this.history = []
     this.previous_location = undefined
-    this.min_duration = 2000
+    this.min_duration = 2000 //ms
     //watchPositionの実行idを管理
     this.watch_id = -1
 
