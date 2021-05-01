@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.69718efc.chunk.css",
-    "main.js": "/static/js/main.ddca9490.chunk.js",
-    "main.js.map": "/static/js/main.ddca9490.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.1de9e61c.js",
-    "runtime-main.js.map": "/static/js/runtime-main.1de9e61c.js.map",
-    "static/css/2.19072978.chunk.css": "/static/css/2.19072978.chunk.css",
-    "static/js/2.f31c97fd.chunk.js": "/static/js/2.f31c97fd.chunk.js",
-    "static/js/2.f31c97fd.chunk.js.map": "/static/js/2.f31c97fd.chunk.js.map",
-    "static/js/3.311e0c57.chunk.js": "/static/js/3.311e0c57.chunk.js",
-    "static/js/3.311e0c57.chunk.js.map": "/static/js/3.311e0c57.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.19072978.chunk.css.map": "/static/css/2.19072978.chunk.css.map",
-    "static/css/main.69718efc.chunk.css.map": "/static/css/main.69718efc.chunk.css.map",
-    "static/js/2.f31c97fd.chunk.js.LICENSE.txt": "/static/js/2.f31c97fd.chunk.js.LICENSE.txt"
+    "main.css": "/front_sandbox/static/css/main.69718efc.chunk.css",
+    "main.js": "/front_sandbox/static/js/main.ddca9490.chunk.js",
+    "main.js.map": "/front_sandbox/static/js/main.ddca9490.chunk.js.map",
+    "runtime-main.js": "/front_sandbox/static/js/runtime-main.be42fe4c.js",
+    "runtime-main.js.map": "/front_sandbox/static/js/runtime-main.be42fe4c.js.map",
+    "static/css/2.19072978.chunk.css": "/front_sandbox/static/css/2.19072978.chunk.css",
+    "static/js/2.de58303e.chunk.js": "/front_sandbox/static/js/2.de58303e.chunk.js",
+    "static/js/2.de58303e.chunk.js.map": "/front_sandbox/static/js/2.de58303e.chunk.js.map",
+    "static/js/3.311e0c57.chunk.js": "/front_sandbox/static/js/3.311e0c57.chunk.js",
+    "static/js/3.311e0c57.chunk.js.map": "/front_sandbox/static/js/3.311e0c57.chunk.js.map",
+    "index.html": "/front_sandbox/index.html",
+    "static/css/2.19072978.chunk.css.map": "/front_sandbox/static/css/2.19072978.chunk.css.map",
+    "static/css/main.69718efc.chunk.css.map": "/front_sandbox/static/css/main.69718efc.chunk.css.map",
+    "static/js/2.de58303e.chunk.js.LICENSE.txt": "/front_sandbox/static/js/2.de58303e.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.1de9e61c.js",
+    "static/js/runtime-main.be42fe4c.js",
     "static/css/2.19072978.chunk.css",
-    "static/js/2.f31c97fd.chunk.js",
+    "static/js/2.de58303e.chunk.js",
     "static/css/main.69718efc.chunk.css",
     "static/js/main.ddca9490.chunk.js"
   ]
