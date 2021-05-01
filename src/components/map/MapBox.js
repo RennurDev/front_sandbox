@@ -70,7 +70,7 @@ export default class MapBox extends Component {
     let body = {
       track:{
         data: String(data),
-        user_id: 1
+        user_id: this.props.current_user.id
       }
     }
 
@@ -80,7 +80,7 @@ export default class MapBox extends Component {
       .then((results) => {
         const data = results.data
         // TODO: レスポンスが200な場合のみ 初期化するよう実装
-        this.hitory = []
+        this.history = [];
       })
       .catch((error) => {
         console.log(error);
@@ -91,11 +91,13 @@ export default class MapBox extends Component {
     let isStarted = this.state.isStarted
 
     if(isStarted) { // Record時の処理
-      console.log(this.history)
-      this.postHistory(this.history)
+      if(this.history.length !== 0) {
+        this.postHistory(this.history)
+      }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
     } else { // Start時の処理
+      console.log(this.history)
       if (this.history.length === 0) {
         // 描画レイヤーの初期化
         initializeGeoLine(this.map);

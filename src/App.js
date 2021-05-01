@@ -95,7 +95,9 @@ class App extends Component {
             </Route>
             <Route path="/home">
               <Header />
-              <MapBox />
+              <MapBox
+              current_user = {this.state.current_user}
+              />
               <Menu 
               current_user = {this.state.current_user}
               form = {this.state.form}
