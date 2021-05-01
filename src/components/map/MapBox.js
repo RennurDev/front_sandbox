@@ -4,9 +4,11 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import drawGeoLine from '../../lib/DrawGeoLine';
 import initializeGeoLine from '../../lib/InitializeGeoLine';
 import RecordTrigger from './RecordTrigger';
+import axios from 'axios';
 
 // アクセストークン
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ANOTHER_API_KEY;
+const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
@@ -54,7 +56,6 @@ export default class MapBox extends Component {
   }
 
   addPositionToHistory(position) {
-    
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
 
     if (elapseTime > this.min_duration) {
@@ -65,11 +66,31 @@ export default class MapBox extends Component {
     }
   }
 
+  postHistory(data) {
+    let body = {
+      track:{
+        data: String(data),
+        user_id: 1
+      }
+    }
+
+    const url = RAILS_API_ENDPOINT + '/tracks'
+    axios
+      .post(url, body)
+      .then((results) => {
+        const data = results.data
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
   onClick() {
     let isStarted = this.state.isStarted
 
     if(isStarted) { //Record時の処理
       console.log(this.history)
+      this.postHistory(this.history)
       navigator.geolocation.clearWatch(this.watch_id);
       //responseが帰ってきたらhistoryを初期化
       if (true) {
