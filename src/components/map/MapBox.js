@@ -79,6 +79,8 @@ export default class MapBox extends Component {
       .post(url, body)
       .then((results) => {
         const data = results.data
+        // TODO: レスポンスが200な場合のみ 初期化するよう実装
+        this.hitory = []
       })
       .catch((error) => {
         console.log(error);
@@ -88,22 +90,19 @@ export default class MapBox extends Component {
   onClick() {
     let isStarted = this.state.isStarted
 
-    if(isStarted) { //Record時の処理
+    if(isStarted) { // Record時の処理
       console.log(this.history)
       this.postHistory(this.history)
       navigator.geolocation.clearWatch(this.watch_id);
-      //responseが帰ってきたらhistoryを初期化
-      if (true) {
-        this.history = []
+      this.setState({isStarted: !isStarted})
+    } else { // Start時の処理
+      if (this.history.length === 0) {
+        // 描画レイヤーの初期化
+        initializeGeoLine(this.map);
+        this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
+        this.setState({isStarted: !isStarted})
       }
-    } else { //Start時の処理
-      //ここで描画レイヤーの初期化
-      initializeGeoLine(this.map);
-      //console.log(this.history);
-      this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
     }
-
-    this.setState({isStarted: !isStarted})
   }
 
   setMap(position){ // 現在地取得
@@ -130,7 +129,8 @@ export default class MapBox extends Component {
   componentWillUnmount() {
     try {
       this.map.remove()
-    } catch(e) {//mapのロードに失敗した場合の例外処理
+    } catch(e) { //mapのロードに失敗した場合の例外処理
+      console.log(e)
     }
   }
   
