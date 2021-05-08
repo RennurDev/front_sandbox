@@ -1,63 +1,65 @@
 import React, { Component } from 'react';
 
-import { Button } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import CardMedia from '@material-ui/core/CardMedia';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  Button,
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  CardMedia,
+  IconButton,
+ } from '@material-ui/core';
+
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles({
+  root: {
+    maxWidth: 360,
+  },
   media: {
-    height: 120,
+    height: 140
   },
-  relative: {
-    position: 'relative'
-  },
-  absolute: {
-    position: 'absolute',
-    top: '20%',
-    left: '20%',
+  actions: {
+    height: 30
   }
 });
 
 export default function Tracks() {
   const classes=useStyles();
-  const imageClass= clsx(classes.media, classes.relative,)
   return(
     <div>
-      <Grid container spacing={2}>
+      <Grid container 
+        spacing={2}
+        alignItems="center"
+        justify="center"
+        direction="column"
+      >
         <Grid item xs={12}>
-         <Card>
+         <Card className={classes.root}>
             <CardContent>
-                
-                <CardMedia
-                  className={imageClass}
+              <CardMedia
+                  className={classes.media}
                   image={process.env.PUBLIC_URL+"/track_test.png"}
-                  title="Paella dish"
-                >
-                  <div className={classes.absolute}>
-                    <Typography align="center" color="textSecondary" gutterBottom>
-                    2021.5.1.sat
-                    </Typography>
-                    <Typography align="center" variant="h5" component="h2">
-                      DISTANCE 100.0km
-                    </Typography>
-                    <Typography align="center" variant="h5" component="h2">
-                      ALTITUDE 300m
-                    </Typography>
-                  </div>
-                </CardMedia>
-                
+              >
+              <div>
+                <Typography align="center" color="textSecondary" gutterBottom>
+                2021.5.1.sat
+                </Typography>
+                <Typography align="center" variant="h5" component="h2">
+                  DISTANCE 100.0km
+                </Typography>
+                <Typography align="center" variant="h5" component="h2">
+                  ALTITUDE 300m
+                </Typography>
+              </div>
+              </CardMedia> 
             </CardContent>
-            <CardActions disableSpacing>
+
+            <CardActions disableSpacing className={classes.actions}>
               <Grid container alignItems="center" justify="center">
                 <Grid xs={0}>
                   <IconButton aria-label="add to favorites">
@@ -71,6 +73,8 @@ export default function Tracks() {
             </CardActions>
           </Card>
         </Grid>
+      </Grid>
+      <Grid container spacing={2}>
         <Grid item xs={6}>
           <Button variant="outlined" color="primary" fullWidth={true}>
             prev
