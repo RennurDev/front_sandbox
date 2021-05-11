@@ -19,16 +19,38 @@ class App extends Component {
     super(props)
     this.state = {
       current_user: {
-        id: '2',
+        id: '1',
         name: 'hoge',
       },
       form: {
         name: '',
       },
+      track_id: '1'
     }
 
+    this.getCurrentUser = this.getCurrentUser.bind(this)
     this.handleProfileChange = this.handleProfileChange.bind(this)
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this)
+  }
+
+  getCurrentUser() {
+    let id = this.state.current_user.id //devise導入後要修正
+    const url = RAILS_API_ENDPOINT + '/users/'+ id
+    axios
+      .get(url)
+      .then((results) => {
+          const data = results.data
+          this.setState({current_user: data})
+          //formの情報の更新(分離した方がいい？)
+          this.setState({form: {
+            name: this.state.current_user.name,
+          }
+        })
+      })
+      .catch(
+        (error) => {
+          console.log(error)
+      })
   }
 
   //formの入力内容の変更を検知
@@ -68,12 +90,7 @@ class App extends Component {
 
   componentDidMount() {
     //current_userの更新
-
-    //formの情報の更新
-    this.setState({form: {
-        name: this.state.current_user.name,
-      }
-    })
+    this.getCurrentUser();
   }
 
 
@@ -97,6 +114,7 @@ class App extends Component {
               <Header />
               <MapBox
               current_user = {this.state.current_user}
+              track_id = {this.state.track_id}
               />
               <Menu 
               current_user = {this.state.current_user}
