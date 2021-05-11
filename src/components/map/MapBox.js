@@ -155,7 +155,6 @@ export default class MapBox extends Component {
   }
 
   componentDidMount() {
-    const track_id = this.props.track_id
     navigator.geolocation.getCurrentPosition(this.setMap)
   }
 
