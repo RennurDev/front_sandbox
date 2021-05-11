@@ -43,6 +43,36 @@ export default class MapBox extends Component {
     this.history.push([position.coords.longitude, position.coords.latitude])
   }
 
+  getTrack(id) {
+    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
+    axios
+      .get(url)
+      .then((results) => {
+          let data = results.data.data
+          //各座標データが１要素として文字列で表現された配列の生成：
+          //元データ：[[lng, lat],[lng, lat],[lng, lat]]
+          //① 配列の先頭,末尾にある"[[","]]"の削除
+          //② 途中にある"],["で文字列を分割
+          let pattern = /\],\s*\[/;
+          data = data.replace("[[", "").replace("]]", "").split(pattern)
+
+          //表示用の配列を作成
+          let old_history = []
+          for(let i = 0; i < data.length; i++) {
+            old_history.push(data[i].split(",").map(Number))
+          }
+
+          console.log(old_history)
+
+          initializeGeoLine(this.map)
+          drawGeoLine(old_history, this.map)
+      })
+      .catch(
+        (error) => {
+          console.log(error)
+      })
+  }
+
   onPosition(position) {
     console.log("watched")
     if(this.history.length === 0) {
@@ -120,11 +150,12 @@ export default class MapBox extends Component {
       style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
       zoom: 16
     })
-
     this.map.addControl(geolocate);
+    this.map.on('load', function(){this.getTrack(this.props.track_id)}.bind(this))
   }
 
   componentDidMount() {
+    const track_id = this.props.track_id
     navigator.geolocation.getCurrentPosition(this.setMap)
   }
 
