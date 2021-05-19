@@ -1,12 +1,5 @@
 export default function InitializeGeoLine(map) {
-  try { //既にSource, Layerが作成されていた場合の処理。
-      map.removeLayer('route');
-      map.removeSource('route');
-  } catch(e) {
-    console.log(e)
-  }
-
-  map.addSource('route', {
+  map.addSource(String(map._mapId), {
     'type': 'geojson',
     'data': {
       'type': 'Feature',
@@ -18,16 +11,16 @@ export default function InitializeGeoLine(map) {
     }
   });
   map.addLayer({
-    'id': 'route',
+    'id': String(map._mapId),
     'type': 'line',
-    'source': 'route',
+    'source': String(map._mapId),
     'layout': {
       'line-join': 'round',
       'line-cap': 'round'
     },
     'paint': {
       'line-color': '#888',
-      'line-width': 4
+      'line-width': 8
     }
   });
 }

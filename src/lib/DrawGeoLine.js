@@ -1,6 +1,6 @@
 export default function DrawGeoLine(logs, map) {
   try { //addSourceが非同期のため、addSourceの実行より先にgetSourceが呼ばれてしまうことがある。
-    map.getSource('route').setData({
+    map.getSource(String(map._mapId)).setData({
       'type': 'Feature',
       'properties': {},
       'geometry': {
@@ -8,5 +8,8 @@ export default function DrawGeoLine(logs, map) {
         'coordinates': logs
       }
     });
-  } catch(e) {}
+  } catch(e) {
+    console.log(e)
+  }
 }
+

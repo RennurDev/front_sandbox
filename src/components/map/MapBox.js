@@ -3,11 +3,13 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import drawGeoLine from '../../lib/DrawGeoLine';
 import initializeGeoLine from '../../lib/InitializeGeoLine';
+import decodeHistory from '../../lib/DecodeHistory';
+import encodeHistory from '../../lib/EncodeHistory';
 import RecordTrigger from './RecordTrigger';
 import axios from 'axios';
 
 // アクセストークン
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ANOTHER_API_KEY;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
 
 const geolocate = new mapboxgl.GeolocateControl({
@@ -40,37 +42,7 @@ export default class MapBox extends Component {
   }
 
   _add(position) {
-    this.history.push([position.coords.longitude, position.coords.latitude])
-  }
-
-  getTrack(id) {
-    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
-    axios
-      .get(url)
-      .then((results) => {
-          let data = results.data.data
-          //各座標データが１要素として文字列で表現された配列の生成：
-          //元データ：[[lng, lat],[lng, lat],[lng, lat]]
-          //① 配列の先頭,末尾にある"[[","]]"の削除
-          //② 途中にある"],["で文字列を分割
-          let pattern = /\],\s*\[/;
-          data = data.replace("[[", "").replace("]]", "").split(pattern)
-
-          //表示用の配列を作成
-          let old_history = []
-          for(let i = 0; i < data.length; i++) {
-            old_history.push(data[i].split(",").map(Number))
-          }
-
-          console.log(old_history)
-
-          initializeGeoLine(this.map)
-          drawGeoLine(old_history, this.map)
-      })
-      .catch(
-        (error) => {
-          console.log(error)
-      })
+    this.history.push([position.coords.longitude, position.coords.latiude])
   }
 
   onPosition(position) {
@@ -81,7 +53,6 @@ export default class MapBox extends Component {
     } else {
       this.addPositionToHistory(position)
     }
-
     drawGeoLine(this.history, this.map)
   }
 
@@ -96,10 +67,29 @@ export default class MapBox extends Component {
     }
   }
 
+  // Get Track
+  getTrack(id) {
+    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
+    axios
+      .get(url)
+      .then((results) => {
+          let data = results.data.data
+          const decoded_data = decodeHistory(data)
+          initializeGeoLine(this.map)
+          drawGeoLine(decoded_data, this.map)
+      })
+      .catch(
+        (error) => {
+          console.log(error)
+      })
+  }
+
+  // Post Track
   postHistory(data) {
+    const encoded_data = encodeHistory(data)
     let body = {
       track:{
-        data: String(data),
+        data: encoded_data,
         user_id: this.props.current_user.id
       }
     }
@@ -119,14 +109,15 @@ export default class MapBox extends Component {
 
   onClick() {
     let isStarted = this.state.isStarted
-
-    if(isStarted) { // Record時の処理
+    if(isStarted) { 
+      // Record時の処理
       if(this.history.length !== 0) {
         this.postHistory(this.history)
       }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
-    } else { // Start時の処理
+    } else { 
+      // Start時の処理
       console.log(this.history)
       if (this.history.length === 0) {
         // 描画レイヤーの初期化
@@ -137,7 +128,8 @@ export default class MapBox extends Component {
     }
   }
 
-  setMap(position){ // 現在地取得
+  setMap(position){ 
+    // 現在地設定
     this.setState({
       current_pos: {
         lng: position.coords.longitude,
@@ -151,7 +143,10 @@ export default class MapBox extends Component {
       zoom: 16
     })
     this.map.addControl(geolocate);
-    this.map.on('load', function(){this.getTrack(this.props.track_id)}.bind(this))
+    this.map.on('load', function() {
+      this.getTrack(this.props.track_id)
+      }.bind(this)
+    )
   }
 
   componentDidMount() {
@@ -161,7 +156,7 @@ export default class MapBox extends Component {
   componentWillUnmount() {
     try {
       this.map.remove()
-    } catch(e) { //mapのロードに失敗した場合の例外処理
+    } catch(e) {
       console.log(e)
     }
   }
