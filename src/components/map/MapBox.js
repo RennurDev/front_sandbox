@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
-import drawGeoLine from '../../lib/DrawGeoLine';
-import initializeGeoLine from '../../lib/InitializeGeoLine';
-import decodeHistory from '../../lib/DecodeHistory';
-import encodeHistory from '../../lib/EncodeHistory';
+import drawTrack from '../../lib/DrawTrack';
+import addTrackLayer from '../../lib/AddTrackLayer';
+import clearTrack from '../../lib/ClearTrack';
+import decodeTrack from '../../lib/DecodeTrack';
+import encodeTrack from '../../lib/EncodeTrack';
 import RecordTrigger from './RecordTrigger';
 import axios from 'axios';
 
@@ -30,7 +31,7 @@ export default class MapBox extends Component {
         lat: 0,
       }
     }
-    this.history = []
+    this.track = []
     this.previous_location = undefined
     this.min_duration = 2000 //ms
     //watchPositionの実行idを管理
@@ -42,21 +43,21 @@ export default class MapBox extends Component {
   }
 
   _add(position) {
-    this.history.push([position.coords.longitude, position.coords.latiude])
+    this.track.push([position.coords.longitude, position.coords.latiude])
   }
 
   onPosition(position) {
     console.log("watched")
-    if(this.history.length === 0) {
+    if(this.track.length === 0) {
       this.previous_location = position;
       this._add(position)
     } else {
-      this.addPositionToHistory(position)
+      this.addPositionToTrack(position)
     }
-    drawGeoLine(this.history, this.map)
+    drawTrack(this.map, "current_track", this.track)
   }
 
-  addPositionToHistory(position) {
+  addPositionToTrack(position) {
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
 
     if (elapseTime > this.min_duration) {
@@ -68,15 +69,15 @@ export default class MapBox extends Component {
   }
 
   // Get Track
-  getTrack(id) {
+  getAllTrack(id) {
     const url = RAILS_API_ENDPOINT + '/tracks/'+ id
     axios
       .get(url)
       .then((results) => {
           let data = results.data.data
-          const decoded_data = decodeHistory(data)
-          initializeGeoLine(this.map)
-          drawGeoLine(decoded_data, this.map)
+          const decoded_data = decodeTrack(data)
+          addTrackLayer(this.map, "all_track")
+          drawTrack(this.map, "all_track", decoded_data)
       })
       .catch(
         (error) => {
@@ -85,8 +86,8 @@ export default class MapBox extends Component {
   }
 
   // Post Track
-  postHistory(data) {
-    const encoded_data = encodeHistory(data)
+  postTrack(data) {
+    const encoded_data = encodeTrack(data)
     let body = {
       track:{
         data: encoded_data,
@@ -100,7 +101,7 @@ export default class MapBox extends Component {
       .then((results) => {
         const data = results.data
         // TODO: レスポンスが200な場合のみ 初期化するよう実装
-        this.history = [];
+        this.track = [];
       })
       .catch((error) => {
         console.log(error);
@@ -111,17 +112,16 @@ export default class MapBox extends Component {
     let isStarted = this.state.isStarted
     if(isStarted) { 
       // Record時の処理
-      if(this.history.length !== 0) {
-        this.postHistory(this.history)
+      if(this.track.length !== 0) {
+        clearTrack(this.map, "current_track")
+        this.postTrack(this.track)
       }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
     } else { 
       // Start時の処理
-      console.log(this.history)
-      if (this.history.length === 0) {
-        // 描画レイヤーの初期化
-        initializeGeoLine(this.map);
+      console.log(this.track)
+      if (this.track.length === 0) {
         this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
         this.setState({isStarted: !isStarted})
       }
@@ -144,7 +144,9 @@ export default class MapBox extends Component {
     })
     this.map.addControl(geolocate);
     this.map.on('load', function() {
-      this.getTrack(this.props.track_id)
+      this.getAllTrack(this.props.track_id)
+      // 記録用のレイヤーの追加
+      addTrackLayer(this.map, "current_track")
       }.bind(this)
     )
   }

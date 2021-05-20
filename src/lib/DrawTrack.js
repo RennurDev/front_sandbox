@@ -1,11 +1,11 @@
-export default function DrawGeoLine(logs, map) {
+export default function DrawTrack(map, id, track) {
   try { //addSourceが非同期のため、addSourceの実行より先にgetSourceが呼ばれてしまうことがある。
-    map.getSource(String(map._mapId)).setData({
+    map.getSource(id).setData({
       'type': 'Feature',
       'properties': {},
       'geometry': {
         'type': 'LineString',
-        'coordinates': logs
+        'coordinates': track
       }
     });
   } catch(e) {
