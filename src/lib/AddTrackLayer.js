@@ -1,5 +1,5 @@
-export default function InitializeGeoLine(map) {
-  map.addSource(String(map._mapId), {
+export default function AddTrackLayer(map, id) {
+  map.addSource(id, {
     'type': 'geojson',
     'data': {
       'type': 'Feature',
@@ -11,9 +11,9 @@ export default function InitializeGeoLine(map) {
     }
   });
   map.addLayer({
-    'id': String(map._mapId),
+    'id': id,
     'type': 'line',
-    'source': String(map._mapId),
+    'source': id,
     'layout': {
       'line-join': 'round',
       'line-cap': 'round'
