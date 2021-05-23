@@ -34,14 +34,15 @@ class App extends Component {
   }
 
   getCurrentUser() {
-    let id = this.state.current_user.id //devise導入後要修正
+    //TODO: device導入後, state.current_user.idを現在ログイン中のidで更新する処理を追記
+    let id = this.state.current_user.id 
     const url = RAILS_API_ENDPOINT + '/users/'+ id
     axios
       .get(url)
       .then((results) => {
           const data = results.data
           this.setState({current_user: data})
-          //formの情報の更新(分離した方がいい？)
+          //formの情報の更新
           this.setState({form: {
             name: this.state.current_user.name,
           }

@@ -1,4 +1,4 @@
-export default function AddTrackLayer(map, id) {
+export default function AddTrackLayer(map, id, track=[]) {
   map.addSource(id, {
     'type': 'geojson',
     'data': {
@@ -6,7 +6,7 @@ export default function AddTrackLayer(map, id) {
       'properties': {},
       'geometry': {
         'type': 'LineString',
-        'coordinates': []
+        'coordinates': track
       }
     }
   });
