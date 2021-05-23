@@ -69,17 +69,15 @@ export default class MapBox extends Component {
   }
 
   getAllTrack(user_id) {
-    const url = RAILS_API_ENDPOINT + '/tracks/'
+    const url = RAILS_API_ENDPOINT + '/users_tracks/' + user_id
     axios
       .get(url)
       .then((results) => {
           let data = results.data
           let decoded_data
           for(let i = 0; i < data.length; i++) {
-            if(data[i].user_id === user_id) {
-              decoded_data = decodeTrack(data[i].data)
-              addTrackLayer(this.map, "track_"+String(i), decoded_data);
-            }
+            decoded_data = decodeTrack(data[i].data)
+            addTrackLayer(this.map, "track_"+String(i), decoded_data);
           }
           
       })
