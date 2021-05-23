@@ -68,16 +68,20 @@ export default class MapBox extends Component {
     }
   }
 
-  // Get Track
-  getAllTrack(id) {
-    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
+  getAllTrack(user_id) {
+    const url = RAILS_API_ENDPOINT + '/tracks/'
     axios
       .get(url)
       .then((results) => {
-          let data = results.data.data
-          const decoded_data = decodeTrack(data)
-          addTrackLayer(this.map, "all_track")
-          drawTrack(this.map, "all_track", decoded_data)
+          let data = results.data
+          let decoded_data
+          for(let i = 0; i < data.length; i++) {
+            if(data[i].user_id === user_id) {
+              decoded_data = decodeTrack(data[i].data)
+              addTrackLayer(this.map, "track_"+String(i), decoded_data);
+            }
+          }
+          
       })
       .catch(
         (error) => {
@@ -85,7 +89,23 @@ export default class MapBox extends Component {
       })
   }
 
-  // Post Track
+  // GetTrack
+  getTrack(id) {// DBからidで指定されたtrackデータを取得し,レスポンスがあればtrack_(id)という名前のソース,レイヤーを作成.
+    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
+    axios
+      .get(url)
+      .then((results) => {
+          let data = results.data.data
+          const decoded_data = decodeTrack(data)
+          addTrackLayer(this.map, "track_"+String(id), decoded_data);
+      })
+      .catch(
+        (error) => {
+          console.log(error)
+      })
+  }
+
+  // PostTrack
   postTrack(data) {
     const encoded_data = encodeTrack(data)
     let body = {
@@ -144,9 +164,11 @@ export default class MapBox extends Component {
     })
     this.map.addControl(geolocate);
     this.map.on('load', function() {
-      this.getAllTrack(this.props.track_id)
+      this.getAllTrack(this.props.current_user.id)
+
       // 記録用のレイヤーの追加
       addTrackLayer(this.map, "current_track")
+      
       }.bind(this)
     )
   }
