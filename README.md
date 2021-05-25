@@ -30,5 +30,5 @@ petampのフロントエンド向けsand_box
 
 - 作業の終了、githubへのアップロード
 1. **add** : `git add -A`
-2. **commit** : `git add -A "○○を追加"`
+2. **commit** : `git commit -m "○○を追加"`
 3. **push** : `git push origin 作業してたブランチ名`
