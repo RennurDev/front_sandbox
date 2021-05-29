@@ -25,10 +25,13 @@ class App extends Component {
       form: {
         name: '',
       },
-      track_id: '1'
+      track_num: '0', //全Track数
+      map: '',
     }
 
     this.getCurrentUser = this.getCurrentUser.bind(this)
+    this.handleMapCreate = this.handleMapCreate.bind(this)
+    this.handleTrackNumChange = this.handleTrackNumChange.bind(this)
     this.handleProfileChange = this.handleProfileChange.bind(this)
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this)
   }
@@ -52,6 +55,14 @@ class App extends Component {
         (error) => {
           console.log(error)
       })
+  }
+
+  handleMapCreate(map) {
+    this.setState({map: map});
+  }
+
+  handleTrackNumChange(num) {
+    this.setState({track_num: num});
   }
 
   //formの入力内容の変更を検知
@@ -116,10 +127,16 @@ class App extends Component {
               <MapBox
               current_user = {this.state.current_user}
               track_id = {this.state.track_id}
+              track_num = {this.state.track_num}
+              map = {this.state.map}
+              handleMapCreate = {this.handleMapCreate}
+              handleTrackNumChange = {this.handleTrackNumChange}
               />
               <Menu 
               current_user = {this.state.current_user}
               form = {this.state.form}
+              map = {this.state.map}
+              track_num = {this.state.track_num}
               handleProfileChange = {this.handleProfileChange}
               handleProfileUpdate = {this.handleProfileUpdate}
               />
