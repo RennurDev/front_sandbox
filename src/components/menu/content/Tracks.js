@@ -13,7 +13,7 @@ import {
 
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
 // import handleCurrentTrack from '../../../lib/HandleCurrentTrack'; //TODO: handleCurrentTrackを使用した実装に変更
 import showTrackLayer from '../../../lib/ShowTrackLayer';

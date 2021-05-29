@@ -3,7 +3,6 @@ import ProfileContent from './content/Profile';
 import TracksContent from './content/Tracks';
 import SettingContent from './content/Setting';
 import Navigation from './nav/Navigation';
-import hideAllTracks from '../../lib/HideAllTracks'
 import showAllTracks from '../../lib/ShowAllTracks'
 
 export default class App extends Component {
@@ -23,9 +22,7 @@ export default class App extends Component {
                       let map = this.props.map
                       let track_num = this.props.track_num
 
-                      if(this.state.value === 'Tracks') {
-                        // hideAllTracks(map, track_num)
-                      } else {
+                      if(this.state.value !== 'Tracks') {
                         showAllTracks(map, track_num)
                       }
                     });
