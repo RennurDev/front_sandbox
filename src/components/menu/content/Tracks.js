@@ -50,6 +50,19 @@ class Track extends Component {
   render() {
       //参考： https://stackoverflow.com/questions/56554586/how-to-use-usestyle-to-style-class-component-in-material-ui
       const { classes } = this.props;
+      const handlePrevTrack = () => {
+        hideTrackLayer(this.props.map, 'track_'+this.state.track_id)
+        this.setState({
+          track_id: (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
+        }, () => {showTrackLayer(this.props.map, 'track_'+this.state.track_id)})
+      }
+      const handleNextTrack = () => {
+        hideTrackLayer(this.props.map, 'track_'+this.state.track_id)
+        this.setState({
+          track_id: (this.state.track_id + 1 + this.props.track_num) % this.props.track_num
+        }, () => {showTrackLayer(this.props.map, 'track_'+this.state.track_id)})
+      }
+      
     return(
 
       <div>
@@ -101,14 +114,7 @@ class Track extends Component {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onClick = {
-                () => {
-                  hideTrackLayer(this.props.map, 'track_'+this.state.track_id)
-                  this.setState({
-                    track_id: (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
-                  }, () => {showTrackLayer(this.props.map, 'track_'+this.state.track_id)})
-                }
-              }
+              onClick = { handlePrevTrack }
             >
               prev
             </Button>
@@ -119,14 +125,7 @@ class Track extends Component {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onClick = {
-                () => {
-                  hideTrackLayer(this.props.map, 'track_'+this.state.track_id)
-                  this.setState({
-                    track_id: (this.state.track_id + 1 + this.props.track_num) % this.props.track_num
-                  }, () => {showTrackLayer(this.props.map, 'track_'+this.state.track_id)})
-                }
-              }
+              onClick = { handleNextTrack }
             >
               next
             </Button>
