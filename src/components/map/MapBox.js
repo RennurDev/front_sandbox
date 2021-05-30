@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
-import drawGeoLine from '../../lib/DrawGeoLine';
-import initializeGeoLine from '../../lib/InitializeGeoLine';
+import drawTrack from '../../lib/DrawTrack';
+import addTrackLayer from '../../lib/AddTrackLayer';
+import clearTrack from '../../lib/ClearTrack';
+import decodeTrack from '../../lib/DecodeTrack';
+import encodeTrack from '../../lib/EncodeTrack';
 import RecordTrigger from './RecordTrigger';
 import axios from 'axios';
 
 // アクセストークン
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ANOTHER_API_KEY;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
 
 const geolocate = new mapboxgl.GeolocateControl({
@@ -28,37 +31,36 @@ export default class MapBox extends Component {
         lat: 0,
       }
     }
-    this.history = []
+    this.map = ''
+    this.track = []
     this.previous_location = undefined
-    this.min_duration = 2000 //ms
     //watchPositionの実行idを管理
     this.watch_id = -1
 
-    this.onPosition = this.onPosition.bind(this)
+    this.onPosition = this.onPosition.bind(this);
     this.onClick = this.onClick.bind(this);
     this.setMap = this.setMap.bind(this);
   }
 
   _add(position) {
-    this.history.push([position.coords.longitude, position.coords.latitude])
+    this.track.push([position.coords.longitude, position.coords.latiude])
   }
 
   onPosition(position) {
-    console.log("watched")
-    if(this.history.length === 0) {
+    if(this.track.length === 0) {
       this.previous_location = position;
       this._add(position)
     } else {
-      this.addPositionToHistory(position)
+      this.addPositionToTrack(position)
     }
-
-    drawGeoLine(this.history, this.map)
+    drawTrack(this.map, "current_track", this.track)
   }
 
-  addPositionToHistory(position) {
+  addPositionToTrack(position) {
+    const min_duration = 2000 //ms
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
 
-    if (elapseTime > this.min_duration) {
+    if (elapseTime > min_duration) {
       this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
       this.previous_location = position
     } else {
@@ -66,10 +68,52 @@ export default class MapBox extends Component {
     }
   }
 
-  postHistory(data) {
+  getAllTracks(user_id) {
+    const url = RAILS_API_ENDPOINT + '/users_tracks/' + user_id
+    axios
+      .get(url)
+      .then((results) => {
+          let data = results.data
+          let decoded_data
+
+          this.props.handleTrackNumChange(data.length)
+
+          let track_num = this.props.track_num
+
+          for(let i = 0; i < track_num; i++) {
+            decoded_data = decodeTrack(data[i].data)
+            addTrackLayer(this.map, "track_"+String(i), decoded_data);
+          }
+          
+      })
+      .catch(
+        (error) => {
+          console.log(error)
+      })
+  }
+
+  // GetTrack
+  getTrack(id) {// DBからidで指定されたtrackデータを取得し,レスポンスがあればtrack_(id)という名前のソース,レイヤーを作成.
+    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
+    axios
+      .get(url)
+      .then((results) => {
+          let data = results.data.data
+          const decoded_data = decodeTrack(data)
+          addTrackLayer(this.map, "track_"+String(id), decoded_data);
+      })
+      .catch(
+        (error) => {
+          console.log(error)
+      })
+  }
+
+  // PostTrack
+  postTrack(data) {
+    const encoded_data = encodeTrack(data)
     let body = {
       track:{
-        data: String(data),
+        data: encoded_data,
         user_id: this.props.current_user.id
       }
     }
@@ -80,7 +124,7 @@ export default class MapBox extends Component {
       .then((results) => {
         const data = results.data
         // TODO: レスポンスが200な場合のみ 初期化するよう実装
-        this.history = [];
+        this.track = [];
       })
       .catch((error) => {
         console.log(error);
@@ -89,39 +133,55 @@ export default class MapBox extends Component {
 
   onClick() {
     let isStarted = this.state.isStarted
-
-    if(isStarted) { // Record時の処理
-      if(this.history.length !== 0) {
-        this.postHistory(this.history)
+    if(isStarted) { 
+      // Record時の処理
+      if(this.track.length !== 0) {
+        clearTrack(this.map, "current_track")
+        this.postTrack(this.track)
       }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
-    } else { // Start時の処理
-      console.log(this.history)
-      if (this.history.length === 0) {
-        // 描画レイヤーの初期化
-        initializeGeoLine(this.map);
+    } else { 
+      // Start時の処理
+      console.log(this.track)
+      if (this.track.length === 0) {
         this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
         this.setState({isStarted: !isStarted})
       }
     }
   }
 
-  setMap(position){ // 現在地取得
+  setMap(position){ 
+    // 現在地設定
     this.setState({
       current_pos: {
         lng: position.coords.longitude,
         lat: position.coords.latitude,
       }
     })
-    this.map = new mapboxgl.Map({
+    let map = new mapboxgl.Map({
       container: this.mapContainer,
       center: [this.state.current_pos.lng, this.state.current_pos.lat],
       style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
       zoom: 16
     })
 
+    this.props.handleMapCreate(map)
+
+    this.map = this.props.map
+
     this.map.addControl(geolocate);
+    this.map.on('load', function() {
+      this.getAllTracks(this.props.current_user.id)
+
+      // 記録用のレイヤーの追加
+      addTrackLayer(this.map, "current_track")
+
+      //Next, Prev用のレイヤーの追加
+      addTrackLayer(this.map, "single_track")
+      
+      }.bind(this)
+    )
   }
 
   componentDidMount() {
@@ -131,7 +191,7 @@ export default class MapBox extends Component {
   componentWillUnmount() {
     try {
       this.map.remove()
-    } catch(e) { //mapのロードに失敗した場合の例外処理
+    } catch(e) {
       console.log(e)
     }
   }

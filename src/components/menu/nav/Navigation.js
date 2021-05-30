@@ -11,7 +11,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 export default class Navigation extends Component {
     render() {
         return(
-            <BottomNavigation value={ this.props.value } onChange={ this.props.handleChange }>
+            <BottomNavigation value={ this.props.value } onChange={ this.props.handleNavChange }>
             <BottomNavigationAction label="Profile" value="Profile" icon={<PersonIcon />} />
             <BottomNavigationAction label="Tracks" value="Tracks" icon={<TimelineIcon />} />
             <BottomNavigationAction label="Setting" value="Setting" icon={<SettingsIcon />} />
