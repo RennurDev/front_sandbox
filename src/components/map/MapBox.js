@@ -31,13 +31,13 @@ export default class MapBox extends Component {
         lat: 0,
       }
     }
+    this.map = ''
     this.track = []
     this.previous_location = undefined
-    this.min_duration = 2000 //ms
     //watchPositionの実行idを管理
     this.watch_id = -1
 
-    this.onPosition = this.onPosition.bind(this)
+    this.onPosition = this.onPosition.bind(this);
     this.onClick = this.onClick.bind(this);
     this.setMap = this.setMap.bind(this);
   }
@@ -47,7 +47,6 @@ export default class MapBox extends Component {
   }
 
   onPosition(position) {
-    console.log("watched")
     if(this.track.length === 0) {
       this.previous_location = position;
       this._add(position)
@@ -58,9 +57,10 @@ export default class MapBox extends Component {
   }
 
   addPositionToTrack(position) {
+    const min_duration = 2000 //ms
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
 
-    if (elapseTime > this.min_duration) {
+    if (elapseTime > min_duration) {
       this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
       this.previous_location = position
     } else {
@@ -68,14 +68,19 @@ export default class MapBox extends Component {
     }
   }
 
-  getAllTrack(user_id) {
+  getAllTracks(user_id) {
     const url = RAILS_API_ENDPOINT + '/users_tracks/' + user_id
     axios
       .get(url)
       .then((results) => {
           let data = results.data
           let decoded_data
-          for(let i = 0; i < data.length; i++) {
+
+          this.props.handleTrackNumChange(data.length)
+
+          let track_num = this.props.track_num
+
+          for(let i = 0; i < track_num; i++) {
             decoded_data = decodeTrack(data[i].data)
             addTrackLayer(this.map, "track_"+String(i), decoded_data);
           }
@@ -154,18 +159,26 @@ export default class MapBox extends Component {
         lat: position.coords.latitude,
       }
     })
-    this.map = new mapboxgl.Map({
+    let map = new mapboxgl.Map({
       container: this.mapContainer,
       center: [this.state.current_pos.lng, this.state.current_pos.lat],
       style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
       zoom: 16
     })
+
+    this.props.handleMapCreate(map)
+
+    this.map = this.props.map
+
     this.map.addControl(geolocate);
     this.map.on('load', function() {
-      this.getAllTrack(this.props.current_user.id)
+      this.getAllTracks(this.props.current_user.id)
 
       // 記録用のレイヤーの追加
       addTrackLayer(this.map, "current_track")
+
+      //Next, Prev用のレイヤーの追加
+      addTrackLayer(this.map, "single_track")
       
       }.bind(this)
     )
