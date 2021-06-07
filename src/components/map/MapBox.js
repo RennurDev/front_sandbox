@@ -162,8 +162,9 @@ export default class MapBox extends Component {
     let map = new mapboxgl.Map({
       container: this.mapContainer,
       center: [this.state.current_pos.lng, this.state.current_pos.lat],
-      style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
-      zoom: 16
+      style: 'mapbox://styles/mapbox/dark-v9', // mapのスタイル指定
+      zoom: 12
+      
     })
 
     this.props.handleMapCreate(map)
