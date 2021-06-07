@@ -19,7 +19,7 @@ class App extends Component {
     super(props)
     this.state = {
       current_user: {
-        id: '1',
+        id: '5',
         name: 'hoge',
       },
       form: {
