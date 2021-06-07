@@ -4,12 +4,6 @@ import MapBox from './components/map/MapBox';
 import Menu from './components/menu/App';
 import './App.css'
 import UserForm from './components/user/App'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
 import axios from 'axios';
 
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
@@ -19,8 +13,8 @@ class App extends Component {
     super(props)
     this.state = {
       current_user: {
-        id: '1',
-        name: 'hoge',
+        id: '',
+        name: '',
       },
       form: {
         name: '',
@@ -102,47 +96,34 @@ class App extends Component {
 
   componentDidMount() {
     //current_userの更新
-    this.getCurrentUser();
   }
 
 
   render(){
     return (
-      <div className="overflow-hidden">
-        <Router>
-          <ul>
-            <li>
-              <Link to='/home'>Home</Link>
-            </li>
-            <li>
-              <Link to='/sign_up'>Sign up</Link>
-            </li>
-          </ul>
-          <Switch>
-            <Route path="/sign_up">
-              <UserForm />
-            </Route>
-            <Route path="/home">
-              <Header />
-              <MapBox
+        <div className="overflow-hidden">
+          { this.state.current_user.id === '' ? <UserForm /> : 
+          <div>
+            <Header />
+            <MapBox
               current_user = {this.state.current_user}
               track_id = {this.state.track_id}
               track_num = {this.state.track_num}
               map = {this.state.map}
               handleMapCreate = {this.handleMapCreate}
               handleTrackNumChange = {this.handleTrackNumChange}
-              />
-              <Menu 
+            />
+            <Menu 
               current_user = {this.state.current_user}
               form = {this.state.form}
               map = {this.state.map}
               track_num = {this.state.track_num}
               handleProfileChange = {this.handleProfileChange}
               handleProfileUpdate = {this.handleProfileUpdate}
-              />
-            </Route>
-          </Switch>
-        </Router>
+            />
+          </div>
+          }
+          
       </div>
     )
   }
