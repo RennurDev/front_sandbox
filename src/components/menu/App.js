@@ -43,6 +43,7 @@ export default class App extends Component {
          this.state.value === 'Tracks' ?
          <TracksContent
          map = {this.props.map}
+         tracks = {this.props.tracks}
          track_num = {this.props.track_num} /> 
          :
          this.state.value === 'Setting' ?

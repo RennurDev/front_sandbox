@@ -75,32 +75,14 @@ export default class MapBox extends Component {
       .then((results) => {
           let data = results.data
           let decoded_data
-
-          this.props.handleTrackNumChange(data.length)
-
-          let track_num = this.props.track_num
+          let track_num = data.length
 
           for(let i = 0; i < track_num; i++) {
-            decoded_data = decodeTrack(data[i].data)
-            addTrackLayer(this.map, "track_"+String(i), decoded_data);
+            data[i].data = decodeTrack(data[i].data)
+            addTrackLayer(this.map, "track_"+String(i), data[i].data);
           }
-          
-      })
-      .catch(
-        (error) => {
-          console.log(error)
-      })
-  }
 
-  // GetTrack
-  getTrack(id) {// DBからidで指定されたtrackデータを取得し,レスポンスがあればtrack_(id)という名前のソース,レイヤーを作成.
-    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
-    axios
-      .get(url)
-      .then((results) => {
-          let data = results.data.data
-          const decoded_data = decodeTrack(data)
-          addTrackLayer(this.map, "track_"+String(id), decoded_data);
+          this.props.handleTracksChange(data)
       })
       .catch(
         (error) => {

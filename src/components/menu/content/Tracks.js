@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import mapboxgl from 'mapbox-gl'
 import {
   Button,
   Grid,
@@ -16,9 +16,8 @@ import ShareIcon from '@material-ui/icons/Share';
 import { withStyles } from '@material-ui/core/styles';
 
 // import handleCurrentTrack from '../../../lib/HandleCurrentTrack'; //TODO: handleCurrentTrackを使用した実装に変更
-import showTrackLayer from '../../../lib/ShowTrackLayer';
-import hideTrackLayer from '../../../lib/HideTrackLayer';
 import hideAllTracks from '../../../lib/HideAllTracks';
+import drawTrack from '../../../lib/DrawTrack';
 
 const styles = theme => ({
   root: {
@@ -39,29 +38,44 @@ class Track extends Component {
     this.state = {
       track_id : '0'//Tracksタブで表示中のtrack_id
     }
+
+    this.handleTrackChange = this.handleTrackChange.bind(this)
+  }
+
+  handleTrackChange(option) {
+    let delta
+    if(option === 'next') {
+      delta = 1
+    } else if(option === 'prev') {
+      delta = -1
+    } else {
+      delta = 0
+    }
+    
+    this.setState({
+      track_id: (this.state.track_id + delta + this.props.track_num) % this.props.track_num
+    }, () => {
+      let coordinates = this.props.tracks[this.state.track_id].data
+      let bounds = coordinates.reduce(function(bounds, coord) {
+        return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+          
+        this.props.map.fitBounds(bounds, {
+        padding: 20
+        });
+      drawTrack(this.props.map, 'single_track', coordinates);
+    })
   }
 
   componentDidMount() {
+    let coordinates = this.props.tracks[this.state.track_id].data
     hideAllTracks(this.props.map, this.props.track_num)
-    showTrackLayer(this.props.map, 'track_'+this.state.track_id)
-    console.log('hoge')
+    this.handleTrackChange()
   }
 
   render() {
       //参考： https://stackoverflow.com/questions/56554586/how-to-use-usestyle-to-style-class-component-in-material-ui
       const { classes } = this.props;
-      const handlePrevTrack = () => {
-        hideTrackLayer(this.props.map, 'track_'+this.state.track_id)
-        this.setState({
-          track_id: (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
-        }, () => {showTrackLayer(this.props.map, 'track_'+this.state.track_id)})
-      }
-      const handleNextTrack = () => {
-        hideTrackLayer(this.props.map, 'track_'+this.state.track_id)
-        this.setState({
-          track_id: (this.state.track_id + 1 + this.props.track_num) % this.props.track_num
-        }, () => {showTrackLayer(this.props.map, 'track_'+this.state.track_id)})
-      }
       
     return(
 
@@ -114,7 +128,7 @@ class Track extends Component {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onClick = { handlePrevTrack }
+              onClick = { () => {this.handleTrackChange('next')} }
             >
               prev
             </Button>
@@ -125,7 +139,7 @@ class Track extends Component {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onClick = { handleNextTrack }
+              onClick = { () => {this.handleTrackChange('next')} }
             >
               next
             </Button>
