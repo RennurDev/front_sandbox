@@ -9,6 +9,8 @@ import encodeTrack from '../../lib/EncodeTrack';
 import RecordTrigger from './RecordTrigger';
 import axios from 'axios';
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 // アクセストークン
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
