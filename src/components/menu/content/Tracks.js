@@ -43,17 +43,17 @@ class Track extends Component {
   }
 
   handleTrackChange(option) {
-    let delta
+    let new_track_id
     if(option === 'next') {
-      delta = 1
+      (this.state.track_id + 1 ) % this.props.track_num
     } else if(option === 'prev') {
-      delta = -1
+      (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
     } else {
-      delta = 0
+      new_track_id = this.state.track_id
     }
     
     this.setState({
-      track_id: (this.state.track_id + delta + this.props.track_num) % this.props.track_num
+      track_id: new_track_id
     }, () => {
       let coordinates = this.props.tracks[this.state.track_id].data
       let bounds = coordinates.reduce(function(bounds, coord) {
