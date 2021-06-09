@@ -45,9 +45,9 @@ class Track extends Component {
   handleTrackChange(option) {
     let new_track_id
     if(option === 'next') {
-      (this.state.track_id + 1 ) % this.props.track_num
+      new_track_id = (this.state.track_id + 1 ) % this.props.track_num
     } else if(option === 'prev') {
-      (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
+      new_track_id = (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
     } else {
       new_track_id = this.state.track_id
     }
