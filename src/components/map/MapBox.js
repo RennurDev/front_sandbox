@@ -9,6 +9,8 @@ import encodeTrack from '../../lib/EncodeTrack';
 import RecordTrigger from './RecordTrigger';
 import axios from 'axios';
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 // アクセストークン
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
@@ -75,32 +77,14 @@ export default class MapBox extends Component {
       .then((results) => {
           let data = results.data
           let decoded_data
-
-          this.props.handleTrackNumChange(data.length)
-
-          let track_num = this.props.track_num
+          let track_num = data.length
 
           for(let i = 0; i < track_num; i++) {
-            decoded_data = decodeTrack(data[i].data)
-            addTrackLayer(this.map, "track_"+String(i), decoded_data);
+            data[i].data = decodeTrack(data[i].data)
+            addTrackLayer(this.map, "track_"+String(i), data[i].data);
           }
-          
-      })
-      .catch(
-        (error) => {
-          console.log(error)
-      })
-  }
 
-  // GetTrack
-  getTrack(id) {// DBからidで指定されたtrackデータを取得し,レスポンスがあればtrack_(id)という名前のソース,レイヤーを作成.
-    const url = RAILS_API_ENDPOINT + '/tracks/'+ id
-    axios
-      .get(url)
-      .then((results) => {
-          let data = results.data.data
-          const decoded_data = decodeTrack(data)
-          addTrackLayer(this.map, "track_"+String(id), decoded_data);
+          this.props.handleTracksChange(data)
       })
       .catch(
         (error) => {
@@ -162,8 +146,9 @@ export default class MapBox extends Component {
     let map = new mapboxgl.Map({
       container: this.mapContainer,
       center: [this.state.current_pos.lng, this.state.current_pos.lat],
-      style: 'mapbox://styles/mapbox/streets-v9', // mapのスタイル指定
-      zoom: 16
+      style: 'mapbox://styles/mapbox/dark-v9', // mapのスタイル指定
+      zoom: 12
+      
     })
 
     this.props.handleMapCreate(map)

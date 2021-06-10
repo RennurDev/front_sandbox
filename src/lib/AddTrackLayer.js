@@ -19,8 +19,8 @@ export default function AddTrackLayer(map, id, track=[]) {
       'line-cap': 'round' ,
     },
     'paint': {
-      'line-color': '#888',
-      'line-width': 8,
+      'line-color': '#E7211A',
+      'line-width': 2,
     }
   });
 }
