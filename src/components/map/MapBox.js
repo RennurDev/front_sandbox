@@ -45,7 +45,7 @@ export default class MapBox extends Component {
   }
 
   _add(position) {
-    this.track.push([position.coords.longitude, position.coords.latiude])
+    this.track.push([position.coords.longitude, position.coords.latitude])
   }
 
   onPosition(position) {
@@ -76,15 +76,15 @@ export default class MapBox extends Component {
       .get(url)
       .then((results) => {
           let data = results.data
-          let decoded_data
           let track_num = data.length
+          let tracks = []
 
           for(let i = 0; i < track_num; i++) {
-            data[i].data = decodeTrack(data[i].data)
-            addTrackLayer(this.map, "track_"+String(i), data[i].data);
+            tracks.push(decodeTrack(data[i].data))
+            addTrackLayer(this.map, "track_"+String(i), tracks[i])
           }
 
-          this.props.handleTracksChange(data)
+          this.props.handleTracksChange(tracks)
       })
       .catch(
         (error) => {
@@ -120,14 +120,18 @@ export default class MapBox extends Component {
     if(isStarted) { 
       // Record時の処理
       if(this.track.length !== 0) {
-        clearTrack(this.map, "current_track")
+        clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
         this.postTrack(this.track)
+        addTrackLayer(this.map, this.props.track_num + 1, this.track);
       }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
+      let new_tracks = this.props.tracks
+      console.log(new_tracks)
+      new_tracks.push(this.track)
+      this.props.handleTracksChange(new_tracks)
     } else { 
       // Start時の処理
-      console.log(this.track)
       if (this.track.length === 0) {
         this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
         this.setState({isStarted: !isStarted})
