@@ -115,15 +115,9 @@ class App extends Component {
               track_num = {this.state.track_num}
               map = {this.state.map}
               handleMapCreate = {this.handleMapCreate}
-<<<<<<< HEAD
-              handleTrackNumChange = {this.handleTrackNumChange}
-            />
-            <Menu 
-=======
               handleTracksChange = {this.handleTracksChange}
               />
               <Menu 
->>>>>>> 82ac247adf1a4e551e790c136ba331bb6f5602ba
               current_user = {this.state.current_user}
               form = {this.state.form}
               map = {this.state.map}
