@@ -57,6 +57,8 @@ class App extends Component {
       .catch((error) => {
         console.log(error);
       })
+
+    this.props.handleUserLogin(1)
   }
   
   handleDestroy() {
@@ -105,13 +107,13 @@ class App extends Component {
                     <Grid container spacing={3}>
                       <Grid item xs={12}>
                         <Button
-                            onClick={() => this.handleCreate()} 
-                            variant="contained"
-                            color="secondary"
-                            fullWidth={true}
-                            >
-                            はじめる
-                          </Button>
+                          onClick={() => this.handleCreate()} 
+                          variant="contained"
+                          color="secondary"
+                          fullWidth={true}
+                        >
+                          はじめる
+                        </Button>
                       </Grid>
                       <Grid item xs={12}>
                         <Button

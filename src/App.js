@@ -25,6 +25,7 @@ class App extends Component {
     }
 
     this.getCurrentUser = this.getCurrentUser.bind(this)
+    this.handleUserLogin = this.handleUserLogin.bind(this) //TODO: 認証機能が完成すると不要になるかもしれない
     this.handleMapCreate = this.handleMapCreate.bind(this)
     this.handleTracksChange = this.handleTracksChange.bind(this)
     this.handleProfileChange = this.handleProfileChange.bind(this)
@@ -50,6 +51,13 @@ class App extends Component {
         (error) => {
           console.log(error)
       })
+  }
+
+  handleUserLogin(id) {//TODO: 認証機能が完成すると不要になるかもしれない
+    this.setState({current_user: {
+      id: id
+    }
+  })
   }
 
   handleMapCreate(map) {
@@ -106,7 +114,9 @@ class App extends Component {
   render(){
     return (
         <div className="overflow-hidden">
-          { this.state.current_user.id === '' ? <UserForm /> : 
+          { this.state.current_user.id === '' ? <UserForm
+            handleUserLogin = {this.handleUserLogin}
+          /> : 
           <div>
             <Header />
             <MapBox
