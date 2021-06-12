@@ -129,7 +129,7 @@ export default class MapBox extends Component {
           this.postTrack(this.track)
           addTrackLayer(this.map, this.props.track_num + 1, this.track);
         } else {
-          console.log('not saved distance(<50): ' + this.distance )
+          alert('not saved distance(<50): ' + this.distance )
         }
       }
       navigator.geolocation.clearWatch(this.watch_id);
