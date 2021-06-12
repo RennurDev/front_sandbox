@@ -7,6 +7,7 @@ import clearTrack from '../../lib/ClearTrack';
 import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
 import RecordTrigger from './RecordTrigger';
+import calcDistance from '../../lib/CalcDistance';
 import axios from 'axios';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -38,6 +39,7 @@ export default class MapBox extends Component {
     this.previous_location = undefined
     //watchPositionの実行idを管理
     this.watch_id = -1
+    this.distance = 0
 
     this.onPosition = this.onPosition.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -53,6 +55,8 @@ export default class MapBox extends Component {
       this.previous_location = position;
       this._add(position)
     } else {
+      this.distance += calcDistance(this.previous_location, position)
+      console.log(this.distance)
       this.addPositionToTrack(position)
     }
     drawTrack(this.map, "current_track", this.track)
@@ -121,8 +125,12 @@ export default class MapBox extends Component {
       // Record時の処理
       if(this.track.length !== 0) {
         clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
-        this.postTrack(this.track)
-        addTrackLayer(this.map, this.props.track_num + 1, this.track);
+        if(this.distance > 50) {
+          this.postTrack(this.track)
+          addTrackLayer(this.map, this.props.track_num + 1, this.track);
+        } else {
+          console.log('not saved distance(<50): ' + this.distance )
+        }
       }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
