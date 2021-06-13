@@ -56,9 +56,6 @@ export default class MapBox extends Component {
       this.previous_location = position;
       this._add(position)
     } else {
-      this.distance += calcDistance(this.previous_location, position)
-      this.comptime += 1
-      console.log(this.distance)
       this.addPositionToTrack(position)
     }
     drawTrack(this.map, "current_track", this.track)
@@ -69,6 +66,9 @@ export default class MapBox extends Component {
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
 
     if (elapseTime > min_duration) {
+      this.distance += calcDistance(this.previous_location, position)
+      this.comptime += 1
+      console.log(this.distance)
       this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
       this.previous_location = position
     } else {
