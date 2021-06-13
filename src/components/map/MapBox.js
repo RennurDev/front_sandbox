@@ -40,6 +40,7 @@ export default class MapBox extends Component {
     //watchPositionの実行idを管理
     this.watch_id = -1
     this.distance = 0
+    this.comptime = 0 //debug
 
     this.onPosition = this.onPosition.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -56,6 +57,7 @@ export default class MapBox extends Component {
       this._add(position)
     } else {
       this.distance += calcDistance(this.previous_location, position)
+      this.comptime += 1
       console.log(this.distance)
       this.addPositionToTrack(position)
     }
@@ -126,7 +128,7 @@ export default class MapBox extends Component {
       if(this.track.length !== 0) {
         clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
         if(this.distance > 50) {
-          alert('distance(>50): ' + this.distance )
+          alert('distance(>50): ' + this.distance +'\n track_length: '+ this.track.length +'\n computed(times): '+ this.comptime)
           this.postTrack(this.track)
           addTrackLayer(this.map, this.props.track_num + 1, this.track);
         } else {
