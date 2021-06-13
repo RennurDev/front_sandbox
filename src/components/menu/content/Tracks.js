@@ -43,32 +43,33 @@ class Track extends Component {
   }
 
   handleTrackChange(option) {
-    let new_track_id
-    if(option === 'next') {
-      new_track_id = (this.state.track_id + 1 ) % this.props.track_num
-    } else if(option === 'prev') {
-      new_track_id = (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
-    } else {
-      new_track_id = this.state.track_id
+    if(this.props.track_num != 0) {
+      let new_track_id
+      if(option === 'next') {
+        new_track_id = (this.state.track_id + 1 ) % this.props.track_num
+      } else if(option === 'prev') {
+        new_track_id = (this.state.track_id - 1 + this.props.track_num) % this.props.track_num
+      } else {
+        new_track_id = this.state.track_id
+      }
+      
+      this.setState({
+        track_id: new_track_id
+      }, () => {
+        let coordinates = this.props.tracks[this.state.track_id]
+        let bounds = coordinates.reduce(function(bounds, coord) {
+          return bounds.extend(coord);
+          }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+            
+          this.props.map.fitBounds(bounds, {
+          padding: 20
+          });
+        drawTrack(this.props.map, 'single_track', coordinates);
+      })
     }
-    
-    this.setState({
-      track_id: new_track_id
-    }, () => {
-      let coordinates = this.props.tracks[this.state.track_id].data
-      let bounds = coordinates.reduce(function(bounds, coord) {
-        return bounds.extend(coord);
-        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-          
-        this.props.map.fitBounds(bounds, {
-        padding: 20
-        });
-      drawTrack(this.props.map, 'single_track', coordinates);
-    })
   }
 
   componentDidMount() {
-    let coordinates = this.props.tracks[this.state.track_id].data
     hideAllTracks(this.props.map, this.props.track_num)
     this.handleTrackChange()
   }

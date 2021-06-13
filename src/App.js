@@ -121,6 +121,7 @@ class App extends Component {
             <Header />
             <MapBox
               current_user = {this.state.current_user}
+              tracks = {this.state.tracks}
               track_id = {this.state.track_id}
               track_num = {this.state.track_num}
               map = {this.state.map}

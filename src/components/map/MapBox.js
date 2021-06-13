@@ -7,6 +7,7 @@ import clearTrack from '../../lib/ClearTrack';
 import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
 import RecordTrigger from './RecordTrigger';
+import calcDistance from '../../lib/CalcDistance';
 import axios from 'axios';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -38,6 +39,7 @@ export default class MapBox extends Component {
     this.previous_location = undefined
     //watchPositionの実行idを管理
     this.watch_id = -1
+    this.distance = 0
 
     this.onPosition = this.onPosition.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -45,7 +47,7 @@ export default class MapBox extends Component {
   }
 
   _add(position) {
-    this.track.push([position.coords.longitude, position.coords.latiude])
+    this.track.push([position.coords.longitude, position.coords.latitude])
   }
 
   onPosition(position) {
@@ -63,6 +65,7 @@ export default class MapBox extends Component {
     const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
 
     if (elapseTime > min_duration) {
+      this.distance += calcDistance(this.previous_location, position)
       this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
       this.previous_location = position
     } else {
@@ -76,15 +79,15 @@ export default class MapBox extends Component {
       .get(url)
       .then((results) => {
           let data = results.data
-          let decoded_data
           let track_num = data.length
+          let tracks = []
 
           for(let i = 0; i < track_num; i++) {
-            data[i].data = decodeTrack(data[i].data)
-            addTrackLayer(this.map, "track_"+String(i), data[i].data);
+            tracks.push(decodeTrack(data[i].data))
+            addTrackLayer(this.map, "track_"+String(i), tracks[i])
           }
 
-          this.props.handleTracksChange(data)
+          this.props.handleTracksChange(tracks)
       })
       .catch(
         (error) => {
@@ -120,14 +123,23 @@ export default class MapBox extends Component {
     if(isStarted) { 
       // Record時の処理
       if(this.track.length !== 0) {
-        clearTrack(this.map, "current_track")
-        this.postTrack(this.track)
+        clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
+        if(this.distance > 50) {
+          alert('distance(>50): ' + this.distance)
+          this.postTrack(this.track)
+          addTrackLayer(this.map, this.props.track_num + 1, this.track);
+        } else {
+          alert('not saved distance(<50): ' + this.distance )
+        }
       }
       navigator.geolocation.clearWatch(this.watch_id);
       this.setState({isStarted: !isStarted})
+      let new_tracks = this.props.tracks
+      console.log(new_tracks)
+      new_tracks.push(this.track)
+      this.props.handleTracksChange(new_tracks)
     } else { 
       // Start時の処理
-      console.log(this.track)
       if (this.track.length === 0) {
         this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
         this.setState({isStarted: !isStarted})
