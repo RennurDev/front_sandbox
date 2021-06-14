@@ -110,8 +110,6 @@ export default class MapBox extends Component {
       .post(url, body)
       .then((results) => {
         const data = results.data
-        // TODO: レスポンスが200な場合のみ 初期化するよう実装
-        this.track = [];
       })
       .catch((error) => {
         console.log(error);
@@ -122,27 +120,30 @@ export default class MapBox extends Component {
     let isStarted = this.state.isStarted
     if(isStarted) { 
       // Record時の処理
+      const track = this.track //NOTE: 後続の処理で初期化されるthis.trackの内容を別変数に退避させておき,非同期で行われる保存処理と独立して処理できるようにする
       if(this.track.length !== 0) {
         clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
         if(this.distance > 50) {
           alert('distance(>50): ' + this.distance)
-          this.postTrack(this.track)
+          this.postTrack(track)
+          let new_tracks = this.props.tracks
+          new_tracks.push(track)
+          this.props.handleTracksChange(new_tracks)
           addTrackLayer(this.map, this.props.track_num + 1, this.track);
         } else {
           alert('not saved distance(<50): ' + this.distance )
         }
       }
       navigator.geolocation.clearWatch(this.watch_id);
+      this.track = [] //NOTE: this.trackが0でないとstartできない
       this.setState({isStarted: !isStarted})
-      let new_tracks = this.props.tracks
-      console.log(new_tracks)
-      new_tracks.push(this.track)
-      this.props.handleTracksChange(new_tracks)
     } else { 
       // Start時の処理
       if (this.track.length === 0) {
         this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
         this.setState({isStarted: !isStarted})
+      } else {
+        console.log("error: this.trackが初期化されてないよ")
       }
     }
   }
