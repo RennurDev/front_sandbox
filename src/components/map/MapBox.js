@@ -125,7 +125,7 @@ export default class MapBox extends Component {
       if(this.track.length !== 0) {
         clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
         if(this.distance > 50) {
-          alert('distance(>50): ' + this.distance)
+          alert('distance(>50): ' + this.distance +'\n encoded_data: '+encodeTrack(this.track))
           this.postTrack(this.track)
           addTrackLayer(this.map, this.props.track_num + 1, this.track);
         } else {
