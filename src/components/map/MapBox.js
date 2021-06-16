@@ -50,6 +50,7 @@ export default class MapBox extends Component {
 
   beginRecordTrack() {
     this.track = []
+    this.distance = 0
     /* WARNING: 以下二行はいずれも非同期. 前後した場合はエラーが生じる. */
     //初期化
     navigator.geolocation.getCurrentPosition(this.initializePosition);
@@ -58,6 +59,7 @@ export default class MapBox extends Component {
   }
 
   endRecordTrack(track) {
+    alert(track)
     clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
     
     if(this.distance > 50) {
