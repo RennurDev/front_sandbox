@@ -59,7 +59,8 @@ export default class MapBox extends Component {
   }
 
   endRecordTrack(track) {
-    alert(track)
+    alert(this.distance)
+    navigator.geolocation.clearWatch(this.watch_id);
     clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
     
     if(this.distance > 50) {
@@ -73,8 +74,6 @@ export default class MapBox extends Component {
     } else {
       alert('not saved distance(<50): ' + this.distance )
     }
-
-    navigator.geolocation.clearWatch(this.watch_id);
   }
 
   initializePosition(position) {
