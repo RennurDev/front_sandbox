@@ -64,7 +64,6 @@ export default class MapBox extends Component {
     
     if(this.distance > 50) {
       this.postTrack(track)
-      alert("success1")
       let new_tracks = this.props.tracks
       new_tracks.push(track)
       alert("success2")
