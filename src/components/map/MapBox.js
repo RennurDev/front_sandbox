@@ -6,6 +6,7 @@ import drawTrack from '../../lib/DrawTrack';
 import addTrackLayer from '../../lib/AddTrackLayer';
 import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
+import handleCurrentPosition from '../../lib/HandleCurrentPosition'
 import axios from 'axios';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -80,7 +81,10 @@ export default class MapBox extends Component {
   }
 
   onPosition(position) {
-    this.track, this.distance, this.previous_position = handleCurrentPosition(this.track, this.previous_position, position, this.distance)
+    let { track, dist, prev_pos } = handleCurrentPosition(this.track, this.previous_position, position, this.distance)
+    this.track = track
+    this.distance = dist
+    this.previous_position = prev_pos
     drawTrack(this.map, "current_track", this.track);
   }
 
