@@ -4,10 +4,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import RecordTrigger from './RecordTrigger';
 import drawTrack from '../../lib/DrawTrack';
 import addTrackLayer from '../../lib/AddTrackLayer';
-import clearTrack from '../../lib/ClearTrack';
 import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
-import calcDistance from '../../lib/CalcDistance';
 import axios from 'axios';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -60,16 +58,14 @@ export default class MapBox extends Component {
 
   endRecordTrack(track) {
     navigator.geolocation.clearWatch(this.watch_id);
-    clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
     
     if(this.distance > 50) {
-      this.postTrack(track)
       let new_tracks = this.props.tracks
       new_tracks.push(track)
-      alert("success2")
       addTrackLayer(this.map, new_tracks.length, track);
-      alert("success3")
       this.props.handleTracksChange(new_tracks)
+
+      this.postTrack(track)
 
       alert('distance(>50): ' + this.distance )
     } else {
@@ -84,15 +80,8 @@ export default class MapBox extends Component {
   }
 
   onPosition(position) {
-    const min_duration = 2000 //ms
-    const elapseTime = parseInt((position.timestamp - this.previous_position.timestamp))
-
-    if (elapseTime > min_duration) {
-      this.distance += calcDistance(this.previous_position, position)
-      this.track.push([position.coords.longitude, position.coords.latitude])
-      this.previous_position = position
-      drawTrack(this.map, "current_track", this.track);
-    }
+    this.track, this.distance, this.previous_position = handleCurrentPosition(this.track, this.previous_position, position, this.distance)
+    drawTrack(this.map, "current_track", this.track);
   }
 
   getAllTracks(user_id) {
