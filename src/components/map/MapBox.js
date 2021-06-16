@@ -6,6 +6,8 @@ import drawTrack from '../../lib/DrawTrack';
 import addTrackLayer from '../../lib/AddTrackLayer';
 import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
+import showTrackLayer from '../../lib/ShowTrackLayer';
+import hideTrackLayer from '../../lib/HideTrackLayer';
 import handleCurrentPosition from '../../lib/HandleCurrentPosition'
 import axios from 'axios';
 
@@ -50,6 +52,7 @@ export default class MapBox extends Component {
   beginRecordTrack() {
     this.track = []
     this.distance = 0
+    hideTrackLayer(this.map, "current_track")
     /* WARNING: 以下二行はいずれも非同期. 前後した場合はエラーが生じる. */
     //初期化
     navigator.geolocation.getCurrentPosition(this.initializePosition);
@@ -59,6 +62,7 @@ export default class MapBox extends Component {
 
   endRecordTrack(track) {
     navigator.geolocation.clearWatch(this.watch_id);
+    hideTrackLayer(this.map, "current_track")
     
     if(this.distance > 50) {
       let new_tracks = this.props.tracks
@@ -143,24 +147,25 @@ export default class MapBox extends Component {
   }
 
   setMap(position){ 
+    const c_lng = position.coords.longitude
+    const c_lat = position.coords.latitude
     // 現在地設定
     this.setState({
       current_pos: {
-        lng: position.coords.longitude,
-        lat: position.coords.latitude,
+        lng: c_lng,
+        lat: c_lat,
       }
     })
     let map = new mapboxgl.Map({
       container: this.mapContainer,
-      center: [this.state.current_pos.lng, this.state.current_pos.lat],
+      center: [c_lng, c_lat],
       style: 'mapbox://styles/mapbox/dark-v9', // mapのスタイル指定
       zoom: 12
       
     })
 
     this.props.handleMapCreate(map)
-
-    this.map = this.props.map
+    this.map = map
 
     this.map.addControl(geolocate);
     this.map.on('load', function() {
