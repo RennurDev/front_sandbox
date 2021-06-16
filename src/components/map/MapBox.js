@@ -59,15 +59,17 @@ export default class MapBox extends Component {
   }
 
   endRecordTrack(track) {
-    alert(this.distance)
     navigator.geolocation.clearWatch(this.watch_id);
     clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
     
     if(this.distance > 50) {
       this.postTrack(track)
+      alert("success1")
       let new_tracks = this.props.tracks
       new_tracks.push(track)
-      addTrackLayer(this.map, this.props.track_num + 1, track);
+      alert("success2")
+      addTrackLayer(this.map, new_tracks.length, track);
+      alert("success3")
       this.props.handleTracksChange(new_tracks)
 
       alert('distance(>50): ' + this.distance )
@@ -83,9 +85,6 @@ export default class MapBox extends Component {
   }
 
   onPosition(position) {
-    if(this.previous_position === undefined) {
-      alert("undefined!")
-    }
     const min_duration = 2000 //ms
     const elapseTime = parseInt((position.timestamp - this.previous_position.timestamp))
 
