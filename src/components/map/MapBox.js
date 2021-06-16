@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
+import RecordTrigger from './RecordTrigger';
 import drawTrack from '../../lib/DrawTrack';
 import addTrackLayer from '../../lib/AddTrackLayer';
 import clearTrack from '../../lib/ClearTrack';
 import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
-import RecordTrigger from './RecordTrigger';
 import calcDistance from '../../lib/CalcDistance';
 import axios from 'axios';
 
@@ -27,7 +27,6 @@ export default class MapBox extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      area: '',
       isStarted: false,
       current_pos: {
         lng: 0,
@@ -36,40 +35,60 @@ export default class MapBox extends Component {
     }
     this.map = ''
     this.track = []
-    this.previous_location = undefined
+    this.previous_position = undefined
     //watchPositionの実行idを管理
     this.watch_id = -1
     this.distance = 0
 
-    this.onPosition = this.onPosition.bind(this);
     this.onClick = this.onClick.bind(this);
     this.setMap = this.setMap.bind(this);
+    this.beginRecordTrack = this.beginRecordTrack.bind(this);
+    this.endRecordTrack = this.endRecordTrack.bind(this);
+    this.initializePosition = this.initializePosition.bind(this);
+    this.onPosition = this.onPosition.bind(this);
   }
 
-  _add(position) {
-    this.track.push([position.coords.longitude, position.coords.latitude])
+  beginRecordTrack() {
+    this.track = []
+    /* WARNING: 以下二行はいずれも非同期. 前後した場合はエラーが生じる. */
+    //初期化
+    navigator.geolocation.getCurrentPosition(this.initializePosition);
+    //それ以降
+    this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
+  }
+
+  endRecordTrack(track) {
+    clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
+    
+    if(this.distance > 50) {
+      this.postTrack(track)
+      let new_tracks = this.props.tracks
+      new_tracks.push(track)
+      addTrackLayer(this.map, this.props.track_num + 1, track);
+      this.props.handleTracksChange(new_tracks)
+
+      alert('distance(>50): ' + this.distance )
+    } else {
+      alert('not saved distance(<50): ' + this.distance )
+    }
+
+    navigator.geolocation.clearWatch(this.watch_id);
+  }
+
+  initializePosition(position) {
+    this.previous_position = position;
+    this.track.push([position.coords.longitude, position.coords.latitude]);
+    drawTrack(this.map, "current_track", this.track);
   }
 
   onPosition(position) {
-    if(this.track.length === 0) {
-      this.previous_location = position;
-      this._add(position)
-    } else {
-      this.addPositionToTrack(position)
-    }
-    drawTrack(this.map, "current_track", this.track)
-  }
-
-  addPositionToTrack(position) {
     const min_duration = 2000 //ms
-    const elapseTime = parseInt((position.timestamp - this.previous_location.timestamp))
+    const elapseTime = parseInt((position.timestamp - this.previous_position.timestamp))
 
     if (elapseTime > min_duration) {
-      this.distance += calcDistance(this.previous_location, position)
-      this._add(position) // 経過時間が設定した制限時間をこえたらヒストリ追加
-      this.previous_location = position
-    } else {
-      return;
+      this.distance += calcDistance(this.previous_position, position)
+      this.track.push([position.coords.longitude, position.coords.latitude])
+      this.previous_position = position
     }
   }
 
@@ -79,10 +98,9 @@ export default class MapBox extends Component {
       .get(url)
       .then((results) => {
           let data = results.data
-          let track_num = data.length
           let tracks = []
 
-          for(let i = 0; i < track_num; i++) {
+          for(let i = 0; i < data.length; i++) {
             tracks.push(decodeTrack(data[i].data))
             addTrackLayer(this.map, "track_"+String(i), tracks[i])
           }
@@ -119,33 +137,13 @@ export default class MapBox extends Component {
   onClick() {
     let isStarted = this.state.isStarted
     if(isStarted) { 
-      // Record時の処理
-      const track = this.track //NOTE: 後続の処理で初期化されるthis.trackの内容を別変数に退避させておき,非同期で行われる保存処理と独立して処理できるようにする
-      if(this.track.length !== 0) {
-        clearTrack(this.map, "current_track") //DISCUSS: hideTrackに置き換えてclearTrackを無くせる？
-        if(this.distance > 50) {
-          alert('distance(>50): ' + this.distance)
-          this.postTrack(track)
-          let new_tracks = this.props.tracks
-          new_tracks.push(track)
-          this.props.handleTracksChange(new_tracks)
-          addTrackLayer(this.map, this.props.track_num + 1, this.track);
-        } else {
-          alert('not saved distance(<50): ' + this.distance )
-        }
-      }
-      navigator.geolocation.clearWatch(this.watch_id);
-      this.track = [] //NOTE: this.trackが0でないとstartできない
-      this.setState({isStarted: !isStarted})
+      // Recordの処理
+      this.endRecordTrack(this.track);
     } else { 
       // Start時の処理
-      if (this.track.length === 0) {
-        this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
-        this.setState({isStarted: !isStarted})
-      } else {
-        console.log("error: this.trackが初期化されてないよ")
-      }
+      this.beginRecordTrack();
     }
+    this.setState({isStarted: !isStarted})
   }
 
   setMap(position){ 
