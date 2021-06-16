@@ -82,6 +82,7 @@ export default class MapBox extends Component {
   }
 
   onPosition(position) {
+    try {
     const min_duration = 2000 //ms
     const elapseTime = parseInt((position.timestamp - this.previous_position.timestamp))
 
@@ -89,7 +90,11 @@ export default class MapBox extends Component {
       this.distance += calcDistance(this.previous_position, position)
       this.track.push([position.coords.longitude, position.coords.latitude])
       this.previous_position = position
+      drawTrack(this.map, "current_track", this.track);
     }
+  } catch(e) {
+    alert(e);
+  }
   }
 
   getAllTracks(user_id) {
