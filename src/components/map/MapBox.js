@@ -66,13 +66,14 @@ export default class MapBox extends Component {
     navigator.geolocation.clearWatch(this.watch_id)
     hideTrackLayer(this.map, "current_track")
     
-    if(this.distance > 50) {
-      const new_tracks = this.props.tracks.concat(track)
+    if(this.distance >= 50) {
+      let new_tracks = this.props.tracks
+      new_tracks.push(track)
       addTrackLayer(this.map, "track_"+String(new_tracks.length-1), track) //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       this.props.handleTracksChange(new_tracks)
       this.postTrack(track)
 
-      alert('distance(>50): ' + this.distance )
+      alert('distance: ' + this.distance )
     } else {
       alert('not saved distance(<50): ' + this.distance )
     }
@@ -103,6 +104,7 @@ export default class MapBox extends Component {
 
           for(let i = 0; i < data.length; i++) {
             tracks.push(decodeTrack(data[i].data))
+            console.log(tracks[i])
             addTrackLayer(this.map, "track_"+String(i), tracks[i])
           }
 
