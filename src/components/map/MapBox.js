@@ -8,7 +8,10 @@ import decodeTrack from '../../lib/DecodeTrack';
 import encodeTrack from '../../lib/EncodeTrack';
 import showTrackLayer from '../../lib/ShowTrackLayer';
 import hideTrackLayer from '../../lib/HideTrackLayer';
-import handleCurrentPosition from '../../lib/HandleCurrentPosition'
+import hideAllTracks from '../../lib/HideAllTracks';
+import showAllTracks from '../../lib/ShowAllTracks';
+import isValidPosition from '../../lib/IsValidPosition';
+import calcDistance from '../../lib/CalcDistance';
 import axios from 'axios';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -52,44 +55,42 @@ export default class MapBox extends Component {
   beginRecordTrack() {
     this.track = []
     this.distance = 0
-    hideTrackLayer(this.map, "current_track")
-    /* WARNING: 以下二行はいずれも非同期. 前後した場合はエラーが生じる. */
+    hideAllTracks(this.map, this.props.tracks.length)
+    showTrackLayer(this.map, "current_track")
     //初期化
     navigator.geolocation.getCurrentPosition(this.initializePosition);
-    //それ以降
     this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
   }
 
   endRecordTrack(track) {
-    navigator.geolocation.clearWatch(this.watch_id);
+    navigator.geolocation.clearWatch(this.watch_id)
     hideTrackLayer(this.map, "current_track")
     
     if(this.distance > 50) {
-      let new_tracks = this.props.tracks
-      new_tracks.push(track)
-      addTrackLayer(this.map, new_tracks.length, track);
+      const new_tracks = this.props.tracks.concat(track)
+      addTrackLayer(this.map, new_tracks.length, track)
       this.props.handleTracksChange(new_tracks)
-
       this.postTrack(track)
 
       alert('distance(>50): ' + this.distance )
     } else {
       alert('not saved distance(<50): ' + this.distance )
     }
+    showAllTracks(this.map, this.props.tracks.length)
   }
 
   initializePosition(position) {
-    this.previous_position = position;
-    this.track.push([position.coords.longitude, position.coords.latitude]);
-    drawTrack(this.map, "current_track", this.track);
+    this.previous_position = position
+    this.track.push([position.coords.longitude, position.coords.latitude])
   }
 
   onPosition(position) {
-    let { track, dist, prev_pos } = handleCurrentPosition(this.track, this.previous_position, position, this.distance)
-    this.track = track
-    this.distance = dist
-    this.previous_position = prev_pos
-    drawTrack(this.map, "current_track", this.track);
+    if (isValidPosition(this.previous_position, position)) {
+      this.distance += calcDistance(this.previous_position, position)
+      track.push([position.coords.longitude, position.coords.latitude])
+      this.previous_position = position
+    }
+    drawTrack(this.map, "current_track", this.track)
   }
 
   getAllTracks(user_id) {
