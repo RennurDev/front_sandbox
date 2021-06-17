@@ -87,7 +87,7 @@ export default class MapBox extends Component {
   onPosition(position) {
     if (isValidPosition(this.previous_position, position)) {
       this.distance += calcDistance(this.previous_position, position)
-      track.push([position.coords.longitude, position.coords.latitude])
+      this.track.push([position.coords.longitude, position.coords.latitude])
       this.previous_position = position
     }
     drawTrack(this.map, "current_track", this.track)
