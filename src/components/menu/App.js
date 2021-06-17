@@ -4,6 +4,8 @@ import TracksContent from './content/Tracks';
 import SettingContent from './content/Setting';
 import Navigation from './nav/Navigation';
 import showAllTracks from '../../lib/ShowAllTracks'
+import Grid from '@material-ui/core/Grid';
+
 
 export default class App extends Component {
   constructor(props){
@@ -34,7 +36,12 @@ export default class App extends Component {
     const form = this.props.form
     console.log(this.props)
     return(
-      <div>
+      <div className="BottomPetamp">
+        <Grid container alignItems="center" justify="center">
+          <Grid xs={4}>
+            <img src={process.env.PUBLIC_URL+"/RecordPETAMP-03.svg"}  alt="アイコン" />
+          </Grid>
+        </Grid>
         <Navigation value={ value } handleNavChange = { handleNavChange }/>
 
         {this.state.value === 'Profile' ? 

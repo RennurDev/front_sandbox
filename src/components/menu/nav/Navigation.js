@@ -7,8 +7,10 @@ import {
 import PersonIcon from '@material-ui/icons/Person';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { withStyles } from "@material-ui/core/styles";
 
-export default class Navigation extends Component {
+
+class Navigation extends Component {
     render() {
         return(
             <BottomNavigation value={ this.props.value } onChange={ this.props.handleNavChange }>
@@ -20,3 +22,5 @@ export default class Navigation extends Component {
         
     }
 }
+
+export default Navigation;

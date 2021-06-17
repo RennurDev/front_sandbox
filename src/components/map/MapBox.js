@@ -211,12 +211,14 @@ export default class MapBox extends Component {
     return (
         <div>
           <div className={'mapContainer'} ref={e => this.mapContainer = e}/>
-          <RecordTrigger 
-            onClick={onClick}
-            btnContent={btnContent}
-            btnColor={btnColor}
-          >
-          </RecordTrigger>
+          <div className="RecordButton">
+            <RecordTrigger 
+              onClick={onClick}
+              btnContent={btnContent}
+              btnColor={btnColor}
+            >
+            </RecordTrigger>
+          </div>
         </div>
      )
   }
