@@ -68,11 +68,11 @@ export default class MapBox extends Component {
     
     if(this.distance > 50) {
       const new_tracks = this.props.tracks.concat(track)
-      addTrackLayer(this.map, new_tracks.length-1, track) //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
+      addTrackLayer(this.map, "track_"+String(new_tracks.length-1), track) //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       this.props.handleTracksChange(new_tracks)
       this.postTrack(track)
 
-      alert('distance(>50): ' + this.distance + '\n length: ' + new_tracks)
+      alert('distance(>50): ' + this.distance )
     } else {
       alert('not saved distance(<50): ' + this.distance )
     }
