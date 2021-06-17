@@ -4,12 +4,6 @@ import MapBox from './components/map/MapBox';
 import Menu from './components/menu/App';
 import './App.css'
 import UserForm from './components/user/App'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
 import axios from 'axios';
 
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT
@@ -19,18 +13,19 @@ class App extends Component {
     super(props)
     this.state = {
       current_user: {
-        id: '5',
-        name: 'hoge',
+        id: '',
+        name: '',
       },
       form: {
         name: '',
       },
       track_num: '0', //全Track数
-      tracks: '',
+      tracks: [],
       map: '',
     }
 
     this.getCurrentUser = this.getCurrentUser.bind(this)
+    this.handleUserLogin = this.handleUserLogin.bind(this) //TODO: 認証機能が完成すると不要になるかもしれない
     this.handleMapCreate = this.handleMapCreate.bind(this)
     this.handleTracksChange = this.handleTracksChange.bind(this)
     this.handleProfileChange = this.handleProfileChange.bind(this)
@@ -56,6 +51,13 @@ class App extends Component {
         (error) => {
           console.log(error)
       })
+  }
+
+  handleUserLogin(id) {//TODO: 認証機能が完成すると不要になるかもしれない
+    this.setState({current_user: {
+      id: id
+    }
+  })
   }
 
   handleMapCreate(map) {
@@ -106,30 +108,20 @@ class App extends Component {
 
   componentDidMount() {
     //current_userの更新
-    this.getCurrentUser();
   }
 
 
   render(){
     return (
-      <div className="overflow-hidden">
-        <Router>
-          <ul>
-            <li>
-              <Link to='/home'>Home</Link>
-            </li>
-            <li>
-              <Link to='/sign_up'>Sign up</Link>
-            </li>
-          </ul>
-          <Switch>
-            <Route path="/sign_up">
-              <UserForm />
-            </Route>
-            <Route path="/home">
-              <Header />
-              <MapBox
+        <div className="overflow-hidden">
+          { this.state.current_user.id === '' ? <UserForm
+            handleUserLogin = {this.handleUserLogin}
+          /> : 
+          <div>
+            <Header />
+            <MapBox
               current_user = {this.state.current_user}
+              tracks = {this.state.tracks}
               track_id = {this.state.track_id}
               track_num = {this.state.track_num}
               map = {this.state.map}
@@ -144,10 +136,10 @@ class App extends Component {
               track_num = {this.state.track_num}
               handleProfileChange = {this.handleProfileChange}
               handleProfileUpdate = {this.handleProfileUpdate}
-              />
-            </Route>
-          </Switch>
-        </Router>
+            />
+          </div>
+          }
+          
       </div>
     )
   }
