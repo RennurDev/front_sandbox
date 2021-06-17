@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Button } from '@material-ui/core'
 
-export default class RecordTrigger extends Component {
+
+class RecordTrigger extends Component {
   // constructor(props){
   //   super(props);
-  // }
+  // }1
 
   render() {
     const btnContent = this.props.btnContent;
@@ -20,3 +21,5 @@ export default class RecordTrigger extends Component {
     )
   }
 }
+
+export default RecordTrigger;
