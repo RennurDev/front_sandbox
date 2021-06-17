@@ -83,6 +83,13 @@ export default class MapBox extends Component {
   initializePosition(position) {
     this.previous_position = position
     this.track.push([position.coords.longitude, position.coords.latitude])
+    this.map.flyTo({
+      center: [
+        position.coords.longitude,
+        position.coords.latitude
+      ],
+      zoom: 15,
+    })
   }
 
   onPosition(position) {
