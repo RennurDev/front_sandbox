@@ -20,7 +20,7 @@ class App extends Component {
         name: '',
       },
       track_num: '0', //全Track数
-      tracks: '',
+      tracks: [],
       map: '',
     }
 
