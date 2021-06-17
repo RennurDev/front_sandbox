@@ -4,7 +4,7 @@ import UserLocation from './UserLocation';
 export default class App extends Component {
   render() {
     return (
-      <div　className="PetampHeader" >
+      <div>
         <UserLocation />
       </div>
     )

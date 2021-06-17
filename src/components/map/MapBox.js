@@ -205,8 +205,6 @@ export default class MapBox extends Component {
   
   render() {
     let isStarted = this.state.isStarted
-    const btnContent = isStarted ? 'RECORD' : 'START'
-    const btnColor = !isStarted ? 'primary' : 'secondary'
     const onClick = this.onClick
     return (
         <div>
@@ -214,8 +212,6 @@ export default class MapBox extends Component {
           <div className="RecordButton">
             <RecordTrigger 
               onClick={onClick}
-              btnContent={btnContent}
-              btnColor={btnColor}
             >
             </RecordTrigger>
           </div>
