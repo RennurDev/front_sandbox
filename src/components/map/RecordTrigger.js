@@ -27,7 +27,7 @@ class RecordTrigger extends Component {
                 className={classes.text}
                 onClick={() => this.props.onClick()}
               >
-                <img className="imgRecordButton" src={process.env.PUBLIC_URL+"/RecordPetamp-03.svg"}  alt="petampButton" />
+                <img className="imgRecordButton" src={process.env.PUBLIC_URL+"/imgRecordButton.svg"}  alt="petampButton" />
               </Button>
             </Grid>
           </Grid>
