@@ -127,8 +127,8 @@ class App extends Component {
               map = {this.state.map}
               handleMapCreate = {this.handleMapCreate}
               handleTracksChange = {this.handleTracksChange}
-              />
-              <Menu 
+            />
+            <Menu 
               current_user = {this.state.current_user}
               form = {this.state.form}
               map = {this.state.map}

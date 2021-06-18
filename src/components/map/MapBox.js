@@ -204,18 +204,15 @@ export default class MapBox extends Component {
   }
   
   render() {
-    let isStarted = this.state.isStarted
     const onClick = this.onClick
     return (
-        <div>
-          <div className={'mapContainer'} ref={e => this.mapContainer = e}/>
-          <div className="RecordButton">
-            <RecordTrigger 
-              onClick={onClick}
-            >
-            </RecordTrigger>
-          </div>
+      <div>
+        <div className={'mapContainer'} ref={e => this.mapContainer = e} >
+          <RecordTrigger 
+            onClick={onClick}
+          />
         </div>
+      </div>
      )
   }
 }

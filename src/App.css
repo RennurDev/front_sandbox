@@ -35,6 +35,10 @@ body {
   z-index: 1;
 }
 
+.imgRecordButton {
+  width: 100%;
+}
+
 .textLocation {
   color: white;
   position: absolute;
@@ -43,10 +47,8 @@ body {
   z-index: 2;
 }
 
-.RecordButton {
+.recordButton {
   position: absolute;
-  bottom: 50px;
-  z-index: 99;
   width: 100%;
 }
 
@@ -55,7 +57,7 @@ body {
 }
 
 .BottomPetamp {
-  width: 100%;
+  width: 30%;
 }
 
 .BackgroundAreaName {
