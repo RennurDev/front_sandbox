@@ -10,7 +10,7 @@
     "@testing-library/user-event": "^12.1.10",
     "animejs": "^3.2.1",
     "axios": "^0.21.1",
-    "gulp": "^4.0.2",
+    "gulp": "^3.9.1",
     "history": "^5.0.0",
     "mapbox-gl": "^2.3.0",
     "react": "^17.0.1",
@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.2.9",
-    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-essentials": "^6.1.21",
     "@storybook/addon-links": "^6.2.9",
     "@storybook/node-logger": "^6.2.9",
     "@storybook/preset-create-react-app": "^3.1.7",
