@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap");
 
 * {
-  font-family: 'Kosugi Maru', sans-serif;
+  font-family: "Kosugi Maru", sans-serif;
 }
 
 .overflow-hidden {
@@ -10,61 +10,72 @@
 
 .mapContainer {
   width: 100%;
-  height: 85vh;
+  height: 87vh;
 }
 
 body {
   margin: 0px;
   padding: 0px;
-}
-
-.PetampHeader {
-  position: absolute; z-index: 99;
-  width: 100%;
+  background-color: #00a563;
 }
 
 .areaName {
   width: 100%;
-  position: absolute; top: 15px;
-  text-align: center; z-index: 1;
+  position: absolute;
+  top: 15px;
+  text-align: center;
+  z-index: 1;
 }
 
-.textWhite {
-  color: white;
+.imgHeader {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  height: 50px;
+  z-index: 1;
 }
 
-.RecordButton{
-  position: absolute; bottom: 100px; z-index: 99;
+.imgRecordButton {
   width: 100%;
 }
 
-.BackgroundGreen {
-  background-color: green
+.textLocation {
+  color: white;
+  position: absolute;
+  width: 100%;
+  top: 40px;
+  z-index: 2;
+}
+
+.recordButton {
+  position: absolute;
+  width: 100%;
+}
+
+.backgroundGreen {
+  background-color: #00a563;
 }
 
 .BottomPetamp {
-  position: absolute; bottom: 0px; z-index: 98;
+  width: 30%;
+}
+
+.BackgroundAreaName {
+  position: absolute;
+  z-index: 1;
+  top: 30px;
   width: 100%;
 }
 
-.BackgroundAreaName{
-  position: absolute; top: 0px; z-index: -1;
-  width: 100%;
-}
-
-.signUp-background-color{
-  background-color:  #1DAA6C;
-}
-
-.Petamp{
+.Petamp {
   width: 100%;
   height: 70%;
 }
 
-.start-color{
- color: #FFFFFF
+.start-color {
+  color: #ffffff;
 }
 
-.login-color{
-  color: #FFFFFF
+.login-color {
+  color: #ffffff;
 }
