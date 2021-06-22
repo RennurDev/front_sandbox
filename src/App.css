@@ -47,17 +47,8 @@ body {
   z-index: 2;
 }
 
-.recordButton {
-  position: absolute;
-  width: 100%;
-}
-
 .backgroundGreen {
   background-color: #00a563;
-}
-
-.BottomPetamp {
-  width: 30%;
 }
 
 .BackgroundAreaName {
