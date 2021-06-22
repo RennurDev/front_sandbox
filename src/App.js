@@ -5,8 +5,15 @@ import Menu from "./components/menu/App";
 import "./App.css";
 import UserForm from "./components/user/App";
 import axios from "axios";
+import { withStyles } from '@material-ui/core/styles';
 
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT;
+const styles = theme => ({
+  root: {
+    overflow: "hidden",
+  }
+});
+
 
 class App extends Component {
   constructor(props) {
@@ -114,8 +121,9 @@ class App extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div className="overflow-hidden">
+      <div className={ classes.root }>
         {this.state.current_user.id === "" ? (
           <UserForm handleUserLogin={this.handleUserLogin} />
         ) : (
@@ -146,4 +154,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withStyles(styles, { withTheme: true })(App);
