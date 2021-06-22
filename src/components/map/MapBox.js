@@ -13,6 +13,7 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import axios from "axios";
+import { withStyles } from '@material-ui/core/styles';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -27,7 +28,14 @@ const geolocate = new mapboxgl.GeolocateControl({
   trackUserLocation: true, // ユーザの位置情報追跡
 });
 
-export default class MapBox extends Component {
+const styles = theme => ({
+  root: {
+    width: "100%",
+    height: "89vh",
+  }
+});
+
+class MapBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -201,12 +209,13 @@ export default class MapBox extends Component {
 
   render() {
     const onClick = this.onClick;
+    const { classes } = this.props;
     return (
-      <div>
-        <div className={"mapContainer"} ref={(e) => (this.mapContainer = e)}>
-          <RecordTrigger onClick={onClick} />
-        </div>
+      <div className={ classes.root } ref={(e) => (this.mapContainer = e)}>
+        <RecordTrigger onClick={onClick} />
       </div>
     );
   }
 }
+
+export default withStyles(styles, { withTheme: true })(MapBox);

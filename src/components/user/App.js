@@ -80,10 +80,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="backgroundGreen">
+      <div>
         <img
           src={`${process.env.PUBLIC_URL}/signUpPetamp.png`}
-          className="Petamp"
+          className="signUpPetamp"
         />
         <form noValidate autoComplete="off">
           <Grid container spacing={0} alignItems="center" justify="center">
@@ -117,7 +117,7 @@ class App extends Component {
                     alignItems="center"
                     justify="center"
                   >
-                    <Grid item xs={5}>
+                    <Grid item xs={6}>
                       <Grid container spacing={3}>
                         <Grid item xs={12}>
                           <Button
@@ -146,69 +146,6 @@ class App extends Component {
             </Grid>
           </Grid>
         </form>
-
-        <form noValidate autoComplete="off">
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {this.state.lists.map((list) => {
-                return (
-                  <div>
-                    <Grid container spaceing={0}>
-                      <Grid item xs={6}>
-                        {list.id}
-                      </Grid>
-                      <Grid item xs={3}>
-                        {list.name}
-                      </Grid>
-                      <Grid item xs={3}>
-                        {list.created_at}
-                      </Grid>
-                    </Grid>
-                  </div>
-                );
-              })}
-            </Grid>
-            {/* 新規作成 */}
-            <Grid item xs={9}>
-              <TextField
-                value={this.state.form.name}
-                onChange={(e) => this.handleChange(e, "name")}
-                fullWidth
-                label="Name"
-                color="primary"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                onClick={() => this.handleCreate()}
-                variant="outlined"
-                color="primary"
-                fullWidth={true}
-              >
-                CREATE
-              </Button>
-            </Grid>
-            {/* ユーザー削除 */}
-            <Grid item xs={2}>
-              <TextField
-                value={this.state.form.id}
-                onChange={(e) => this.handleChange(e, "id")}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                onClick={() => this.handleDestroy()}
-                variant="outlined"
-                color="secondary"
-                fullWidth={true}
-              >
-                DELETE
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-        <p>Forget Name?(sorry, but I can do nothing.)</p>
       </div>
     );
   }
