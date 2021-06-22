@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class UserLocationHistory {
   constructor() {
@@ -10,10 +10,9 @@ class UserLocationHistory {
   }
 
   _add(geolocate) {
-    if (this._hasProperty(geolocate, 'timestamp')) {
+    if (this._hasProperty(geolocate, "timestamp")) {
       this.history.add(geolocate);
       this.last_location = geolocate;
     }
   }
-  
 }

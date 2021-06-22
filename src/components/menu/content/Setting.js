@@ -1,25 +1,30 @@
-import React, { Component } from 'react';
-import { TextField, Button } from '@material-ui/core';
+import React, { Component } from "react";
+import { TextField, Button } from "@material-ui/core";
 
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 
 export default class Setting extends Component {
   render() {
-    return(
+    return (
       <div>
-
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <h1>Edit Profile</h1>
           </Grid>
           <Grid item xs={9}>
-                <TextField value={this.props.form.name}
-                    onChange={e=>this.props.handleChange(e, 'name')}
-                fullWidth={true}/>
+            <TextField
+              value={this.props.form.name}
+              onChange={(e) => this.props.handleChange(e, "name")}
+              fullWidth={true}
+            />
           </Grid>
           <Grid item xs={3}>
-            <Button variant="outlined" color="primary" fullWidth={true}
-            onClick = {this.props.handleUpdate}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth={true}
+              onClick={this.props.handleUpdate}
+            >
               Update
             </Button>
           </Grid>
@@ -41,6 +46,6 @@ export default class Setting extends Component {
           </Grid>
         </Grid>
       </div>
-    )
+    );
   }
 }

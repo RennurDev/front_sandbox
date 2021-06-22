@@ -1,8 +1,3 @@
 export default function ShowTrackLayer(map, id) {
-
-    map.setLayoutProperty(
-            id,
-            'visibility',
-            'visible'
-        );
+  map.setLayoutProperty(id, "visibility", "visible");
 }

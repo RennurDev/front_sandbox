@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import UserLocation from './UserLocation';
+import React, { Component } from "react";
+import UserLocation from "./UserLocation";
 
 export default class App extends Component {
   render() {
@@ -7,6 +7,6 @@ export default class App extends Component {
       <div>
         <UserLocation />
       </div>
-    )
+    );
   }
 }

@@ -1,15 +1,15 @@
 export default function DrawTrack(map, id, track) {
-  try { //addSourceが非同期のため、addSourceの実行より先にgetSourceが呼ばれてしまうことがある。
+  try {
+    //addSourceが非同期のため、addSourceの実行より先にgetSourceが呼ばれてしまうことがある。
     map.getSource(id).setData({
-      'type': 'Feature',
-      'properties': {},
-      'geometry': {
-        'type': 'LineString',
-        'coordinates': track
-      }
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: track,
+      },
     });
-  } catch(e) {
-    console.log(e)
+  } catch (e) {
+    console.log(e);
   }
 }
-
