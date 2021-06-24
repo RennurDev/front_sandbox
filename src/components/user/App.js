@@ -82,7 +82,7 @@ class App extends Component {
     return (
       <div>
         <img
-          src={`${process.env.PUBLIC_URL}/signUpPetamp.png`}
+          src={`${process.env.PUBLIC_URL}/signUpPetamp.svg`}
           className="signUpPetamp"
         />
         <form noValidate autoComplete="off">
