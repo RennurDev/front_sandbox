@@ -13,6 +13,7 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
+import { withStyles } from "@material-ui/core/styles";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;

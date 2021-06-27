@@ -5,6 +5,13 @@ import Menu from "./components/menu/App";
 import "./App.css";
 import UserForm from "./components/user/App";
 import RequestAxios from "./lib/RequestAxios";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = (theme) => ({
+  root: {
+    overflow: "hidden",
+  },
+});
 
 class App extends Component {
   constructor(props) {
