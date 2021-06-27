@@ -31,18 +31,15 @@ class App extends Component {
 
   getCurrentUser() {
     //TODO: device導入後, state.current_user.idを現在ログイン中のidで更新する処理を追記
-    let response;
     let id = this.state.current_user.id;
     const url = "/users/" + id;
-    response = RequestAxios(url, "get");
-    if (response) {
-      this.setState({ current_user: response });
+    let response = RequestAxios(url, "get");
+    response.then((r) => {
+      this.setState({ current_user: r });
       this.setState({
-        form: {
-          name: this.state.current_user.name,
-        },
+        name: this.state.current_user.name,
       });
-    }
+    });
   }
 
   handleUserLogin(id) {
@@ -79,7 +76,6 @@ class App extends Component {
 
   //更新処理
   handleProfileUpdate() {
-    let response;
     let body = {
       user: {
         id: this.state.current_user.id,
@@ -88,14 +84,14 @@ class App extends Component {
     };
     let id = this.state.current_user.id;
     const url = "/users/" + id;
-    response = RequestAxios(url, "put", body);
-    if (response) {
+    let response = RequestAxios(url, "put", body);
+    response.then((r) => {
       this.setState({
         current_user: {
           name: this.state.form.name,
         },
       });
-    }
+    });
   }
 
   componentDidMount() {
