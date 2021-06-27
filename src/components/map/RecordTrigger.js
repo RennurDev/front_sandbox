@@ -11,6 +11,7 @@ const styles = (theme) => ({
     bottom: -2,
   },
   text: {
+    width: "100%",
     padding: 0,
   },
 });
