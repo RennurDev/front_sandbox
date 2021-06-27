@@ -4,8 +4,16 @@ import TracksContent from './content/Tracks';
 import SettingContent from './content/Setting';
 import Navigation from './nav/Navigation';
 import showAllTracks from '../../lib/ShowAllTracks';
+import Grid from "@material-ui/core/Grid";
+import { withStyles } from '@material-ui/core/styles';
 
-export default class App extends Component {
+const styles = theme => ({
+  root: {
+    marginBottom: 30,
+  },
+});
+
+class App extends Component {
   constructor(props){
     super(props);
 
@@ -16,6 +24,7 @@ export default class App extends Component {
   
   render() {
     const { value } = this.state; //これ{}無いと動かん理由わからん
+    const { classes } = this.props;
     const handleNavChange = (e, value) => {
       this.setState({ value },
                     () => {
@@ -36,29 +45,40 @@ export default class App extends Component {
     return(
       <div>
         <Navigation value={ value } handleNavChange = { handleNavChange }/>
-        <div className="backgroundGreen">
-          {this.state.value === 'Profile' ? 
-          <ProfileContent current_user = { current_user } />
-          : 
-          this.state.value === 'Tracks' ?
-          <TracksContent
-          map = {this.props.map}
-          tracks = {this.props.tracks}
-          track_num = {this.props.track_num} /> 
-          :
-          this.state.value === 'Setting' ?
-          <SettingContent
-          current_user = { current_user }
-          form = { form }
-          handleChange = { handleProfileChange }
-          handleUpdate = { handleProfileUpdate }/>
-          :
-          null
-          }
-        </div>
+        <Grid
+          container
+          spacing={0}
+          alignContent="center" 
+          alignItems="center"
+          justify="center"
+          className={ classes.root }
+        >
+          <Grid item xs={10}>
+            {this.state.value === 'Profile' ? 
+            <ProfileContent current_user = { current_user } />
+            : 
+            this.state.value === 'Tracks' ?
+            <TracksContent
+            map = {this.props.map}
+            tracks = {this.props.tracks}
+            track_num = {this.props.track_num} /> 
+            :
+            this.state.value === 'Setting' ?
+            <SettingContent
+            current_user = { current_user }
+            form = { form }
+            handleChange = { handleProfileChange }
+            handleUpdate = { handleProfileUpdate }/>
+            :
+            null
+            }
+          </Grid>
+        </Grid>
         
       </div>
     )
   }
 }
+
+export default withStyles(styles, { withTheme: true })(App);
 

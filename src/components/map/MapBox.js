@@ -26,7 +26,14 @@ const geolocate = new mapboxgl.GeolocateControl({
   trackUserLocation: true, // ユーザの位置情報追跡
 });
 
-export default class MapBox extends Component {
+const styles = (theme) => ({
+  root: {
+    width: "100%",
+    height: "87vh",
+  },
+});
+
+class MapBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -204,3 +211,5 @@ export default class MapBox extends Component {
     );
   }
 }
+
+export default withStyles(styles, { withTheme: true })(MapBox);
