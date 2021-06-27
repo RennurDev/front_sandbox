@@ -215,9 +215,10 @@ class MapBox extends Component {
 
   render() {
     const onClick = this.onClick;
+    const { classes } = this.props;
     return (
       <div>
-        <div className={"mapContainer"} ref={(e) => (this.mapContainer = e)}>
+        <div className={ classes.root } ref={(e) => (this.mapContainer = e)}>
           <RecordTrigger onClick={onClick} />
         </div>
       </div>
