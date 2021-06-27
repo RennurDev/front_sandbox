@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import axios from "axios";
-import "../../App.css";
 
-const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT;
+import RequestAxios from "../../lib/RequestAxios";
+import "../../App.css";
 
 class App extends Component {
   constructor(props) {
@@ -19,15 +18,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get(RAILS_API_ENDPOINT + "/users")
-      .then((results) => {
-        const data = results.data;
-        this.setState({ lists: data });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const url = "/users";
+    var response = RequestAxios(url, "get");
+    response.then((r) => {
+      if (r.data.length >= 1) {
+        this.setState({ lists: r.data });
+      }
+    });
   }
 
   handleChange(e, key) {
@@ -42,45 +39,33 @@ class App extends Component {
   }
 
   handleCreate() {
-    let body = {
-      user: {
-        name: this.state.form.name,
-      },
-    };
-    const url = RAILS_API_ENDPOINT + "/users";
-    axios
-      .post(url, body)
-      .then((results) => {
-        const data = results.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+    // TODO: バックエンドでのUser作成機能完成後にコメントアウト
+    // let response;
+    // const url = "/users";
+    // let body = {
+    //   user: {
+    //     name: this.state.form.name,
+    //   },
+    // };
+    // response = RequestAxios(url, "post", body);
+    // if (response) {
+    //   console.log(response);
+    // }
     this.props.handleUserLogin(5);
   }
 
   handleDestroy() {
-    let body = {
-      user: {
-        id: this.state.form.id,
-      },
-    };
     let id = this.state.form.id;
-    const url = RAILS_API_ENDPOINT + "/users/" + id;
-    axios
-      .delete(url, body)
-      .then((results) => {
-        const data = results.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const url = "/users/" + id;
+    let response = RequestAxios(url, "delete");
+    response.then((r) => {
+      console.log(r.data);
+    });
   }
 
   render() {
     return (
-      <div>
+      <div className="backgroundGreen">
         <img
           src={`${process.env.PUBLIC_URL}/signUpPetamp.png`}
           className="signUpPetamp"

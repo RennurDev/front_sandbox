@@ -12,15 +12,14 @@ import hideAllTracks from "../../lib/HideAllTracks";
 import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
-import axios from "axios";
-import { withStyles } from '@material-ui/core/styles';
+import RequestAxios from "../../lib/RequestAxios";
+import { withStyles } from "@material-ui/core/styles";
 import getCurrentPlaceName from "../../lib/GetCurrentPlaceName";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 // アクセストークン
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
-const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT;
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
@@ -29,11 +28,11 @@ const geolocate = new mapboxgl.GeolocateControl({
   trackUserLocation: true, // ユーザの位置情報追跡
 });
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     width: "100%",
     height: "87vh",
-  }
+  },
 });
 
 class MapBox extends Component {
@@ -109,25 +108,20 @@ class MapBox extends Component {
   }
 
   getAllTracks(user_id) {
-    const url = RAILS_API_ENDPOINT + "/users_tracks/" + user_id;
-    axios
-      .get(url)
-      .then((results) => {
-        let data = results.data;
-        let tracks = [];
-
-        for (let i = 0; i < data.length; i++) {
-          tracks.push(decodeTrack(data[i].data));
-          console.log(tracks[i]);
+    let tracks = [];
+    const url = "/users_tracks/" + user_id;
+    let response = RequestAxios(url, "get");
+    response.then((r) => {
+      console.log(r);
+      if (r.data.length >= 1) {
+        for (let i = 0; i < r.data.length; i++) {
+          tracks.push(decodeTrack(r.data[i].data));
           addTrackLayer(this.map, "track_" + String(i), tracks[i]);
         }
-
         this.props.handleState("tracks", tracks);
-      this.props.handleState("track_num", tracks.length);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        this.props.handleState("track_num", tracks.length);
+      }
+    });
   }
 
   // PostTrack
@@ -139,16 +133,14 @@ class MapBox extends Component {
         user_id: this.props.current_user.id,
       },
     };
-
-    const url = RAILS_API_ENDPOINT + "/tracks";
-    axios
-      .post(url, body)
-      .then((results) => {
-        const data = results.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const url = "/tracks";
+    let response = RequestAxios(url, "post", body);
+    response.then((r) => {
+      if (r.data.length >= 1) {
+      } else {
+        console.log("error");
+      }
+    });
   }
 
   onClick() {
@@ -175,13 +167,14 @@ class MapBox extends Component {
     });
 
     let response = getCurrentPlaceName(c_lng, c_lat);
-    response.then((r) => {
-      this.props.handleState("current_location", r.data.features[0].text);
-    })
-    .catch((error) => {
-      console.log(error);
-      this.props.handleState("current_location", "???");
-    });  
+    response
+      .then((r) => {
+        this.props.handleState("current_location", r.data.features[0].text);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.props.handleState("current_location", "???");
+      });
 
     let map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -222,10 +215,11 @@ class MapBox extends Component {
 
   render() {
     const onClick = this.onClick;
-    const { classes } = this.props;
     return (
-      <div className={ classes.root } ref={(e) => (this.mapContainer = e)}>
-        <RecordTrigger onClick={onClick} />
+      <div>
+        <div className={"mapContainer"} ref={(e) => (this.mapContainer = e)}>
+          <RecordTrigger onClick={onClick} />
+        </div>
       </div>
     );
   }
