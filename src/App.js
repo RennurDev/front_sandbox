@@ -21,6 +21,7 @@ class App extends Component {
         id: "",
         name: "",
       },
+      current_location: "",
       form: {
         name: "",
       },
@@ -30,10 +31,9 @@ class App extends Component {
     };
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.handleUserLogin = this.handleUserLogin.bind(this); //TODO: 認証機能が完成すると不要になるかもしれない
-    this.handleMapCreate = this.handleMapCreate.bind(this);
-    this.handleTracksChange = this.handleTracksChange.bind(this);
     this.handleProfileChange = this.handleProfileChange.bind(this);
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
+    this.handleState = this.handleState.bind(this);
   }
 
   getCurrentUser() {
@@ -49,23 +49,16 @@ class App extends Component {
     });
   }
 
+  handleState(name, data) {
+    this.setState({ [name] : data});
+  }
+
   handleUserLogin(id) {
     //TODO: 認証機能が完成すると不要になるかもしれない
     this.setState({
       current_user: {
         id: id,
       },
-    });
-  }
-
-  handleMapCreate(map) {
-    this.setState({ map: map });
-  }
-
-  handleTracksChange(tracks) {
-    this.setState({
-      tracks: tracks,
-      track_num: tracks.length,
     });
   }
 
@@ -102,7 +95,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //current_userの更新
   }
 
   render() {
@@ -113,15 +105,16 @@ class App extends Component {
           <UserForm handleUserLogin={this.handleUserLogin} />
         ) : (
           <div>
-            <Header />
+            <Header
+              current_location={this.state.current_location}
+            />
             <MapBox
               current_user={this.state.current_user}
               tracks={this.state.tracks}
               track_id={this.state.track_id}
               track_num={this.state.track_num}
               map={this.state.map}
-              handleMapCreate={this.handleMapCreate}
-              handleTracksChange={this.handleTracksChange}
+              handleState={this.handleState}
             />
             <Menu
               current_user={this.state.current_user}

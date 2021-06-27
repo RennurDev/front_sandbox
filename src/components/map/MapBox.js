@@ -14,6 +14,7 @@ import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
 import { withStyles } from "@material-ui/core/styles";
+import getCurrentPlaceName from "../../lib/GetCurrentPlaceName";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -77,7 +78,8 @@ class MapBox extends Component {
       let new_tracks = this.props.tracks;
       new_tracks.push(track);
       addTrackLayer(this.map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
-      this.props.handleTracksChange(new_tracks);
+      this.props.handleState("tracks", new_tracks);
+      this.props.handleState("track_num", new_tracks.length);
       this.postTrack(track);
 
       alert("distance: " + this.distance);
@@ -116,9 +118,8 @@ class MapBox extends Component {
           tracks.push(decodeTrack(r.data[i].data));
           addTrackLayer(this.map, "track_" + String(i), tracks[i]);
         }
-        this.props.handleTracksChange(tracks);
-      } else {
-        console.log("err");
+        this.props.handleState("tracks", tracks);
+        this.props.handleState("track_num", tracks.length);
       }
     });
   }
@@ -164,6 +165,17 @@ class MapBox extends Component {
         lat: c_lat,
       },
     });
+
+    let response = getCurrentPlaceName(c_lng, c_lat);
+    response
+      .then((r) => {
+        this.props.handleState("current_location", r.data.features[0].text);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.props.handleState("current_location", "???");
+      });
+
     let map = new mapboxgl.Map({
       container: this.mapContainer,
       center: [c_lng, c_lat],
@@ -171,7 +183,7 @@ class MapBox extends Component {
       zoom: 12,
     });
 
-    this.props.handleMapCreate(map);
+    this.props.handleState("map", map);
     this.map = map;
 
     this.map.addControl(geolocate);

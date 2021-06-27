@@ -31,7 +31,7 @@ class UserInfo extends Component {
               />
             </div>
             <Typography className="textLocation" align="center" gutterBottom>
-              BUNKYO
+              { this.props.current_location }
             </Typography>
           </Grid>
         </Grid>
