@@ -39,11 +39,12 @@ class Track extends Component {
       track_id : '0'//Tracksタブで表示中のtrack_id
     }
 
+
     this.handleTrackChange = this.handleTrackChange.bind(this)
   }
 
   handleTrackChange(option) {
-    if(this.props.track_num != 0) {
+    if(this.props.track_num !== 0) {
       let new_track_id
       if(option === 'next') {
         new_track_id = (this.state.track_id + 1 ) % this.props.track_num
@@ -70,14 +71,18 @@ class Track extends Component {
   }
 
   componentDidMount() {
-    hideAllTracks(this.props.map, this.props.track_num)
-    this.handleTrackChange()
+    if(this.props.track_num !== 0) {
+      hideAllTracks(this.props.map, this.props.track_num)
+      this.handleTrackChange()
+    }
   }
 
   render() {
       //参考： https://stackoverflow.com/questions/56554586/how-to-use-usestyle-to-style-class-component-in-material-ui
       const { classes } = this.props;
-      
+      const date = this.props.date
+      const distance = this.props.distance
+      const altitude = this.props.altitude
     return(
 
       <div>
@@ -96,13 +101,13 @@ class Track extends Component {
                 >
                 <div>
                   <Typography align="center" color="textSecondary" gutterBottom>
-                  2021.5.1.sat
+                    {date}
                   </Typography>
                   <Typography align="center" variant="h5" component="h2">
-                    DISTANCE 100.0km
+                    {distance}
                   </Typography>
                   <Typography align="center" variant="h5" component="h2">
-                    ALTITUDE 300m
+                    {altitude}
                   </Typography>
                 </div>
                 </CardMedia> 
@@ -110,7 +115,7 @@ class Track extends Component {
 
               <CardActions disableSpacing className={classes.actions}>
                 <Grid container alignItems="center" justify="center">
-                  <Grid xs={0}>
+                  <Grid xs={12}>
                     <IconButton aria-label="add to favorites">
                       <FavoriteIcon />
                         </IconButton>

@@ -12,6 +12,9 @@ export default class App extends Component {
     this.state = {
       value: '',
     }
+    this.date= "2021/2/3"
+    this.distance= "123245"
+    this.altitude= "6789"
   }
   
   render() {
@@ -44,7 +47,11 @@ export default class App extends Component {
          <TracksContent
          map = {this.props.map}
          tracks = {this.props.tracks}
-         track_num = {this.props.track_num} /> 
+         track_num = {this.props.track_num}
+         date = {this.date}
+         distance = {this.distance}
+         altitude = {this.altitude}
+          /> 
          :
          this.state.value === 'Setting' ?
          <SettingContent
