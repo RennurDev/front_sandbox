@@ -4,16 +4,14 @@ import MapBox from "./components/map/MapBox";
 import Menu from "./components/menu/App";
 import "./App.css";
 import UserForm from "./components/user/App";
-import axios from "axios";
-import { withStyles } from '@material-ui/core/styles';
+import RequestAxios from "./lib/RequestAxios";
+import { withStyles } from "@material-ui/core/styles";
 
-const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT;
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     overflow: "hidden",
-  }
+  },
 });
-
 
 class App extends Component {
   constructor(props) {
@@ -23,6 +21,7 @@ class App extends Component {
         id: "",
         name: "",
       },
+      current_location: "",
       form: {
         name: "",
       },
@@ -30,34 +29,28 @@ class App extends Component {
       tracks: [],
       map: "",
     };
-
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.handleUserLogin = this.handleUserLogin.bind(this); //TODO: 認証機能が完成すると不要になるかもしれない
-    this.handleMapCreate = this.handleMapCreate.bind(this);
-    this.handleTracksChange = this.handleTracksChange.bind(this);
     this.handleProfileChange = this.handleProfileChange.bind(this);
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
+    this.handleState = this.handleState.bind(this);
   }
 
   getCurrentUser() {
     //TODO: device導入後, state.current_user.idを現在ログイン中のidで更新する処理を追記
     let id = this.state.current_user.id;
-    const url = RAILS_API_ENDPOINT + "/users/" + id;
-    axios
-      .get(url)
-      .then((results) => {
-        const data = results.data;
-        this.setState({ current_user: data });
-        //formの情報の更新
-        this.setState({
-          form: {
-            name: this.state.current_user.name,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    const url = "/users/" + id;
+    let response = RequestAxios(url, "get");
+    response.then((r) => {
+      this.setState({ current_user: r });
+      this.setState({
+        name: this.state.current_user.name,
       });
+    });
+  }
+
+  handleState(name, data) {
+    this.setState({ [name] : data});
   }
 
   handleUserLogin(id) {
@@ -66,17 +59,6 @@ class App extends Component {
       current_user: {
         id: id,
       },
-    });
-  }
-
-  handleMapCreate(map) {
-    this.setState({ map: map });
-  }
-
-  handleTracksChange(tracks) {
-    this.setState({
-      tracks: tracks,
-      track_num: tracks.length,
     });
   }
 
@@ -101,42 +83,38 @@ class App extends Component {
       },
     };
     let id = this.state.current_user.id;
-    const url = RAILS_API_ENDPOINT + "/users/" + id;
-    axios
-      .put(url, body)
-      .then((results) => {
-        this.setState({
-          current_user: {
-            name: this.state.form.name,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    const url = "/users/" + id;
+    let response = RequestAxios(url, "put", body);
+    response.then((r) => {
+      this.setState({
+        current_user: {
+          name: this.state.form.name,
+        },
       });
+    });
   }
 
   componentDidMount() {
-    //current_userの更新
   }
 
   render() {
     const { classes } = this.props;
     return (
-      <div className={ classes.root }>
+      <div className={classes.root}>
         {this.state.current_user.id === "" ? (
           <UserForm handleUserLogin={this.handleUserLogin} />
         ) : (
           <div>
-            <Header />
+            <Header
+              current_location={this.state.current_location}
+            />
             <MapBox
               current_user={this.state.current_user}
               tracks={this.state.tracks}
               track_id={this.state.track_id}
               track_num={this.state.track_num}
               map={this.state.map}
-              handleMapCreate={this.handleMapCreate}
-              handleTracksChange={this.handleTracksChange}
+              handleState={this.handleState}
             />
             <Menu
               current_user={this.state.current_user}

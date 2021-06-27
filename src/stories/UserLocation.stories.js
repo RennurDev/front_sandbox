@@ -9,5 +9,5 @@ export default {
 const Template = (args) => <UserLocation {...args} />;
 export const Primary = Template.bind({})
 Primary.args = {
-    areaName: "OCHANOMIZU"
+    current_location: "OCHANOMIZU"
 };

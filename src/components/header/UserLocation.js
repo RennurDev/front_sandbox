@@ -33,6 +33,7 @@ class UserInfo extends Component {
             </div>
             <Typography className="textLocation" align="center" gutterBottom>
               {areaName}
+              { this.props.current_location }
             </Typography>
           </Grid>
         </Grid>

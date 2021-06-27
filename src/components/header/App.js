@@ -5,8 +5,11 @@ export default class App extends Component {
   render() {
     const areaName = "OHANOMIZU";
     return (
-        <UserLocation areaName={areaName}>
-        </UserLocation>
-    ) 
+      <div>
+        <UserLocation
+          current_location={this.props.current_location}
+        />
+      </div>
+    )
   }
 }
