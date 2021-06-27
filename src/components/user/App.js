@@ -84,6 +84,7 @@ class App extends Component {
         <img
           src={`${process.env.PUBLIC_URL}/signUpPetamp.png`}
           className="signUpPetamp"
+          alt="signUp"
         />
         <form noValidate autoComplete="off">
           <Grid container spacing={0} alignItems="center" justify="center">

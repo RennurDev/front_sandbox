@@ -5,7 +5,9 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <UserLocation />
+        <UserLocation
+          current_location={this.props.current_location}
+        />
       </div>
     )
   }
