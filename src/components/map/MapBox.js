@@ -31,7 +31,7 @@ const geolocate = new mapboxgl.GeolocateControl({
 const styles = theme => ({
   root: {
     width: "100%",
-    height: "89vh",
+    height: "87vh",
   }
 });
 
