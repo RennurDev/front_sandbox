@@ -81,6 +81,9 @@ class Track extends Component {
   render() {
     //参考： https://stackoverflow.com/questions/56554586/how-to-use-usestyle-to-style-class-component-in-material-ui
     const { classes } = this.props;
+    const date = this.props.date
+    const distance = this.props.distance
+    const altitude = this.props.altitude
 
     return (
       <div>
@@ -104,13 +107,13 @@ class Track extends Component {
                       color="textSecondary"
                       gutterBottom
                     >
-                      2021.5.1.sat
+                      {date}
                     </Typography>
                     <Typography align="center" variant="h5" component="h2">
-                      DISTANCE 100.0km
+                      {distance}
                     </Typography>
                     <Typography align="center" variant="h5" component="h2">
-                      ALTITUDE 300m
+                      {altitude}
                     </Typography>
                   </div>
                 </CardMedia>
@@ -118,7 +121,7 @@ class Track extends Component {
 
               <CardActions disableSpacing className={classes.actions}>
                 <Grid container alignItems="center" justify="center">
-                  <Grid xs={0}>
+                  <Grid xs={12}>
                     <IconButton aria-label="add to favorites">
                       <FavoriteIcon />
                     </IconButton>

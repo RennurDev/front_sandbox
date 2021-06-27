@@ -3,6 +3,7 @@ import UserLocation from './UserLocation';
 
 export default class App extends Component {
   render() {
+    const areaName = "OHANOMIZU";
     return (
       <div>
         <UserLocation

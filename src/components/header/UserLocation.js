@@ -12,6 +12,7 @@ const styles = (theme) => ({
 
 class UserInfo extends Component {
   render() {
+    const areaName=this.props.areaName
     const { classes } = this.props;
     return (
       <div>
@@ -31,6 +32,7 @@ class UserInfo extends Component {
               />
             </div>
             <Typography className="textLocation" align="center" gutterBottom>
+              {areaName}
               { this.props.current_location }
             </Typography>
           </Grid>

@@ -17,7 +17,8 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "worker-loader": "^3.0.8"
+    "worker-loader": "^3.0.8",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,7 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && gh-pages -d build",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "start-storybook -p 6006 -s public NODE_ENV=production",
     "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
