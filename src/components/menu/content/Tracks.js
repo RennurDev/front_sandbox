@@ -52,7 +52,6 @@ class Track extends Component {
       } else {
         new_track_id = this.state.track_id
       }
-      
       this.setState({
         track_id: new_track_id
       }, () => {
@@ -129,7 +128,7 @@ class Track extends Component {
               variant="outlined"
               color="primary"
               fullWidth={true}
-              onClick = { () => {this.handleTrackChange('next')} }
+              onClick = { () => {this.handleTrackChange('prev')} }
             >
               prev
             </Button>
