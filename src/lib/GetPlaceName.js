@@ -10,6 +10,7 @@ export default async function GetPlaceName(lng, lat) {
     const response = await axios.get(url)
     return response.data.features[0].text
   } catch(err) {
-    return err
+    console.log(err);
+    return "???"
   }
 }

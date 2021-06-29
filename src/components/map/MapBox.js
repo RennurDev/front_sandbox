@@ -170,10 +170,6 @@ class MapBox extends Component {
     current_place_name
       .then((p) => {
         this.props.handleState("current_location", p);
-      })
-      .catch((error) => {
-        console.log(error);
-        this.props.handleState("current_location", "???");
       });
 
     let map = new mapboxgl.Map({
