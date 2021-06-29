@@ -8,7 +8,7 @@ export default async function GetPlaceName(lng, lat) {
   const url = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+location+".json?"+options+"&access_token="+access_token;
   try {
     const response = await axios.get(url)
-    return response
+    return response.data.features[0].text
   } catch(err) {
     return err
   }
