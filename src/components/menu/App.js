@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ProfileContent from "./content/Profile";
 // import TracksContent from "./content/Tracks";
 import { Tracks } from "./content/Tracks";
+import { Profile } from "./content/Profile";
 import SettingContent from "./content/Setting";
 import Navigation from "./nav/Navigation";
 import showAllTracks from "../../lib/ShowAllTracks";
@@ -54,7 +55,7 @@ class App extends Component {
         >
           <Grid item xs={10}>
             {this.state.value === "Profile" ? (
-              <ProfileContent current_user={current_user} />
+              <Profile currentUser={current_user} />
             ) : this.state.value === "Tracks" ? (
               // <TracksContent
               //   map={this.props.map}
