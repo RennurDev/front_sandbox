@@ -11,13 +11,19 @@ const useStyles = makeStyles({
   },
 });
 
-export const Navigation = (value, handleNavChange) => {
+export function Navigation(props) {
+  function handleActChange(value) {
+    //NOTE:  we invoke the callback with the new value
+    props.onChange(value);
+  }
   const classes = useStyles();
   return (
     <BottomNavigation
       className={classes.root}
-      value={value}
-      onChange={handleNavChange}
+      value={props.value}
+      onChange={(e, value) => {
+        handleActChange(value);
+      }}
     >
       <BottomNavigationAction
         label="Profile"
@@ -36,4 +42,4 @@ export const Navigation = (value, handleNavChange) => {
       />
     </BottomNavigation>
   );
-};
+}

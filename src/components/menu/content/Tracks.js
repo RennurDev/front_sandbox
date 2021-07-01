@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 
 //TODO: handleCurrentTrackを使用した実装に変更
-import hideAllTracks from "../../../lib/HideAllTracks";
 import drawTrack from "../../../lib/DrawTrack";
 
 const styles = (theme) => ({
@@ -31,7 +30,6 @@ export const Tracks = ({ trackNum, tracks, map }) => {
   // NOTE: trackID に変更があった際に以下の関数が動作する
   // TODO: hideAllTracks を複数呼び出しを削除
   useEffect(() => {
-    hideAllTracks(map, trackNum);
     changeSelectedTrack(trackID, trackNum, tracks, map);
   }, [trackID]);
 

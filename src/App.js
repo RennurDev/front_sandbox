@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./components/header/App";
 import MapBox from "./components/map/MapBox";
-import Menu from "./components/menu/App";
+import { Menu } from "./menu";
 import "./App.css";
 import UserForm from "./components/user/App";
 import RequestAxios from "./lib/RequestAxios";
@@ -31,8 +31,6 @@ class App extends Component {
     };
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.handleUserLogin = this.handleUserLogin.bind(this); //TODO: 認証機能が完成すると不要になるかもしれない
-    this.handleProfileChange = this.handleProfileChange.bind(this);
-    this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
     this.handleState = this.handleState.bind(this);
   }
 
@@ -50,7 +48,7 @@ class App extends Component {
   }
 
   handleState(name, data) {
-    this.setState({ [name] : data});
+    this.setState({ [name]: data });
   }
 
   handleUserLogin(id) {
@@ -62,40 +60,40 @@ class App extends Component {
     });
   }
 
-  //formの入力内容の変更を検知
-  handleProfileChange(e, key) {
-    let target = e.target;
-    let value = target.value;
-    let form = this.state.form;
-    form[key] = value;
+  // TODO: User API 実装後に修正
+  // //formの入力内容の変更を検知
+  // handleProfileChange(e, key) {
+  //   let target = e.target;
+  //   let value = target.value;
+  //   let form = this.state.form;
+  //   form[key] = value;
 
-    this.setState({
-      form: form,
-    });
-  }
+  //   this.setState({
+  //     form: form,
+  //   });
+  // }
 
-  //更新処理
-  handleProfileUpdate() {
-    let body = {
-      user: {
-        id: this.state.current_user.id,
-        name: this.state.form.name,
-      },
-    };
-    let id = this.state.current_user.id;
-    const url = "/users/" + id;
-    let response = RequestAxios(url, "put", body);
-    response.then((r) => {
-      this.setState({
-        current_user: {
-          name: this.state.form.name,
-        },
-      });
-    });
-  }
+  // //更新処理
+  // handleProfileUpdate() {
+  //   let body = {
+  //     user: {
+  //       id: this.state.current_user.id,
+  //       name: this.state.form.name,
+  //     },
+  //   };
+  //   let id = this.state.current_user.id;
+  //   const url = "/users/" + id;
+  //   let response = RequestAxios(url, "put", body);
+  //   response.then((r) => {
+  //     this.setState({
+  //       current_user: {
+  //         name: this.state.form.name,
+  //       },
+  //     });
+  //   });
+  // }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     const { classes } = this.props;
@@ -105,9 +103,7 @@ class App extends Component {
           <UserForm handleUserLogin={this.handleUserLogin} />
         ) : (
           <div>
-            <Header
-              current_location={this.state.current_location}
-            />
+            <Header current_location={this.state.current_location} />
             <MapBox
               current_user={this.state.current_user}
               tracks={this.state.tracks}
@@ -122,8 +118,6 @@ class App extends Component {
               map={this.state.map}
               tracks={this.state.tracks}
               track_num={this.state.track_num}
-              handleProfileChange={this.handleProfileChange}
-              handleProfileUpdate={this.handleProfileUpdate}
             />
           </div>
         )}
