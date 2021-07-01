@@ -3,7 +3,7 @@ import ProfileContent from "./content/Profile";
 // import TracksContent from "./content/Tracks";
 import { Tracks } from "./content/Tracks";
 import { Profile } from "./content/Profile";
-import SettingContent from "./content/Setting";
+import { Setting } from "./content/Setting";
 import Navigation from "./nav/Navigation";
 import showAllTracks from "../../lib/ShowAllTracks";
 import Grid from "@material-ui/core/Grid";
@@ -57,11 +57,6 @@ class App extends Component {
             {this.state.value === "Profile" ? (
               <Profile currentUser={current_user} />
             ) : this.state.value === "Tracks" ? (
-              // <TracksContent
-              //   map={this.props.map}
-              //   tracks={this.props.tracks}
-              //   track_num={this.props.track_num}
-              // />
               // TODO: mapの中身が作成された後にこのコンポーネントを呼び出し可能にする
               <Tracks
                 trackNum={this.props.track_num}
@@ -69,12 +64,8 @@ class App extends Component {
                 map={this.props.map}
               />
             ) : this.state.value === "Setting" ? (
-              <SettingContent
-                current_user={current_user}
-                form={form}
-                handleChange={handleProfileChange}
-                handleUpdate={handleProfileUpdate}
-              />
+              // TODO: User API 周りの処理
+              <Setting />
             ) : null}
           </Grid>
         </Grid>
