@@ -4,7 +4,7 @@ import ProfileContent from "./content/Profile";
 import { Tracks } from "./content/Tracks";
 import { Profile } from "./content/Profile";
 import { Setting } from "./content/Setting";
-import Navigation from "./nav/Navigation";
+import { Navigation } from "./nav/Navigation";
 import showAllTracks from "../../lib/ShowAllTracks";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
