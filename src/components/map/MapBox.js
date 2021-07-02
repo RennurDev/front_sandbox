@@ -14,7 +14,7 @@ import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
 import { withStyles } from "@material-ui/core/styles";
-import getCurrentPlaceName from "../../lib/GetCurrentPlaceName";
+import getPlaceName from "../../lib/GetPlaceName";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -166,14 +166,10 @@ class MapBox extends Component {
       },
     });
 
-    let response = getCurrentPlaceName(c_lng, c_lat);
-    response
-      .then((r) => {
-        this.props.handleState("current_location", r.data.features[0].text);
-      })
-      .catch((error) => {
-        console.log(error);
-        this.props.handleState("current_location", "???");
+    let current_place_name = getPlaceName(c_lng, c_lat);
+    current_place_name
+      .then((p) => {
+        this.props.handleState("current_location", p);
       });
 
     let map = new mapboxgl.Map({
