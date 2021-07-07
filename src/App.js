@@ -113,10 +113,10 @@ class App extends Component {
               handleState={this.handleState}
             />
             <Menu
-              current_user={this.state.current_user}
+              currentUser={this.state.current_user}
               map={this.state.map}
               tracks={this.state.tracks}
-              track_num={this.state.track_num}
+              trackNum={this.state.track_num}
             />
           </div>
         )}

@@ -31,15 +31,13 @@ export const Tracks = ({ trackNum, tracks, map }) => {
     changeSelectedTrack(trackID, trackNum, tracks, map);
   }, [trackID]);
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
-    if (trackID >= 0 && trackID < trackNum) {
-      let selectedCoords = tracks[trackID];
+    if (0 <= trackID) {
+      let selectedCoords = tracks[trackID % trackNum];
       changeMapBound(selectedCoords, map);
     } else if (trackID < 0) {
       // NOTE: trackID が trackNum の倍数の場合でも期待の値を取得できる
+      console.log((trackNum + (trackID % trackNum)) % trackNum);
       let selectedCoords = tracks[(trackNum + (trackID % trackNum)) % trackNum];
-      changeMapBound(selectedCoords, map);
-    } else if (trackNum <= trackID) {
-      let selectedCoords = tracks[trackID % trackNum];
       changeMapBound(selectedCoords, map);
     }
   };
