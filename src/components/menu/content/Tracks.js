@@ -27,18 +27,16 @@ const styles = (theme) => ({
 export const Tracks = ({ trackNum, tracks, map }) => {
   const [trackID, setTrackID] = useState(0);
 
-  // NOTE: trackID に変更があった際に以下の関数が動作する
-  // TODO: hideAllTracks を複数呼び出しを削除
   useEffect(() => {
     changeSelectedTrack(trackID, trackNum, tracks, map);
   }, [trackID]);
-
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
     if (trackID >= 0 && trackID < trackNum) {
       let selectedCoords = tracks[trackID];
       changeMapBound(selectedCoords, map);
     } else if (trackID < 0) {
-      let selectedCoords = tracks[trackNum + (trackID % trackNum)];
+      // NOTE: trackID が trackNum の倍数の場合でも期待の値を取得できる
+      let selectedCoords = tracks[(trackNum + (trackID % trackNum)) % trackNum];
       changeMapBound(selectedCoords, map);
     } else if (trackNum <= trackID) {
       let selectedCoords = tracks[trackID % trackNum];

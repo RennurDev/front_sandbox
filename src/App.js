@@ -114,7 +114,6 @@ class App extends Component {
             />
             <Menu
               current_user={this.state.current_user}
-              form={this.state.form}
               map={this.state.map}
               tracks={this.state.tracks}
               track_num={this.state.track_num}

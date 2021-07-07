@@ -14,7 +14,7 @@ const styles = (theme) => ({
   },
 });
 
-export const Menu = (currentUser, form, map, tracks, trackNum) => {
+export const Menu = ({ currentUser, map, tracks, trackNum }) => {
   const [selectedAct, setSelcetedAct] = useState("");
 
   useEffect(() => {
@@ -22,7 +22,6 @@ export const Menu = (currentUser, form, map, tracks, trackNum) => {
   }, [selectedAct]);
 
   function handleActChange(value) {
-    console.log(value);
     setSelcetedAct(value);
   }
 
