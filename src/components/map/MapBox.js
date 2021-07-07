@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import RecordTrigger from "./RecordTrigger";
+import { RecordTrigger } from "./RecordTrigger";
+import { withStyles } from "@material-ui/core/styles";
+
+import getPlaceName from "../../lib/GetPlaceName";
 import drawTrack from "../../lib/DrawTrack";
 import addTrackLayer from "../../lib/AddTrackLayer";
 import decodeTrack from "../../lib/DecodeTrack";
@@ -13,8 +16,6 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
-import { withStyles } from "@material-ui/core/styles";
-import getPlaceName from "../../lib/GetPlaceName";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;

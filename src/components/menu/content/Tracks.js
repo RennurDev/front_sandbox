@@ -9,7 +9,6 @@ import {
   CardMedia,
 } from "@material-ui/core";
 
-//TODO: handleCurrentTrackを使用した実装に変更
 import drawTrack from "../../../lib/DrawTrack";
 
 const styles = (theme) => ({
