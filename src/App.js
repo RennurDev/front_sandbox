@@ -25,7 +25,7 @@ class App extends Component {
       form: {
         name: "",
       },
-      track_num: 0, //全Track数
+      track_num: "0", //全Track数
       tracks: [],
       map: "",
     };
@@ -113,10 +113,10 @@ class App extends Component {
               handleState={this.handleState}
             />
             <Menu
-              currentUser={this.state.current_user}
+              current_user={this.state.current_user}
               map={this.state.map}
               tracks={this.state.tracks}
-              trackNum={this.state.track_num}
+              track_num={this.state.track_num}
             />
           </div>
         )}

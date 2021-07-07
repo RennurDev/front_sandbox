@@ -34,7 +34,6 @@ export const Tracks = ({ trackNum, tracks, map }) => {
   }, [trackID]);
 
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
-    console.log(trackID);
     if (trackID >= 0 && trackID < trackNum) {
       let selectedCoords = tracks[trackID];
       changeMapBound(selectedCoords, map);
