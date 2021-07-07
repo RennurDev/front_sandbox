@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Header } from "./components/header/App";
-import MapBox from "./components/map/MapBox";
+import { Header } from "./header";
 import { Menu } from "./menu";
+import MapBox from "./components/map/MapBox";
 import "./App.css";
 import UserForm from "./components/user/App";
 import RequestAxios from "./lib/RequestAxios";

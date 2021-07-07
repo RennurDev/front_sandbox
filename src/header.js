@@ -1,4 +1,4 @@
-import { UserLocation } from './UserLocation';
+import { UserLocation } from './components/header/UserLocation';
 
 export const Header = ({ current_location }) => {
   return (
