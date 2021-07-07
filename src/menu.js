@@ -15,14 +15,14 @@ const styles = (theme) => ({
 });
 
 export const Menu = ({ currentUser, map, tracks, trackNum }) => {
-  const [selectedAct, setSelcetedAct] = useState("");
+  const [selectedAct, setSelecetedAct] = useState("");
 
   useEffect(() => {
     displayMapExeceptTracks(selectedAct);
   }, [selectedAct]);
 
   function handleActChange(value) {
-    setSelcetedAct(value);
+    setSelecetedAct(value);
   }
 
   const displayMapExeceptTracks = (action) => {
