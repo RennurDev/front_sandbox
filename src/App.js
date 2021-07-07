@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./components/header/App";
-import MapBox from "./components/map/MapBox";
+import { MapBox } from "./components/map/MapBox";
 import { Menu } from "./menu";
 import "./App.css";
 import UserForm from "./components/user/App";
@@ -107,8 +107,6 @@ class App extends Component {
             <MapBox
               current_user={this.state.current_user}
               tracks={this.state.tracks}
-              track_id={this.state.track_id}
-              track_num={this.state.track_num}
               map={this.state.map}
               handleState={this.handleState}
             />
