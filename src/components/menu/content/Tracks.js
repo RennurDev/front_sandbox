@@ -36,6 +36,7 @@ export const Tracks = ({ trackNum, tracks, map }) => {
       changeMapBound(selectedCoords, map);
     } else if (trackID < 0) {
       // NOTE: trackID が trackNum の倍数の場合でも期待の値を取得できる
+      console.log((trackNum + (trackID % trackNum)) % trackNum);
       let selectedCoords = tracks[(trackNum + (trackID % trackNum)) % trackNum];
       changeMapBound(selectedCoords, map);
     } else if (trackNum <= trackID) {
