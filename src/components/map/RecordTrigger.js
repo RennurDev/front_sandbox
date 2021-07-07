@@ -1,7 +1,6 @@
-import React from "react";
 import { Button, Grid } from "@material-ui/core";
 
-const styles = (theme) => ({
+const styles = {
   root: {
     position: "absolute",
     width: "100vw",
@@ -12,11 +11,11 @@ const styles = (theme) => ({
     width: "100%",
     padding: 0,
   },
-});
+};
 
 export const RecordTrigger = ({ onClick }) => {
   return (
-    <div className={styles.root}>
+    <div style={styles.root}>
       <Grid
         container
         spacing={0}
@@ -25,10 +24,7 @@ export const RecordTrigger = ({ onClick }) => {
         justify="center"
       >
         <Grid item xs={4}>
-          <Button
-            className={styles.text}
-            onClick={onClick}
-          >
+          <Button style={styles.text} onClick={onClick}>
             <img
               className="imgRecordButton"
               src={process.env.PUBLIC_URL + "/imgRecordButton.svg"}
