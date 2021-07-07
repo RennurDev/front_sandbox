@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
-import UserLocation from './UserLocation';
+import { UserLocation } from './UserLocation';
 
-export default class App extends Component {
-  render() {
-    return (
-      <div>
-        <UserLocation
-          current_location={this.props.current_location}
-        />
-      </div>
-    )
-  }
+export const Header = ({ current_location }) => {
+  return (
+    <div>
+      <UserLocation
+        current_location={current_location}
+      />
+    </div>
+  )
 }
