@@ -34,12 +34,18 @@ export const Tracks = ({ trackNum, tracks, map }) => {
   }, [trackID]);
 
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
+    console.log(trackID);
     if (trackID >= 0 && trackID < trackNum) {
       let selectedCoords = tracks[trackID];
       changeMapBound(selectedCoords, map);
     } else if (trackID < 0) {
-      let selectedCoords = tracks[trackNum + (trackID % trackNum)];
-      changeMapBound(selectedCoords, map);
+      if (trackID % trackNum === 0) {
+        let selectedCoords = tracks[trackID % trackNum];
+        changeMapBound(selectedCoords, map);
+      } else {
+        let selectedCoords = tracks[trackNum + (trackID % trackNum)];
+        changeMapBound(selectedCoords, map);
+      }
     } else if (trackNum <= trackID) {
       let selectedCoords = tracks[trackID % trackNum];
       changeMapBound(selectedCoords, map);
