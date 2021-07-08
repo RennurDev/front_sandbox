@@ -105,10 +105,10 @@ class App extends Component {
           <div>
             <Header current_location={this.state.current_location} />
             <MapBox
-              current_user={this.state.current_user}
+              currentUser={this.state.current_user}
               tracks={this.state.tracks}
-              track_id={this.state.track_id}
-              track_num={this.state.track_num}
+              trackID={this.state.track_id}
+              trackNum={this.state.track_num}
               map={this.state.map}
               handleState={this.handleState}
             />
