@@ -1,8 +1,7 @@
 import { useRef, useEffect, useState } from "react";
+import { RecordTrigger } from "./RecordTrigger";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { RecordTrigger } from "./RecordTrigger";
-
 import getPlaceName from "../../lib/GetPlaceName";
 import drawTrack from "../../lib/DrawTrack";
 import addTrackLayer from "../../lib/AddTrackLayer";
@@ -50,11 +49,17 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   const beginRecordTrack = () => {
     posHistory = [];
     distance = 0;
-    console.log(map);
     hideAllTracks(map, tracks.length);
     showTrackLayer(map, "current_track");
     //初期化
-    navigator.geolocation.getCurrentPosition(initializePosition);
+    navigator.geolocation.getCurrentPosition((position) => {
+      previous_position = position;
+      posHistory.push([position.coords.longitude, position.coords.latitude]);
+      map.flyTo({
+        center: [position.coords.longitude, position.coords.latitude],
+        zoom: 15,
+      });
+    });
     watch_id = navigator.geolocation.watchPosition(onPosition);
   }
 
@@ -75,15 +80,6 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
       alert("not saved distance(<50): " + distance);
     }
     showAllTracks(map, tracks.length);
-  }
-
-  const initializePosition = (position) => {
-    previous_position = position;
-    posHistory.push([position.coords.longitude, position.coords.latitude]);
-    map.flyTo({
-      center: [position.coords.longitude, position.coords.latitude],
-      zoom: 15,
-    });
   }
 
   const onPosition = (position) => {
@@ -131,17 +127,6 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
     });
   }
 
-  const onClick = () => {
-    if (isStarted) {
-      // Recordの処理
-      endRecordTrack(posHistory);
-    } else {
-      // Start時の処理
-      beginRecordTrack();
-    }
-    setIsStarted(!isStarted);
-  }
-
   const setMap = (position) => {
     const c_lng = position.coords.longitude;
     const c_lat = position.coords.latitude;
@@ -151,8 +136,8 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
         lat: c_lat
     });
 
-    let current_place_name = getPlaceName(c_lng, c_lat);
-    current_place_name
+    let currentPlaceName = getPlaceName(c_lng, c_lat);
+    currentPlaceName
       .then((p) => {
         handleState("current_location", p);
       });
@@ -191,10 +176,21 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
     };
   }, [])
 
+  useEffect(() => {
+    if (isStarted) {
+      beginRecordTrack();
+    } else {
+      if(posHistory.length !== 0) {
+        console.log(posHistory)
+        endRecordTrack(posHistory);
+      }
+    }
+  }, [isStarted])
+
   return (
     <div>
       <div style={ styles.root } ref={ mapContainer }>
-        <RecordTrigger onClick={onClick} />
+        <RecordTrigger onClick={ () => setIsStarted(!isStarted) } />
       </div>
     </div>
   );
