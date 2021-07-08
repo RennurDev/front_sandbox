@@ -92,7 +92,6 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   }
 
   const getAllTracks = (user_id) => {
-    let tracks = [];
     const url = "/users_tracks/" + user_id;
     let response = RequestAxios(url, "get");
     response.then((r) => {
@@ -165,8 +164,11 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
     );
   }
 
+  const isFirstRender = useRef(false)
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(setMap);
+    isFirstRender.current = true;
     return () => {
       try {
         map.remove();
@@ -177,11 +179,12 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   }, [])
 
   useEffect(() => {
-    if (isStarted) {
-      beginRecordTrack();
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
     } else {
-      if(posHistory.length !== 0) {
-        console.log(posHistory)
+      if (isStarted) {
+        beginRecordTrack();
+      } else {
         endRecordTrack(posHistory);
       }
     }
