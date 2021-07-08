@@ -1,43 +1,34 @@
-import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-
-const styles = (theme) => ({
+import { Grid, Typography } from "@material-ui/core";
+const styles = {
   grid: {
     position: "relative",
     height: 30,
   },
-});
+};
 
-class UserInfo extends Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <div>
-        <Grid
-          container
-          alignContent="center"
-          alignItems="center"
-          justify="center"
-        >
-          <Grid className={classes.grid} item xs={7}>
-            <div className="imgHeader">
-              <img
-                src={
-                  process.env.PUBLIC_URL + "/PetampAreaNameBackground-02.svg"
-                }
-                alt="header"
-              />
-            </div>
-            <Typography className="textLocation" align="center" gutterBottom>
-              { this.props.current_location }
-            </Typography>
-          </Grid>
+export const UserLocation = ({current_location}) => {
+  return (
+    <div>
+      <Grid
+        container
+        alignContent="center"
+        alignItems="center"
+        justify="center"
+      >
+        <Grid style={styles.grid} item xs={7}>
+          <div className="imgHeader">
+            <img
+              src={
+                process.env.PUBLIC_URL + "/PetampAreaNameBackground-02.svg"
+              }
+              alt="header"
+            />
+          </div>
+          <Typography className="textLocation" align="center" gutterBottom>
+            { current_location }
+          </Typography>
         </Grid>
-      </div>
-    );
-  }
+      </Grid>
+    </div>
+  );
 }
-
-export default withStyles(styles, { withTheme: true })(UserInfo);
