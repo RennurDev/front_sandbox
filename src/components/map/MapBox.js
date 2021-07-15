@@ -73,6 +73,7 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   }
 
   useEffect(() => {
+    alert("updated")
     drawTrack(map, "current_track", posHistory);
   }, [posHistory.length])
 
