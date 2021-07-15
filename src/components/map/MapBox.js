@@ -45,8 +45,8 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
 
   const beginRecordTrack = () => {
     let prevPos = undefined;
+    let currentDistance = 0;
     setPosHistory([]);
-    setDistance(0);
     hideAllTracks(map, tracks.length);
     showTrackLayer(map, "current_track");
     //初期化
@@ -62,8 +62,8 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
     const id = navigator.geolocation.watchPosition(
       (position) => {
         if (isValidPosition(prevPos, position)) {
-          setDistance(distance + calcDistance(prevPos, position));
-          alert(distance)
+          currentDistance += calcDistance(prevPos, position);
+          setDistance(distance);
           setPosHistory(posHistory.push([position.coords.longitude, position.coords.latitude]));
           prevPos = position;
         }
