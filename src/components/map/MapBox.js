@@ -38,33 +38,44 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
 
   const [isStarted, setIsStarted] = useState(false);
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }])
-
-  let posHistory = [];
-  let previous_position = undefined;
-  //watchPositionの実行idを管理
-  let watch_id = -1;
-  let distance = 0;
+  const [posHistory, setPosHistory] = useState([]);
+  const [watchId, setWatchId] = useState(-1);
+  const [distance, setDistance] = useState(0);
   const mapContainer = useRef(null);
 
   const beginRecordTrack = () => {
-    posHistory = [];
-    distance = 0;
+    let prevPos = undefined;
+    setPosHistory([]);
+    setDistance(0);
     hideAllTracks(map, tracks.length);
     showTrackLayer(map, "current_track");
     //初期化
     navigator.geolocation.getCurrentPosition((position) => {
-      previous_position = position;
-      posHistory.push([position.coords.longitude, position.coords.latitude]);
+      prevPos = position;
+      setPosHistory([position.coords.longitude, position.coords.latitude]);
       map.flyTo({
         center: [position.coords.longitude, position.coords.latitude],
         zoom: 15,
       });
     });
-    watch_id = navigator.geolocation.watchPosition(onPosition);
+
+    const id = navigator.geolocation.watchPosition(
+      (position) => {
+        if (isValidPosition(prevPos, position)) {
+          setDistance(distance + calcDistance(prevPos, position));
+          alert(distance)
+          setPosHistory(posHistory.push([position.coords.longitude, position.coords.latitude]));
+          prevPos = position;
+        }
+        drawTrack(map, "current_track", posHistory);
+      }
+    );
+    setWatchId(id);
   }
 
   const endRecordTrack = (track) => {
-    navigator.geolocation.clearWatch(watch_id);
+    console.log(watchId);
+    navigator.geolocation.clearWatch(watchId);
     hideTrackLayer(map, "current_track");
 
     if (distance >= 50) {
@@ -82,21 +93,10 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
     showAllTracks(map, tracks.length);
   }
 
-  const onPosition = (position) => {
-    if (isValidPosition(previous_position, position)) {
-      distance += calcDistance(previous_position, position);
-      alert(distance)
-      posHistory.push([position.coords.longitude, position.coords.latitude]);
-      previous_position = position;
-    }
-    drawTrack(map, "current_track", posHistory);
-  }
-
   const getAllTracks = (user_id) => {
     const url = "/users_tracks/" + user_id;
     let response = RequestAxios(url, "get");
     response.then((r) => {
-      console.log(r);
       if (r.data.length >= 1) {
         for (let i = 0; i < r.data.length; i++) {
           tracks.push(decodeTrack(r.data[i].data));
