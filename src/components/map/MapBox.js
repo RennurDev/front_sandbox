@@ -85,6 +85,7 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   const onPosition = (position) => {
     if (isValidPosition(previous_position, position)) {
       distance += calcDistance(previous_position, position);
+      alert(distance)
       posHistory.push([position.coords.longitude, position.coords.latitude]);
       previous_position = position;
     }
