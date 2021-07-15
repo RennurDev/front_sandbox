@@ -74,7 +74,7 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
 
   useEffect(() => {
     drawTrack(map, "current_track", posHistory);
-  }, [posHistory])
+  }, [posHistory.length])
 
   const endRecordTrack = (track) => {
     console.log(watchId);
