@@ -46,13 +46,15 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   const beginRecordTrack = () => {
     let prevPos = undefined;
     let currentDistance = 0;
+    const currentPosHistory = [];
     setPosHistory([]);
     hideAllTracks(map, tracks.length);
     showTrackLayer(map, "current_track");
     //初期化
     navigator.geolocation.getCurrentPosition((position) => {
       prevPos = position;
-      setPosHistory([position.coords.longitude, position.coords.latitude]);
+      currentPosHistory.push([position.coords.longitude, position.coords.latitude])
+      setPosHistory(currentPosHistory);
       map.flyTo({
         center: [position.coords.longitude, position.coords.latitude],
         zoom: 15,
@@ -63,19 +65,17 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
       (position) => {
         if (isValidPosition(prevPos, position)) {
           currentDistance += calcDistance(prevPos, position);
+          currentPosHistory.push([position.coords.longitude, position.coords.latitude]);
           setDistance(currentDistance);
-          setPosHistory(posHistory.push([position.coords.longitude, position.coords.latitude]));
+          setPosHistory(currentPosHistory);
           prevPos = position;
         }
+
+        drawTrack(map, "current_track", currentPosHistory);
       }
     );
     setWatchId(id);
   }
-
-  useEffect(() => {
-    alert("updated")
-    drawTrack(map, "current_track", posHistory);
-  }, [posHistory.length])
 
   const endRecordTrack = (track) => {
     console.log(watchId);
