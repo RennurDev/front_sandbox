@@ -63,15 +63,18 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
       (position) => {
         if (isValidPosition(prevPos, position)) {
           currentDistance += calcDistance(prevPos, position);
-          setDistance(distance);
+          setDistance(currentDistance);
           setPosHistory(posHistory.push([position.coords.longitude, position.coords.latitude]));
           prevPos = position;
         }
-        drawTrack(map, "current_track", posHistory);
       }
     );
     setWatchId(id);
   }
+
+  useEffect(() => {
+    drawTrack(map, "current_track", posHistory);
+  }, [posHistory])
 
   const endRecordTrack = (track) => {
     console.log(watchId);
