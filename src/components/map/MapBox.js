@@ -3,6 +3,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { RecordTrigger } from "./RecordTrigger";
 import { withStyles } from "@material-ui/core/styles";
+import { Flash } from "../flash/index";
 
 import getPlaceName from "../../lib/GetPlaceName";
 import drawTrack from "../../lib/DrawTrack";
@@ -168,10 +169,9 @@ class MapBox extends Component {
     });
 
     let current_place_name = getPlaceName(c_lng, c_lat);
-    current_place_name
-      .then((p) => {
-        this.props.handleState("current_location", p);
-      });
+    current_place_name.then((p) => {
+      this.props.handleState("current_location", p);
+    });
 
     let map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -215,7 +215,7 @@ class MapBox extends Component {
     const { classes } = this.props;
     return (
       <div>
-        <div className={ classes.root } ref={(e) => (this.mapContainer = e)}>
+        <div className={classes.root} ref={(e) => (this.mapContainer = e)}>
           <RecordTrigger onClick={onClick} />
         </div>
       </div>

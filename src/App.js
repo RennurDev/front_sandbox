@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Header } from "./header";
 import { Menu } from "./menu";
+import { Flash } from "./components/flash/index";
 import MapBox from "./components/map/MapBox";
 import "./App.css";
 import UserForm from "./components/user/App";
@@ -45,6 +46,11 @@ class App extends Component {
         name: this.state.current_user.name,
       });
     });
+    return (
+      <div>
+        <Flash message="ログイン完了" type="success" />
+      </div>
+    );
   }
 
   handleState(name, data) {

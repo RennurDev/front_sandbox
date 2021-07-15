@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Flash } from "../components/flash/index";
 const RAILS_API_ENDPOINT = process.env.REACT_APP_BACKEND_API_ENDPOINT;
 export default async function RequestAxios(url, action, params) {
   if (action === "get") {
@@ -6,7 +7,11 @@ export default async function RequestAxios(url, action, params) {
       const res = await axios.get(RAILS_API_ENDPOINT + url);
       return res;
     } catch (err) {
-      return err;
+      return (
+        <div>
+          <Flash message={err} type="error" />
+        </div>
+      );
     }
   } else if (action === "post") {
     if (!params) {

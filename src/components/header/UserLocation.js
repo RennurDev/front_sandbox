@@ -6,7 +6,7 @@ const styles = {
   },
 };
 
-export const UserLocation = ({current_location}) => {
+export const UserLocation = ({ current_location }) => {
   return (
     <div>
       <Grid
@@ -18,17 +18,15 @@ export const UserLocation = ({current_location}) => {
         <Grid style={styles.grid} item xs={7}>
           <div className="imgHeader">
             <img
-              src={
-                process.env.PUBLIC_URL + "/PetampAreaNameBackground-02.svg"
-              }
+              src={process.env.PUBLIC_URL + "/PetampAreaNameBackground-02.svg"}
               alt="header"
             />
           </div>
           <Typography className="textLocation" align="center" gutterBottom>
-            { current_location }
+            {current_location}
           </Typography>
         </Grid>
       </Grid>
     </div>
   );
-}
+};
