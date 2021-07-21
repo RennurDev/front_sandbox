@@ -44,7 +44,7 @@ export const MapBox = ({current_user, tracks, map, handleState}) => {
   const mapContainer = useRef(null);
 
   const beginRecordTrack = () => {
-    let prevPos = undefined;
+    let prevPos;
     let currentDistance = 0;
     const currentPosHistory = [];
     setPosHistory([]);
