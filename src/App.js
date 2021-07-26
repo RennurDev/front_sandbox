@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./header";
 import { Menu } from "./menu";
 import { MapBox } from "./components/map/MapBox";
 import { UserForm } from "./components/user/App";
-import "./App.css";
 
 const styles = {
   root: {
@@ -13,19 +12,27 @@ const styles = {
 
 export const App = () => {
   const [currentUser, setCurrentUser] = useState([{
-    id: "",
-    name: "",
+    id: undefined,
+    name: undefined,
   }]);
-  const [currentLocation, setCurrentLocation] = useState("");
+  const [currentLocation, setCurrentLocation] = useState();
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
-  const [map, setMap] = useState("");
+  const [map, setMap] = useState();
+
+  const [isLoggedIn, setIsLoggedIn] = useState();
+
+  useEffect(() => {
+    if(currentUser.id === undefined) {
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, [currentUser.id])
 
   return (
     <div className={styles.root}>
-      {currentUser.id !== "" ? (
-        <UserForm setCurrentUser={setCurrentUser} />
-      ) : (
+      {isLoggedIn ? (
         <div>
           <Header currentLocation={currentLocation} />
           <MapBox
@@ -45,6 +52,8 @@ export const App = () => {
             trackNum={trackNum}
           />
         </div>
+      ) : (
+        <UserForm setCurrentUser={setCurrentUser} />
       )}
     </div>
   );

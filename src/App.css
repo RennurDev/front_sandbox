@@ -9,28 +9,3 @@ body {
   padding: 0px;
   background-color: #00a563;
 }
-
-.imgHeader {
-  position: absolute;
-  top: 30px;
-  width: 100%;
-  height: 50px;
-  z-index: 1;
-}
-
-.imgRecordButton {
-  width: 100%;
-}
-
-.textLocation {
-  color: white;
-  position: absolute;
-  width: 100%;
-  top: 40px;
-  z-index: 2;
-}
-
-.signUpPetamp {
-  width: 100%;
-  height: 70%;
-}

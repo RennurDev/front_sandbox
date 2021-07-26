@@ -1,21 +1,17 @@
-import { useState } from "react";
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 
 import RequestAxios from "../../lib/RequestAxios";
 import "../../App.css";
 
+const styles = {
+  signUpImg: {
+    width: "100%",
+  height: "70%",
+  },
+};
+
 export const UserForm = ({ setCurrentUser }) => {
-  const [form, setForm] = useState([{
-    name: "",
-    password: "",
-  }]);
-
-  // handleChange(e, key) {
-  //   let target = e.target;
-  //   let value = target.value;
-  //   form[key] = value;
-
 
   const handleCreate = () => {
     // TODO: バックエンドでのUser作成機能完成後にコメントアウト
@@ -34,10 +30,10 @@ export const UserForm = ({ setCurrentUser }) => {
   }
 
   return (
-    <div className="backgroundGreen">
+    <div>
       <img
         src={`${process.env.PUBLIC_URL}/signUpPetamp.png`}
-        className="signUpPetamp"
+        style={styles.signUpImg}
         alt="signUp"
       />
       <form noValidate autoComplete="off">
@@ -52,7 +48,6 @@ export const UserForm = ({ setCurrentUser }) => {
                       label="Name"
                       variant="filled"
                       fullWidth
-                      onChange={() => setForm({name: ""})}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -61,7 +56,6 @@ export const UserForm = ({ setCurrentUser }) => {
                       label="Password"
                       variant="filled"
                       fullWidth
-                      onChange={() => setForm({password: ""})}
                     />
                   </Grid>
                 </Grid>

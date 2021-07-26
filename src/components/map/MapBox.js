@@ -97,8 +97,9 @@ export const MapBox = ({currentUser, tracks, map, setCurrentLocation, setTracks,
     showAllTracks(map, tracks.length);
   }
 
-  const getAllTracks = (user_id) => {
-    const url = "/users_tracks/" + user_id;
+  const getAllTracks = (userId) => {
+    console.log(userId);
+    const url = "/users_tracks/" + userId;
     let response = RequestAxios(url, "get");
     response.then((r) => {
       if (r.data.length >= 1) {
