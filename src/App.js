@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Header } from "./header";
 import { Menu } from "./menu";
-import MapBox from "./components/map/MapBox";
 import "./App.css";
 import UserForm from "./components/user/App";
+import MapBox from "./components/map/MapBox";
 
 const styles = (theme) => ({
   root: {

@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import { useRef, useEffect, useState } from "react";
+import { RecordTrigger } from "./RecordTrigger";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { RecordTrigger } from "./RecordTrigger";
-import { withStyles } from "@material-ui/core/styles";
-
 import getPlaceName from "../../lib/GetPlaceName";
 import drawTrack from "../../lib/DrawTrack";
 import addTrackLayer from "../../lib/AddTrackLayer";
@@ -29,109 +27,98 @@ const geolocate = new mapboxgl.GeolocateControl({
   trackUserLocation: true, // ユーザの位置情報追跡
 });
 
-const styles = (theme) => ({
+const styles = {
   root: {
     width: "100%",
     height: "87vh",
   },
-});
+};
 
-class MapBox extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isStarted: false,
-      current_pos: {
-        lng: 0,
-        lat: 0,
-      },
-    };
-    this.map = "";
-    this.track = [];
-    this.previous_position = undefined;
-    //watchPositionの実行idを管理
-    this.watch_id = -1;
-    this.distance = 0;
+export const MapBox = ({current_user, tracks, map, handleState}) => {
 
-    this.onClick = this.onClick.bind(this);
-    this.setMap = this.setMap.bind(this);
-    this.beginRecordTrack = this.beginRecordTrack.bind(this);
-    this.endRecordTrack = this.endRecordTrack.bind(this);
-    this.initializePosition = this.initializePosition.bind(this);
-    this.onPosition = this.onPosition.bind(this);
-  }
+  const [isStarted, setIsStarted] = useState(false);
+  const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }])
+  const [posHistory, setPosHistory] = useState([]);
+  const [watchId, setWatchId] = useState(-1);
+  const [distance, setDistance] = useState(0);
+  const mapContainer = useRef(null);
 
-  beginRecordTrack() {
-    this.track = [];
-    this.distance = 0;
-    hideAllTracks(this.map, this.props.tracks.length);
-    showTrackLayer(this.map, "current_track");
+  const beginRecordTrack = () => {
+    let prevPos;
+    let currentDistance = 0;
+    const currentPosHistory = [];
+    setPosHistory([]);
+    hideAllTracks(map, tracks.length);
+    showTrackLayer(map, "current_track");
     //初期化
-    navigator.geolocation.getCurrentPosition(this.initializePosition);
-    this.watch_id = navigator.geolocation.watchPosition(this.onPosition);
-  }
-
-  endRecordTrack(track) {
-    navigator.geolocation.clearWatch(this.watch_id);
-    hideTrackLayer(this.map, "current_track");
-
-    if (this.distance >= 50) {
-      let new_tracks = this.props.tracks;
-      new_tracks.push(track);
-      addTrackLayer(this.map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
-      this.props.handleState("tracks", new_tracks);
-      this.props.handleState("track_num", new_tracks.length);
-      this.postTrack(track);
-
-      alert("distance: " + this.distance);
-    } else {
-      alert("not saved distance(<50): " + this.distance);
-    }
-    showAllTracks(this.map, this.props.tracks.length);
-  }
-
-  initializePosition(position) {
-    this.previous_position = position;
-    this.track.push([position.coords.longitude, position.coords.latitude]);
-    this.map.flyTo({
-      center: [position.coords.longitude, position.coords.latitude],
-      zoom: 15,
+    navigator.geolocation.getCurrentPosition((position) => {
+      prevPos = position;
+      currentPosHistory.push([position.coords.longitude, position.coords.latitude])
+      setPosHistory(currentPosHistory);
+      map.flyTo({
+        center: [position.coords.longitude, position.coords.latitude],
+        zoom: 15,
+      });
     });
+
+    const id = navigator.geolocation.watchPosition(
+      (position) => {
+        if (isValidPosition(prevPos, position)) {
+          currentDistance += calcDistance(prevPos, position);
+          currentPosHistory.push([position.coords.longitude, position.coords.latitude]);
+          setDistance(currentDistance);
+          setPosHistory(currentPosHistory);
+          prevPos = position;
+        }
+
+        drawTrack(map, "current_track", currentPosHistory);
+      }
+    );
+    setWatchId(id);
   }
 
-  onPosition(position) {
-    if (isValidPosition(this.previous_position, position)) {
-      this.distance += calcDistance(this.previous_position, position);
-      this.track.push([position.coords.longitude, position.coords.latitude]);
-      this.previous_position = position;
+  const endRecordTrack = (track) => {
+    console.log(watchId);
+    navigator.geolocation.clearWatch(watchId);
+    hideTrackLayer(map, "current_track");
+
+    if (distance >= 50) {
+      let new_tracks = tracks;
+      new_tracks.push(track);
+      addTrackLayer(map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
+      handleState("tracks", new_tracks);
+      handleState("track_num", new_tracks.length);
+      postTrack(track);
+
+      alert("distance: " + distance);
+    } else {
+      alert("not saved distance(<50): " + distance);
     }
-    drawTrack(this.map, "current_track", this.track);
+    showAllTracks(map, tracks.length);
   }
 
-  getAllTracks(user_id) {
-    let tracks = [];
+  const getAllTracks = (user_id) => {
     const url = "/users_tracks/" + user_id;
     let response = RequestAxios(url, "get");
     response.then((r) => {
-      console.log(r);
       if (r.data.length >= 1) {
         for (let i = 0; i < r.data.length; i++) {
           tracks.push(decodeTrack(r.data[i].data));
-          addTrackLayer(this.map, "track_" + String(i), tracks[i]);
+          addTrackLayer(map, "track_" + String(i), tracks[i]);
         }
-        this.props.handleState("tracks", tracks);
-        this.props.handleState("track_num", tracks.length);
+        handleState("tracks", tracks);
+        handleState("track_num", tracks.length);
       }
     });
   }
 
   // PostTrack
-  postTrack(data) {
+  const postTrack = (data) => {
     const encoded_data = encodeTrack(data);
     let body = {
       track: {
         data: encoded_data,
-        user_id: this.props.current_user.id,
+        user_id: current_user.id,
       },
     };
     const url = "/tracks";
@@ -144,83 +131,75 @@ class MapBox extends Component {
     });
   }
 
-  onClick() {
-    let isStarted = this.state.isStarted;
-    if (isStarted) {
-      // Recordの処理
-      this.endRecordTrack(this.track);
-    } else {
-      // Start時の処理
-      this.beginRecordTrack();
-    }
-    this.setState({ isStarted: !isStarted });
-  }
-
-  setMap(position) {
+  const setMap = (position) => {
     const c_lng = position.coords.longitude;
     const c_lat = position.coords.latitude;
     // 現在地設定
-    this.setState({
-      current_pos: {
+    setCurrentPos({
         lng: c_lng,
-        lat: c_lat,
-      },
+        lat: c_lat
     });
 
-    let current_place_name = getPlaceName(c_lng, c_lat);
-    current_place_name
+    let currentPlaceName = getPlaceName(c_lng, c_lat);
+    currentPlaceName
       .then((p) => {
-        this.props.handleState("current_location", p);
+        handleState("current_location", p);
       });
 
-    let map = new mapboxgl.Map({
-      container: this.mapContainer,
+    map = new mapboxgl.Map({
+      container: mapContainer.current,
       center: [c_lng, c_lat],
       style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
       zoom: 12,
     });
 
-    this.props.handleState("map", map);
-    this.map = map;
-
-    this.map.addControl(geolocate);
-    this.map.on(
+    handleState("map", map);
+    map.addControl(geolocate);
+    map.on(
       "load",
       function () {
-        this.getAllTracks(this.props.current_user.id);
+        getAllTracks(current_user.id);
 
         // 記録用のレイヤーの追加
-        addTrackLayer(this.map, "current_track");
+        addTrackLayer(map, "current_track");
 
         //Next, Prev用のレイヤーの追加
-        addTrackLayer(this.map, "single_track");
-      }.bind(this)
+        addTrackLayer(map, "single_track");
+      }
     );
   }
 
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(this.setMap);
-  }
+  const isFirstRender = useRef(false)
 
-  componentWillUnmount() {
-    try {
-      this.map.remove();
-    } catch (e) {
-      console.log(e);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(setMap);
+    isFirstRender.current = true;
+    return () => {
+      try {
+        map.remove();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }, [])
+
+  useEffect(() => {
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      if (isStarted) {
+        beginRecordTrack();
+      } else {
+        endRecordTrack(posHistory);
+      }
     }
-  }
+  }, [isStarted])
 
-  render() {
-    const onClick = this.onClick;
-    const { classes } = this.props;
-    return (
-      <div>
-        <div className={ classes.root } ref={(e) => (this.mapContainer = e)}>
-          <RecordTrigger onClick={onClick} />
-        </div>
+  return (
+    <div>
+      <div style={ styles.root } ref={ mapContainer }>
+        <RecordTrigger onClick={ () => setIsStarted(!isStarted) } />
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default withStyles(styles, { withTheme: true })(MapBox);
