@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Header } from "./header";
 import { Menu } from "./menu";
-import MapBox from "./components/map/MapBox";
 import "./App.css";
 import UserForm from "./components/user/App";
 import RequestAxios from "./lib/RequestAxios";
@@ -107,8 +106,6 @@ class App extends Component {
             <MapBox
               current_user={this.state.current_user}
               tracks={this.state.tracks}
-              track_id={this.state.track_id}
-              track_num={this.state.track_num}
               map={this.state.map}
               handleState={this.handleState}
             />
