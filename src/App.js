@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Header } from "./header";
 import { Menu } from "./menu";
+import { MapBox } from "./components/map/MapBox";
+import { UserForm } from "./components/user/App";
 import "./App.css";
-import UserForm from "./components/user/App";
-import MapBox from "./components/map/MapBox";
 
-const styles = (theme) => ({
+const styles = {
   root: {
     overflow: "hidden",
   },
-});
+};
 
 export const App = () => {
   const [currentUser, setCurrentUser] = useState([{
@@ -17,25 +17,26 @@ export const App = () => {
     name: "",
   }]);
   const [currentLocation, setCurrentLocation] = useState("");
-  const [form, setForm] = useState([{
-    name: "",
-  }]);
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [map, setMap] = useState("");
 
   return (
     <div className={styles.root}>
-      {this.state.current_user.id === "" ? (
-        <UserForm handleUserLogin={this.handleUserLogin} />
+      {currentUser.id !== "" ? (
+        <UserForm setCurrentUser={setCurrentUser} />
       ) : (
         <div>
-          <Header current_location={currentLocation} />
+          <Header currentLocation={currentLocation} />
           <MapBox
-            current_user={currentUser}
+            currentUser={currentUser}
             tracks={tracks}
-            track_num={trackNum}
+            trackNum={trackNum}
             map={map}
+            setCurrentLocation={setCurrentLocation}
+            setTracks={setTracks}
+            setTrackNum={setTrackNum}
+            setMap={setMap}
           />
           <Menu
             currentUser={currentUser}
