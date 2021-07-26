@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Header from "./components/header/App";
-import { MapBox } from "./components/map/MapBox";
+import { Header } from "./header";
 import { Menu } from "./menu";
 import "./App.css";
 import UserForm from "./components/user/App";
