@@ -4,6 +4,7 @@ import { Tracks } from "./components/menu/content/Tracks";
 import { Setting } from "./components/menu/content/Setting";
 import { Navigation } from "./components/menu/nav/Navigation";
 import { Grid } from "@material-ui/core";
+import { Suspense } from "react";
 
 import ShowAllTracks from "./lib/ShowAllTracks";
 import HideAllTracks from "./lib/HideAllTracks";
@@ -41,12 +42,14 @@ export const Menu = ({ currentUser, map, tracks, trackNum }) => {
       <Navigation value={selectedAct} onChange={handleActChange} />
       <Grid container justify="center" className={styles.root}>
         <Grid item xs={10}>
-          {isProfile ? <Profile currentUser={currentUser} /> : null}
-          {isTracks ? (
-            <Tracks trackNum={trackNum} tracks={tracks} map={map} />
-          ) : null}
-          {/* TODO: User API 完成後に 引数追加 */}
-          {isSetting ? <Setting /> : null}
+          <Suspense fallback={<p>Loading...</p>}>
+            {isProfile ? <Profile currentUser={currentUser} /> : null}
+            {isTracks ? (
+              <Tracks trackNum={trackNum} tracks={tracks} map={map} />
+            ) : null}
+            {/* TODO: User API 完成後に 引数追加 */}
+            {isSetting ? <Setting /> : null}
+          </Suspense>
         </Grid>
       </Grid>
     </div>

@@ -1,12 +1,4 @@
-import React, { Component } from "react";
-import { TextField, Button } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
 
-import RequestAxios from "../../lib/RequestAxios";
-import "../../App.css";
-
-class App extends Component {
-  constructor(props) {
     super(props);
     this.state = {
       lists: [],
@@ -21,8 +13,14 @@ class App extends Component {
     const url = "/users";
     var response = RequestAxios(url, "get");
     response.then((r) => {
-      if (r.data.length >= 1) {
-        this.setState({ lists: r.data });
+      if (r.status) {
+        if (r.data.length >= 1 && r.status === 200) {
+          this.setState({ lists: r.data });
+        } else {
+          console.log("軌跡データがありません");
+        }
+      } else {
+        console.log("ERROR:" + r);
       }
     });
   }
@@ -59,7 +57,11 @@ class App extends Component {
     const url = "/users/" + id;
     let response = RequestAxios(url, "delete");
     response.then((r) => {
-      console.log(r.data);
+      if (r.stasus) {
+        console.log(r.data);
+      } else {
+        console.log("[ERROR]" + r);
+      }
     });
   }
 

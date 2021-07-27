@@ -29,6 +29,7 @@ export const Tracks = ({ trackNum, tracks, map }) => {
   useEffect(() => {
     changeSelectedTrack(trackID, trackNum, tracks, map);
   }, [trackID]);
+
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
     if (0 <= trackID) {
       let selectedCoords = tracks[trackID % trackNum];
@@ -40,10 +41,10 @@ export const Tracks = ({ trackNum, tracks, map }) => {
     }
   };
 
-  const changeMapBound = (coords, map) => {
+  const changeMapBound = async (coords, map) => {
     // TODO: map 表示中に実行すると coords が undefined となるので,
     // 非同期処理に変更する
-    let bounds = coords.reduce((bounds, coord) => {
+    let bounds = await coords.reduce((bounds, coord) => {
       return bounds.extend(coord);
     }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
 

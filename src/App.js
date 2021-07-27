@@ -5,6 +5,8 @@ import "./App.css";
 import UserForm from "./components/user/App";
 import RequestAxios from "./lib/RequestAxios";
 import { withStyles } from "@material-ui/core/styles";
+import { MapBox } from "./components/map/MapBox";
+import { Suspense } from "react";
 
 const styles = (theme) => ({
   root: {
@@ -102,19 +104,25 @@ class App extends Component {
           <UserForm handleUserLogin={this.handleUserLogin} />
         ) : (
           <div>
-            <Header current_location={this.state.current_location} />
-            <MapBox
-              current_user={this.state.current_user}
-              tracks={this.state.tracks}
-              map={this.state.map}
-              handleState={this.handleState}
-            />
-            <Menu
-              currentUser={this.state.current_user}
-              map={this.state.map}
-              tracks={this.state.tracks}
-              trackNum={this.state.track_num}
-            />
+            <Suspense fallback={<p>Loading...</p>}>
+              <Header current_location={this.state.current_location} />
+            </Suspense>
+            <Suspense fallback={<p>Loading...</p>}>
+              <MapBox
+                current_user={this.state.current_user}
+                tracks={this.state.tracks}
+                map={this.state.map}
+                handleState={this.handleState}
+              />
+            </Suspense>
+            <Suspense fallback={<p>Loading...</p>}>
+              <Menu
+                currentUser={this.state.current_user}
+                map={this.state.map}
+                tracks={this.state.tracks}
+                trackNum={this.state.track_num}
+              />
+            </Suspense>
           </div>
         )}
       </div>
