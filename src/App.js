@@ -12,8 +12,8 @@ const styles = {
 
 export const App = () => {
   const [currentUser, setCurrentUser] = useState([{
-    id: undefined,
-    name: undefined,
+    id: "",
+    name: "",
   }]);
   const [currentLocation, setCurrentLocation] = useState();
   const [trackNum, setTrackNum] = useState(0);
@@ -21,9 +21,9 @@ export const App = () => {
   const [map, setMap] = useState();
 
   const [isLoggedIn, setIsLoggedIn] = useState();
-
+  
   useEffect(() => {
-    if(currentUser.id === undefined) {
+    if(currentUser.id === undefined || currentUser.id === "") {
       setIsLoggedIn(false);
     } else {
       setIsLoggedIn(true);
