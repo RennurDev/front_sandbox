@@ -15,15 +15,11 @@ const styles = {
 };
 
 export const Menu = ({ currentUser, map, tracks, trackNum }) => {
-  const [selectedAct, setSelecetedAct] = useState();
+  const [selectedAct, setSelectedAct] = useState();
 
   useEffect(() => {
     displayMapExeceptTracks(selectedAct);
   }, [selectedAct]);
-
-  function handleActChange(value) {
-    setSelecetedAct(value);
-  }
 
   const displayMapExeceptTracks = (action) => {
     if (action === "Tracks") {
@@ -38,7 +34,7 @@ export const Menu = ({ currentUser, map, tracks, trackNum }) => {
   const isSetting = selectedAct === "Setting" ? true : false;
   return (
     <div>
-      <Navigation value={selectedAct} onChange={handleActChange} />
+      <Navigation selectedAct={selectedAct} setSelectedAct={setSelectedAct} />
       <Grid container justify="center" styles={styles.grid}>
         <Grid item xs={10}>
           {isProfile ? <Profile currentUser={currentUser} /> : null}

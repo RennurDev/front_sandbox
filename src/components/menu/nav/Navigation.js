@@ -3,26 +3,20 @@ import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
+const styles = {
   root: {
     backgroundColor: "#00a563",
   },
-});
+};
 
-export function Navigation(props) {
-  function handleActChange(value) {
-    //NOTE:  we invoke the callback with the new value
-    props.onChange(value);
-  }
-  const classes = useStyles();
+export const Navigation = ({selectedAct, setSelectedAct}) => {
   return (
     <BottomNavigation
-      className={classes.root}
-      value={props.value}
+      style={styles.root}
+      value={selectedAct}
       onChange={(e, value) => {
-        handleActChange(value);
+        setSelectedAct(value);
       }}
     >
       <BottomNavigationAction
