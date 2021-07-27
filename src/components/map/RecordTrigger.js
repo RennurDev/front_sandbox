@@ -11,6 +11,9 @@ const styles = {
     width: "100%",
     padding: 0,
   },
+  recordButtonImg: {
+    width: "100%",
+  },
 };
 
 export const RecordTrigger = ({ onClick }) => {
@@ -26,7 +29,7 @@ export const RecordTrigger = ({ onClick }) => {
         <Grid item xs={4}>
           <Button style={styles.text} onClick={onClick}>
             <img
-              className="imgRecordButton"
+              style={styles.recordButtonImg}
               src={process.env.PUBLIC_URL + "/imgRecordButton.svg"}
               alt="petampButton"
             />
