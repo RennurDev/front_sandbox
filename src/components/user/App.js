@@ -5,12 +5,11 @@ import RequestAxios from "../../lib/RequestAxios";
 const styles = {
   signUpImg: {
     width: "100%",
-  height: "70%",
+    height: "70%",
   },
 };
 
 export const UserForm = ({ setCurrentUser }) => {
-
   const handleCreate = () => {
     // TODO: バックエンドでのUser作成機能完成後にコメントアウト
     // let response;
@@ -24,8 +23,8 @@ export const UserForm = ({ setCurrentUser }) => {
     // if (response) {
     //   console.log(response);
     // }
-    setCurrentUser({id: 5});
-  }
+    setCurrentUser({ id: 5 });
+  };
 
   return (
     <div>
@@ -97,4 +96,4 @@ export const UserForm = ({ setCurrentUser }) => {
       </form>
     </div>
   );
-}
+};

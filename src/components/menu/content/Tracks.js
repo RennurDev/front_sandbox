@@ -11,7 +11,7 @@ import {
 
 import drawTrack from "../../../lib/DrawTrack";
 
-const styles = (theme) => ({
+const styles = {
   root: {
     maxWidth: 360,
   },
@@ -21,7 +21,7 @@ const styles = (theme) => ({
   actions: {
     height: 30,
   },
-});
+};
 
 export const Tracks = ({ trackNum, tracks, map }) => {
   const [trackID, setTrackID] = useState(0);
@@ -29,32 +29,35 @@ export const Tracks = ({ trackNum, tracks, map }) => {
   useEffect(() => {
     changeSelectedTrack(trackID, trackNum, tracks, map);
   }, [trackID]);
+
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
     if (0 <= trackID) {
       let selectedCoords = tracks[trackID % trackNum];
-      changeMapBound(selectedCoords, map);
+      calcMapBound(selectedCoords, map).then((bounds) => {
+        map.fitBounds(bounds, { padding: 20 });
+      });
+      drawTrack(map, "single_track", selectedCoords);
     } else if (trackID < 0) {
       // NOTE: trackID が trackNum の倍数の場合でも期待の値を取得できる
       let selectedCoords = tracks[(trackNum + (trackID % trackNum)) % trackNum];
-      changeMapBound(selectedCoords, map);
+      calcMapBound(selectedCoords, map).then((bounds) => {
+        map.fitBounds(bounds, { padding: 20 });
+      });
+      drawTrack(map, "single_track", selectedCoords);
     }
   };
 
-  const changeMapBound = (coords, map) => {
-    // TODO: map 表示中に実行すると coords が undefined となるので,
-    // 非同期処理に変更する
-    let bounds = coords.reduce((bounds, coord) => {
-      return bounds.extend(coord);
-    }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
-
-    try {
-      map.fitBounds(bounds, {
-        padding: 20,
-      });
-      drawTrack(map, "single_track", coords);
-    } catch (e) {
-      console.log(e);
-    }
+  const calcMapBound = (coords, map) => {
+    return new Promise((resolve, reject) => {
+      if (coords && map) {
+        let bounds = coords.reduce((bounds, coords) => {
+          return bounds.extend(coords);
+        }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
+        resolve(bounds);
+      } else {
+        reject("coords not found");
+      }
+    });
   };
 
   return (

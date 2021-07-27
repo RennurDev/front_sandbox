@@ -6,7 +6,8 @@ export default async function RequestAxios(url, action, params) {
       const res = await axios.get(RAILS_API_ENDPOINT + url);
       return res;
     } catch (err) {
-      return err;
+      const errorMessage = err || err.message;
+      return errorMessage;
     }
   } else if (action === "post") {
     if (!params) {
@@ -16,7 +17,8 @@ export default async function RequestAxios(url, action, params) {
       const res = await axios.post(RAILS_API_ENDPOINT + url, params);
       return res;
     } catch (err) {
-      return err;
+      const errorMessage = err.response || err.message;
+      return errorMessage;
     }
   } else if (action === "put") {
     if (!params) {
@@ -26,14 +28,16 @@ export default async function RequestAxios(url, action, params) {
       const res = await axios.put(RAILS_API_ENDPOINT + url, params);
       return res;
     } catch (err) {
-      return err;
+      const errorMessage = err.response || err.message;
+      return errorMessage;
     }
   } else if (action === "delete") {
     try {
       const res = await axios.delete(RAILS_API_ENDPOINT + url);
       return res;
     } catch (err) {
-      return err;
+      const errorMessage = err.response || err.message;
+      return errorMessage;
     }
   } else {
     console.log("undefined action");
