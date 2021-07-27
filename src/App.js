@@ -3,6 +3,7 @@ import { Header } from "./header";
 import { Menu } from "./menu";
 import { MapBox } from "./components/map/MapBox";
 import { UserForm } from "./components/user/App";
+import { ModalWindow } from "./components/modal/ModalWindow";
 
 const styles = {
   root: {
@@ -34,6 +35,7 @@ export const App = () => {
     <div className={styles.root}>
       {isLoggedIn ? (
         <div>
+          <ModalWindow />
           <Header currentLocation={currentLocation} />
           <MapBox
             currentUser={currentUser}
