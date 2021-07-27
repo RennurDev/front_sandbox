@@ -11,16 +11,12 @@ const styles = {
 };
 
 export const Navigation = ({selectedAct, setSelectedAct}) => {
-  const handleActChange = (value) => {
-    //NOTE:  we invoke the callback with the new value
-    setSelectedAct(value);
-  }
   return (
     <BottomNavigation
       style={styles.root}
       value={selectedAct}
       onChange={(e, value) => {
-        handleActChange(value);
+        setSelectedAct(value);
       }}
     >
       <BottomNavigationAction
