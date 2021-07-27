@@ -41,21 +41,20 @@ export const Tracks = ({ trackNum, tracks, map }) => {
     }
   };
 
-  const changeMapBound = async (coords, map) => {
-    // TODO: map 表示中に実行すると coords が undefined となるので,
-    // 非同期処理に変更する
-    let bounds = await coords.reduce((bounds, coord) => {
-      return bounds.extend(coord);
-    }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
-
-    try {
-      map.fitBounds(bounds, {
-        padding: 20,
-      });
-      drawTrack(map, "single_track", coords);
-    } catch (e) {
-      console.log(e);
-    }
+  const changeMapBound = (coords, map) => {
+    return new Promise((resolve, reject) => {
+      if (coords) {
+        let bounds = coords.reduce((bounds, coord) => {
+          return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
+        map.fitBounds(bounds, {
+          padding: 20,
+        });
+        drawTrack(map, "single_track", coords);
+      } else {
+        reject("coords is not found");
+      }
+    });
   };
 
   return (

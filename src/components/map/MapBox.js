@@ -34,7 +34,15 @@ const styles = {
   },
 };
 
-export const MapBox = ({ current_user, tracks, map, handleState }) => {
+export const MapBox = ({
+  currentUser,
+  tracks,
+  map,
+  setCurrentLocation,
+  setTracks,
+  setTrackNum,
+  setMap,
+}) => {
   const [isStarted, setIsStarted] = useState(false);
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
   const [posHistory, setPosHistory] = useState([]);
@@ -89,8 +97,8 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
       let new_tracks = tracks;
       new_tracks.push(track);
       addTrackLayer(map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
-      handleState("tracks", new_tracks);
-      handleState("track_num", new_tracks.length);
+      setTracks(new_tracks);
+      setTrackNum(new_tracks.length);
       postTrack(track);
 
       alert("distance: " + distance);
@@ -100,8 +108,9 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
     showAllTracks(map, tracks.length);
   };
 
-  const getAllTracks = (user_id) => {
-    const url = "/users_tracks/" + user_id;
+  const getAllTracks = (userId) => {
+    console.log(userId);
+    const url = "/users_tracks/" + userId;
     let response = RequestAxios(url, "get");
     response.then((r) => {
       if (r.status) {
@@ -109,8 +118,8 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
           tracks.push(decodeTrack(r.data[i].data));
           addTrackLayer(map, "track_" + String(i), tracks[i]);
         }
-        handleState("tracks", tracks);
-        handleState("track_num", tracks.length);
+        setTracks(tracks);
+        setTrackNum(tracks.length);
       } else {
         console.log("[ERROR]" + r);
       }
@@ -123,7 +132,7 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
     let body = {
       track: {
         data: encoded_data,
-        user_id: current_user.id,
+        user_id: currentUser.id,
       },
     };
     const url = "/tracks";
@@ -137,7 +146,7 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
     });
   };
 
-  const setMap = (position) => {
+  const createMap = (position) => {
     const c_lng = position.coords.longitude;
     const c_lat = position.coords.latitude;
     // 現在地設定
@@ -148,7 +157,7 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
 
     let currentPlaceName = getPlaceName(c_lng, c_lat);
     currentPlaceName.then((p) => {
-      handleState("current_location", p);
+      setCurrentLocation(p);
     });
 
     map = new mapboxgl.Map({
@@ -158,10 +167,10 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
       zoom: 12,
     });
 
-    handleState("map", map);
+    setMap(map);
     map.addControl(geolocate);
     map.on("load", function () {
-      getAllTracks(current_user.id);
+      getAllTracks(currentUser.id);
 
       // 記録用のレイヤーの追加
       addTrackLayer(map, "current_track");
@@ -174,7 +183,7 @@ export const MapBox = ({ current_user, tracks, map, handleState }) => {
   const isFirstRender = useRef(false);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(setMap);
+    navigator.geolocation.getCurrentPosition(createMap);
     isFirstRender.current = true;
     return () => {
       try {

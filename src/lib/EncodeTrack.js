@@ -1,6 +1,6 @@
 export default function EncodeTrack(data) {
   if (data !== []) {
-    let encoded_track = ""
+    let encoded_track;
     for(let i=0; i<data.length-1; i++) {
       encoded_track += data[i]+":"
     }

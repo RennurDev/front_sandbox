@@ -9,14 +9,14 @@ import { Suspense } from "react";
 import ShowAllTracks from "./lib/ShowAllTracks";
 import HideAllTracks from "./lib/HideAllTracks";
 
-const styles = (theme) => ({
-  root: {
+const styles = {
+  grid: {
     marginBottom: 30,
   },
-});
+};
 
 export const Menu = ({ currentUser, map, tracks, trackNum }) => {
-  const [selectedAct, setSelecetedAct] = useState("");
+  const [selectedAct, setSelecetedAct] = useState();
 
   useEffect(() => {
     displayMapExeceptTracks(selectedAct);
@@ -40,7 +40,7 @@ export const Menu = ({ currentUser, map, tracks, trackNum }) => {
   return (
     <div>
       <Navigation value={selectedAct} onChange={handleActChange} />
-      <Grid container justify="center" className={styles.root}>
+      <Grid container justify="center" styles={styles.grid}>
         <Grid item xs={10}>
           <Suspense fallback={<p>Loading...</p>}>
             {isProfile ? <Profile currentUser={currentUser} /> : null}

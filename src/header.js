@@ -1,10 +1,10 @@
 import { UserLocation } from './components/header/UserLocation';
 
-export const Header = ({ current_location }) => {
+export const Header = ({ currentLocation }) => {
   return (
     <div>
       <UserLocation
-        current_location={current_location}
+        currentLocation={currentLocation}
       />
     </div>
   )
