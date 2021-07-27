@@ -10,7 +10,7 @@ const styles = {
   },
 };
 
-export const Navigation = ({selectedAct, setSelectedAct}) => {
+export const Navigation = ({ selectedAct, setSelectedAct }) => {
   return (
     <BottomNavigation
       style={styles.root}
@@ -36,4 +36,4 @@ export const Navigation = ({selectedAct, setSelectedAct}) => {
       />
     </BottomNavigation>
   );
-}
+};

@@ -12,24 +12,26 @@ const styles = {
 };
 
 export const App = () => {
-  const [currentUser, setCurrentUser] = useState([{
-    id: "",
-    name: "",
-  }]);
+  const [currentUser, setCurrentUser] = useState([
+    {
+      id: "",
+      name: "",
+    },
+  ]);
   const [currentLocation, setCurrentLocation] = useState();
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [map, setMap] = useState();
 
   const [isLoggedIn, setIsLoggedIn] = useState();
-  
+
   useEffect(() => {
-    if(currentUser.id) {
+    if (currentUser.id) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, [currentUser.id])
+  }, [currentUser.id]);
 
   return (
     <div className={styles.root}>
@@ -58,4 +60,4 @@ export const App = () => {
       )}
     </div>
   );
-}
+};
