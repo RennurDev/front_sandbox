@@ -3,6 +3,7 @@ import { Header } from "./header";
 import { Menu } from "./menu";
 import { MapBox } from "./components/map/MapBox";
 import { UserForm } from "./components/user/App";
+import "./App.css";
 
 const styles = {
   root: {
