@@ -4,6 +4,7 @@ import { Menu } from "./menu";
 import { MapBox } from "./components/map/MapBox";
 import { UserForm } from "./components/user/App";
 import { ModalWindow } from "./components/modal/ModalWindow";
+import "./App.css";
 
 const styles = {
   root: {
