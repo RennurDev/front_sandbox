@@ -23,10 +23,10 @@ export const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState();
   
   useEffect(() => {
-    if(currentUser.id === undefined || currentUser.id === "") {
-      setIsLoggedIn(false);
-    } else {
+    if(currentUser.id) {
       setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
   }, [currentUser.id])
 
