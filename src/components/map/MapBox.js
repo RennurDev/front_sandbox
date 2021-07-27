@@ -14,6 +14,12 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -48,7 +54,34 @@ export const MapBox = ({
   const [posHistory, setPosHistory] = useState([]);
   const [watchId, setWatchId] = useState(-1);
   const [distance, setDistance] = useState(0);
+  const [open, setOpen] = useState(false);
   const mapContainer = useRef(null);
+
+  const isFirstRender = useRef(false);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(createMap);
+    isFirstRender.current = true;
+    return () => {
+      try {
+        map.remove();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      if (isStarted) {
+        beginRecordTrack();
+      } else {
+        endRecordTrack(posHistory);
+      }
+    }
+  }, [isStarted]);
 
   const beginRecordTrack = () => {
     let prevPos;
@@ -94,11 +127,11 @@ export const MapBox = ({
     hideTrackLayer(map, "current_track");
 
     if (distance >= 50) {
-      let new_tracks = tracks;
-      new_tracks.push(track);
-      addTrackLayer(map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
-      setTracks(new_tracks);
-      setTrackNum(new_tracks.length);
+      let newTracks = tracks;
+      newTracks.push(track);
+      addTrackLayer(map, "track_" + String(newTracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
+      setTracks(newTracks);
+      setTrackNum(newTracks.length);
       postTrack(track);
 
       alert("distance: " + distance);
@@ -114,14 +147,27 @@ export const MapBox = ({
     let response = RequestAxios(url, "get");
     response.then((r) => {
       if (r.status) {
-        for (let i = 0; i < r.data.length; i++) {
-          tracks.push(decodeTrack(r.data[i].data));
-          addTrackLayer(map, "track_" + String(i), tracks[i]);
+        if (r.data.length >= 1) {
+          for (let i = 0; i < r.data.length; i++) {
+            tracks.push(decodeTrack(r.data[i].data));
+            addTrackLayer(map, "track_" + String(i), tracks[i]);
+          }
+        } else {
+          console.log("軌跡ないよ");
+          return (
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert severity="warning">軌跡が保存されていません</Alert>
+            </Snackbar>
+          );
         }
         setTracks(tracks);
         setTrackNum(tracks.length);
       } else {
-        console.log("[ERROR]" + r);
+        return (
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert severity="error">${r}</Alert>
+          </Snackbar>
+        );
       }
     });
   };
@@ -147,22 +193,22 @@ export const MapBox = ({
   };
 
   const createMap = (position) => {
-    const c_lng = position.coords.longitude;
-    const c_lat = position.coords.latitude;
+    const cLng = position.coords.longitude;
+    const cLat = position.coords.latitude;
     // 現在地設定
     setCurrentPos({
-      lng: c_lng,
-      lat: c_lat,
+      lng: cLng,
+      lat: cLat,
     });
 
-    let currentPlaceName = getPlaceName(c_lng, c_lat);
+    let currentPlaceName = getPlaceName(cLng, cLat);
     currentPlaceName.then((p) => {
       setCurrentLocation(p);
     });
 
     map = new mapboxgl.Map({
       container: mapContainer.current,
-      center: [c_lng, c_lat],
+      center: [cLng, cLat],
       style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
       zoom: 12,
     });
@@ -180,31 +226,13 @@ export const MapBox = ({
     });
   };
 
-  const isFirstRender = useRef(false);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(createMap);
-    isFirstRender.current = true;
-    return () => {
-      try {
-        map.remove();
-      } catch (e) {
-        console.log(e);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
-      if (isStarted) {
-        beginRecordTrack();
-      } else {
-        endRecordTrack(posHistory);
-      }
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
     }
-  }, [isStarted]);
+
+    setOpen(false);
+  };
 
   return (
     <div>

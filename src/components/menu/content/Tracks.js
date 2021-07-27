@@ -11,7 +11,7 @@ import {
 
 import drawTrack from "../../../lib/DrawTrack";
 
-const styles = (theme) => ({
+const styles = {
   root: {
     maxWidth: 360,
   },
@@ -21,7 +21,7 @@ const styles = (theme) => ({
   actions: {
     height: 30,
   },
-});
+};
 
 export const Tracks = ({ trackNum, tracks, map }) => {
   const [trackID, setTrackID] = useState(0);
@@ -33,26 +33,29 @@ export const Tracks = ({ trackNum, tracks, map }) => {
   const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
     if (0 <= trackID) {
       let selectedCoords = tracks[trackID % trackNum];
-      changeMapBound(selectedCoords, map);
+      calcMapBound(selectedCoords, map).then((bounds) => {
+        map.fitBounds(bounds, { padding: 20 });
+      });
+      drawTrack(map, "single_track", selectedCoords);
     } else if (trackID < 0) {
       // NOTE: trackID が trackNum の倍数の場合でも期待の値を取得できる
       let selectedCoords = tracks[(trackNum + (trackID % trackNum)) % trackNum];
-      changeMapBound(selectedCoords, map);
+      calcMapBound(selectedCoords, map).then((bounds) => {
+        map.fitBounds(bounds, { padding: 20 });
+      });
+      drawTrack(map, "single_track", selectedCoords);
     }
   };
 
-  const changeMapBound = (coords, map) => {
+  const calcMapBound = (coords, map) => {
     return new Promise((resolve, reject) => {
-      if (coords) {
-        let bounds = coords.reduce((bounds, coord) => {
-          return bounds.extend(coord);
+      if (coords && map) {
+        let bounds = coords.reduce((bounds, coords) => {
+          return bounds.extend(coords);
         }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
-        map.fitBounds(bounds, {
-          padding: 20,
-        });
-        drawTrack(map, "single_track", coords);
+        resolve(bounds);
       } else {
-        reject("coords is not found");
+        reject("coords not found");
       }
     });
   };
