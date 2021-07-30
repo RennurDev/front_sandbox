@@ -50,6 +50,11 @@ const styles = {
   list: {
     paddingLeft: 20,
   },
+  instructionImage: {
+    width: "60%",
+    display: "block",
+    margin: "0 auto",
+  },
 };
 
 export const HowToPlay = ({ setContent }) => {
@@ -67,7 +72,17 @@ export const HowToPlay = ({ setContent }) => {
           onClick={() => setContent("notifications")}
           src={`${process.env.PUBLIC_URL}/button_next.svg`}
         />
-        <div style={styles.textContent} className="hideScrollBar"></div>
+        <div style={styles.textContent} className="hideScrollBar">
+          <p>画面最下部にいるペタンプくんを押すと軌跡の記録が始まります.</p>
+          <img
+            src={`${process.env.PUBLIC_URL}/instruction01.png`}
+            style={styles.instructionImage}
+          />
+          <p>
+            終了するときはもう一度ペタンプくんを押すと記録が終了し,
+            いいかんじのリザルト画面がでてきます.
+          </p>
+        </div>
       </div>
     </div>
   );
