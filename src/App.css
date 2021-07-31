@@ -14,7 +14,20 @@ body {
 
 .inset {
   clip-path: circle(100%);
-  animation: scale 5s ease 0s 1 alternate none running;
+  animation: scale 6s ease 0s 1 normal none running;
+  /* アニメーション名, 実行時間, イベント発火から開始までの遅延, 繰り返し回数, 終了時の状態 */
+}
+
+.bg-wrap {
+  overflow: hidden;
+  display: block;
+}
+
+.slide-in {
+  display: block;
+  opacity: 0;
+  animation: slide-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.8s normal forwards
+    running;
 }
 
 @keyframes scale {
@@ -23,10 +36,26 @@ body {
   }
 
   50% {
-    clip-path: circle(50%);
+    clip-path: circle(17vh);
+  }
+
+  60% {
+    clip-path: circle(17vh);
   }
 
   100% {
     clip-path: circle(100%);
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: matrix(1, 0, 0, 1, 0, 100);
+  }
+
+  100% {
+    opacity: 1;
+    transform: matrix(1, 0, 0, 1, 0, 0);
   }
 }

@@ -9,6 +9,14 @@ const styles = {
   root: {
     overflow: "hidden",
   },
+  text: {
+    position: "absolute",
+    top: "calc(50% + 17vh)",
+    width: "100vw",
+    textAlign: "center",
+    margin: "auto",
+    color: "white",
+  },
 };
 
 export const App = () => {
@@ -36,24 +44,31 @@ export const App = () => {
   return (
     <div className={styles.root}>
       {isLoggedIn ? (
-        <div className="inset">
-          <Header currentLocation={currentLocation} />
-          <MapBox
-            currentUser={currentUser}
-            tracks={tracks}
-            trackNum={trackNum}
-            map={map}
-            setCurrentLocation={setCurrentLocation}
-            setTracks={setTracks}
-            setTrackNum={setTrackNum}
-            setMap={setMap}
-          />
-          <Menu
-            currentUser={currentUser}
-            map={map}
-            tracks={tracks}
-            trackNum={trackNum}
-          />
+        <div>
+          <div style={styles.text}>
+            <div className="bg-wrap">
+              <span className="slide-in">YAMAGATA</span>
+            </div>
+          </div>
+          <div className="inset">
+            <Header currentLocation={currentLocation} />
+            <MapBox
+              currentUser={currentUser}
+              tracks={tracks}
+              trackNum={trackNum}
+              map={map}
+              setCurrentLocation={setCurrentLocation}
+              setTracks={setTracks}
+              setTrackNum={setTrackNum}
+              setMap={setMap}
+            />
+            <Menu
+              currentUser={currentUser}
+              map={map}
+              tracks={tracks}
+              trackNum={trackNum}
+            />
+          </div>
         </div>
       ) : (
         <UserForm setCurrentUser={setCurrentUser} />
