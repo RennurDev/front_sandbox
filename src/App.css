@@ -9,3 +9,24 @@ body {
   padding: 0px;
   background-color: #00a563;
 }
+
+/*transition*/
+
+.inset {
+  clip-path: circle(100%);
+  animation: scale 5s ease 0s 1 alternate none running;
+}
+
+@keyframes scale {
+  0% {
+    clip-path: circle(0%);
+  }
+
+  50% {
+    clip-path: circle(50%);
+  }
+
+  100% {
+    clip-path: circle(100%);
+  }
+}
