@@ -11,7 +11,7 @@ const styles = {
   },
   text: {
     position: "absolute",
-    top: "calc(50% + 17vh)",
+    top: "calc(55% + 17vh)",
     width: "100vw",
     textAlign: "center",
     margin: "auto",
