@@ -59,7 +59,7 @@ const styles = {
 
 export const HowToPlay = ({ setContent }) => {
   return (
-    <div style={styles.filter}>
+    <div style={styles.filter} className="modal-wrap">
       <img
         src={`${process.env.PUBLIC_URL}/howToPlay.svg`}
         style={styles.modal}
