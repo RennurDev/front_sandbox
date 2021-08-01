@@ -60,3 +60,15 @@ body {
     transform: matrix(1, 0, 0, 1, 0, 0);
   }
 }
+
+/*hide scroll bar*/
+.hideScrollBar {
+  height: 150px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE, Edge 対応 */
+  scrollbar-width: none; /* Firefox 対応 */
+}
+.hideScrollBar::-webkit-scrollbar {
+  /* Chrome, Safari 対応 */
+  display: none;
+}

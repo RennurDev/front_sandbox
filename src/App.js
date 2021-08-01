@@ -6,6 +6,7 @@ import { UserForm } from "./components/user/App";
 import { WrapContent } from "./components/wrap/WrapContent";
 import getRegionName from "./lib/GetRegionName";
 import getPlaceName from "./lib/GetPlaceName";
+import { ModalWindow } from "./components/modal/ModalWindow";
 import "./App.css";
 
 const styles = {
@@ -66,6 +67,7 @@ export const App = () => {
             <WrapContent currentRegion={currentRegion} />
           </div>
           <div className="inset">
+            <ModalWindow />
             <Header currentPlace={currentPlace} />
             <MapBox
               currentUser={currentUser}
