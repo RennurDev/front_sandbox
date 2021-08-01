@@ -1,13 +1,15 @@
 const styles = {
-  grid: {
-    marginBottom: 30,
+  text: {
+    fontFamily: "Kanit",
   },
 };
 
 export const WrapContent = ({ currentRegion }) => {
   return (
     <div className="bg-wrap">
-      <span className="slide-in">{currentRegion}</span>
+      <span className="slide-in" style={styles.text}>
+        {currentRegion}
+      </span>
     </div>
   );
 };
