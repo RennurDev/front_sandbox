@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@600&display=swap");
 * {
   font-family: "Kosugi Maru", sans-serif;
 }
@@ -7,6 +7,7 @@
 body {
   margin: 0px;
   padding: 0px;
+  overflow-x: hidden;
   background-color: #00a563;
 }
 
@@ -20,4 +21,68 @@ body {
 .hideScrollBar::-webkit-scrollbar {
   /* Chrome, Safari 対応 */
   display: none;
+}
+
+/*transition*/
+
+.inset {
+  clip-path: circle(100%);
+  animation: scale 6s ease 0s 1 normal none running;
+  /* アニメーション名, 実行時間, イベント発火から開始までの遅延, 繰り返し回数, 終了時の状態 */
+}
+
+@keyframes scale {
+  0% {
+    clip-path: circle(0%);
+  }
+
+  50% {
+    clip-path: circle(17vh);
+  }
+
+  60% {
+    clip-path: circle(17vh);
+  }
+
+  100% {
+    clip-path: circle(100%);
+  }
+}
+
+/*テキストのスライドイン*/
+
+.bg-wrap {
+  overflow: hidden;
+  display: block;
+}
+
+.slide-in {
+  display: block;
+  opacity: 0;
+  animation: slide-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.8s normal forwards
+    running;
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: matrix(1, 0, 0, 1, 0, 100);
+  }
+
+  100% {
+    opacity: 1;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+  }
+}
+
+.modal-wrap {
+  opacity: 0;
+  animation: appear 1.2s cubic-bezier(0.22, 1, 0.36, 1) 5s normal forwards
+    running;
+}
+
+@keyframes appear {
+  100% {
+    opacity: 1;
+  }
 }
