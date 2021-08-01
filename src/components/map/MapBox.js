@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from "react";
 import { RecordTrigger } from "./RecordTrigger";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import getPlaceName from "../../lib/GetPlaceName";
 import drawTrack from "../../lib/DrawTrack";
 import addTrackLayer from "../../lib/AddTrackLayer";
 import decodeTrack from "../../lib/DecodeTrack";
@@ -38,7 +37,6 @@ export const MapBox = ({
   currentUser,
   tracks,
   map,
-  setCurrentLocation,
   setTracks,
   setTrackNum,
   setMap,
@@ -109,7 +107,6 @@ export const MapBox = ({
   };
 
   const getAllTracks = (userId) => {
-    console.log(userId);
     const url = "/users_tracks/" + userId;
     let response = RequestAxios(url, "get");
     response.then((r) => {
@@ -150,11 +147,6 @@ export const MapBox = ({
     setCurrentPos({
       lng: c_lng,
       lat: c_lat,
-    });
-
-    let currentPlaceName = getPlaceName(c_lng, c_lat);
-    currentPlaceName.then((p) => {
-      setCurrentLocation(p);
     });
 
     map = new mapboxgl.Map({

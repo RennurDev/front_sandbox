@@ -20,7 +20,7 @@ const styles = {
   },
 };
 
-export const UserLocation = ({ currentLocation }) => {
+export const UserLocation = ({ currentPlace }) => {
   return (
     <div>
       <Grid
@@ -42,7 +42,7 @@ export const UserLocation = ({ currentLocation }) => {
             align="center"
             gutterBottom
           >
-            {currentLocation}
+            {currentPlace}
           </Typography>
         </Grid>
       </Grid>

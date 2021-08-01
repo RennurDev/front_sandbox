@@ -1,9 +1,9 @@
 import { UserLocation } from "./components/header/UserLocation";
 
-export const Header = ({ currentLocation }) => {
+export const Header = ({ currentPlace }) => {
   return (
     <div>
-      <UserLocation currentLocation={currentLocation} />
+      <UserLocation currentPlace={currentPlace} />
     </div>
   );
 };

@@ -3,6 +3,9 @@ import { Header } from "./header";
 import { Menu } from "./menu";
 import { MapBox } from "./components/map/MapBox";
 import { UserForm } from "./components/user/App";
+import { WrapContent } from "./components/wrap/WrapContent";
+import getRegionName from "./lib/GetRegionName";
+import getPlaceName from "./lib/GetPlaceName";
 import "./App.css";
 
 const styles = {
@@ -26,12 +29,26 @@ export const App = () => {
       name: "",
     },
   ]);
-  const [currentLocation, setCurrentLocation] = useState();
+  const [currentPlace, setCurrentPlace] = useState();
+  const [currentRegion, setCurrentRegion] = useState();
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [map, setMap] = useState();
 
   const [isLoggedIn, setIsLoggedIn] = useState();
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      let place = getPlaceName(pos.coords.longitude, pos.coords.latitude);
+      place.then((p) => {
+        setCurrentPlace(p);
+      });
+      let region = getRegionName(pos.coords.longitude, pos.coords.latitude);
+      region.then((r) => {
+        setCurrentRegion(r);
+      });
+    });
+  }, []);
 
   useEffect(() => {
     if (currentUser.id) {
@@ -46,18 +63,15 @@ export const App = () => {
       {isLoggedIn ? (
         <div>
           <div style={styles.text}>
-            <div className="bg-wrap">
-              <span className="slide-in">YAMAGATA</span>
-            </div>
+            <WrapContent currentRegion={currentRegion} />
           </div>
           <div className="inset">
-            <Header currentLocation={currentLocation} />
+            <Header currentPlace={currentPlace} />
             <MapBox
               currentUser={currentUser}
               tracks={tracks}
               trackNum={trackNum}
               map={map}
-              setCurrentLocation={setCurrentLocation}
               setTracks={setTracks}
               setTrackNum={setTrackNum}
               setMap={setMap}
