@@ -39,7 +39,7 @@ export const UserForm = ({ setCurrentUser }) => {
         <Grid container spacing={0} alignItems="center" justify="center">
           <Grid item xs={10}>
             <Grid container spacing={3} alignItems="center" justify="center">
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
