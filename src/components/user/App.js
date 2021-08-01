@@ -4,13 +4,14 @@ import RequestAxios from "../../lib/RequestAxios";
 
 const styles = {
   signUpImg: {
-    width: "100%",
-  height: "70%",
+    width: "300px",
+    display: "block",
+    margin: "0 auto",
+    height: "70%",
   },
 };
 
 export const UserForm = ({ setCurrentUser }) => {
-
   const handleCreate = () => {
     // TODO: バックエンドでのUser作成機能完成後にコメントアウト
     // let response;
@@ -24,8 +25,8 @@ export const UserForm = ({ setCurrentUser }) => {
     // if (response) {
     //   console.log(response);
     // }
-    setCurrentUser({id: 5});
-  }
+    setCurrentUser({ id: 5 });
+  };
 
   return (
     <div>
@@ -37,8 +38,8 @@ export const UserForm = ({ setCurrentUser }) => {
       <form noValidate autoComplete="off">
         <Grid container spacing={0} alignItems="center" justify="center">
           <Grid item xs={10}>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
+            <Grid container spacing={3} alignItems="center" justify="center">
+              <Grid item xs={6}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
@@ -97,4 +98,4 @@ export const UserForm = ({ setCurrentUser }) => {
       </form>
     </div>
   );
-}
+};
