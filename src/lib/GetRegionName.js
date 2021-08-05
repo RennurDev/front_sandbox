@@ -13,8 +13,7 @@ export default async function GetRegionName(lng, lat) {
     access_token;
   try {
     const response = await axios.get(url);
-    console.log(response.data.features[0].text);
-    return response.data.features[0].text;
+    return response.data.features[0].text.split(" ")[0];
   } catch (err) {
     console.log(err);
     return "???";
