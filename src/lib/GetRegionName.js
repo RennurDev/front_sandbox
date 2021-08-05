@@ -13,6 +13,10 @@ export default async function GetRegionName(lng, lat) {
     access_token;
   try {
     const response = await axios.get(url);
+
+    /* ①respunseは複数の配列なのでdata.features[0]を選択 */
+    /* ②Tokyo Prefectureのように, 名前のあとに都道府県が付与されるケースがあるので, splitして名前のみを取得 */
+    /* ③大文字に変換 */
     return response.data.features[0].text.split(" ")[0].toUpperCase();
   } catch (err) {
     console.log(err);
