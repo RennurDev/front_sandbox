@@ -48,9 +48,9 @@ export const WrapContent = ({
   useEffect(() => {
     const nearestStation = getNearestStation(currentPos.lng, currentPos.lat);
     nearestStation.then((s) => {
+      alert("name: " + s.name + ", distance: " + s.distance);
       if (station.distance !== s.distance) {
         //変更があった場合のみsetStationを呼ぶ
-        alert("name: " + s.name + ", distance: " + s.distance);
         setStation(s);
       }
     });
