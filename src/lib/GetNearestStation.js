@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function GetNearestStation(lng, lat) {
   const url =
-    "http://express.heartrails.com/api/json?method=getStations&x=" +
+    "https://express.heartrails.com/api/json?method=getStations&x=" +
     lng +
     "&y=" +
     lat;
@@ -13,6 +13,6 @@ export default async function GetNearestStation(lng, lat) {
     return { name: name, distance: distance };
   } catch (err) {
     alert(err);
-    return "???";
+    return { name: "", distance: "" };
   }
 }
