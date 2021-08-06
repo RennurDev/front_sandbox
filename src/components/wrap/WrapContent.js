@@ -1,54 +1,89 @@
 const styles = {
   root: {
     position: "absolute",
-    top: "calc(50% + 25vh)",
+    top: "50%",
     width: "100vw",
-    textAlign: "center",
     margin: "auto",
     color: "white",
+    textAlign: "center",
   },
   text: {
     fontFamily: "Kanit",
   },
+  input: {
+    fontFamily: "Kanit",
+    color: "white",
+    margin: "0 auto",
+    border: "none",
+    outline: "none",
+    backgroundColor: "transparent",
+  },
+  upper: {
+    textAlign: "center",
+    position: "absolute",
+    width: "100vw",
+    top: "-40vh",
+  },
+  lower: {
+    textAlign: "center",
+    position: "absolute",
+    width: "100vw",
+    top: "25vh",
+  },
 };
 
-export const WrapContent = ({ currentRegion, page, setPage }) => {
+export const WrapContent = ({
+  currentRegion,
+  appState,
+  setAppState,
+  currentPlace,
+}) => {
   const Content = () => {
     //TODO: 要素を追加
-    if (page === "beginApp") {
+    if (appState === "beginApp") {
       return (
-        <div className="bg-wrap">
+        <div className="bg-wrap" style={styles.lower}>
           <span className="slide-in" style={styles.text}>
             {currentRegion}
           </span>
         </div>
       );
-    } else if (page === "running") {
+    } else if (appState === "running") {
       return (
-        <div className="bg-wrap">
-          <span className="slide-in">
-            <h1 style={styles.text}>0.0km</h1>
-          </span>
-          <input
-            type="submit"
-            value="FINISH RECORD"
-            style={styles.text}
-            className="slide-in"
-            onClick={() => {
-              if (page !== "running") {
-                //ランニング開始
-                //NOTE: 正常に動作している場合この分岐は機能しない.(終了時にこのボタンを押すことはできない)
-                //TODO: このonClick関数部分を抽象化して使いまわせるようにしたい.
-                setPage("running");
-              } else {
-                //ランニング終了.
-                setPage("finishRunning");
-              }
-            }}
-          />
+        <div>
+          <div style={styles.upper}>
+            <h1 className="bg-wrap">
+              <span style={styles.text} className="slide-in">
+                {currentPlace}
+              </span>
+            </h1>
+            <p className="bg-wrap">
+              <span style={styles.text} className="slide-in">
+                山形駅まで900m
+              </span>
+            </p>
+          </div>
+          <div style={styles.lower}>
+            <h1 className="bg-wrap">
+              <span style={styles.text} className="slide-in">
+                0.0km
+              </span>
+            </h1>
+            <div className="bg-wrap">
+              <input
+                type="submit"
+                value="FINISH RECORD"
+                style={styles.input}
+                className="slide-in"
+                onClick={() => {
+                  setAppState("finishRunning");
+                }}
+              />
+            </div>
+          </div>
         </div>
       );
-    } else if (page === "finishRunning") {
+    } else if (appState === "finishRunning") {
       return <div />;
     } else {
       return <div />;

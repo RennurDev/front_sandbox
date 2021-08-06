@@ -37,11 +37,11 @@ export const MapBox = ({
   currentUser,
   tracks,
   map,
-  page,
+  appState,
   setTracks,
   setTrackNum,
   setMap,
-  setPage,
+  setAppState,
 }) => {
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
   const [posHistory, setPosHistory] = useState([]);
@@ -182,26 +182,20 @@ export const MapBox = ({
   }, []);
 
   useEffect(() => {
-    if (page === "running") {
+    //TODO: appStateを監視するuseEffectを一元化したい
+    if (appState === "running") {
       beginRecordTrack();
-    } else if (page === "finishRunning") {
+    } else if (appState === "finishRunning") {
       endRecordTrack(posHistory);
     }
-  }, [page]);
+  }, [appState]);
 
   return (
     <div>
       <div style={styles.root} ref={mapContainer}>
         <RecordTrigger
           onClick={() => {
-            if (page !== "running") {
-              setPage("running"); //ランニング開始
-            } else {
-              //ランニング終了.
-              //NOTE: 正常に動作している場合この分岐は機能しない.(終了時にこのボタンを押すことはできない)
-              //TODO: このonClick関数部分を抽象化して使いまわせるようにしたい.
-              setPage("finishRunning");
-            }
+            setAppState("running");
           }}
         />
       </div>

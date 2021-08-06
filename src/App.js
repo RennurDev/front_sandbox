@@ -29,7 +29,7 @@ export const App = () => {
   const [map, setMap] = useState();
   const [animationOverlap, setAnimationOverlap] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState();
-  const [page, setPage] = useState("beginApp");
+  const [appState, setAppState] = useState("beginApp");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -46,14 +46,14 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    if (page === "beginApp") {
+    if (appState === "beginApp") {
       setAnimationOverlap("inset");
-    } else if (page === "running") {
+    } else if (appState === "running") {
       setAnimationOverlap("scale-and-stop");
-    } else if (page === "finishRunning") {
+    } else if (appState === "finishRunning") {
       setAnimationOverlap("stop-and-scale");
     }
-  }, [page]);
+  }, [appState]);
 
   useEffect(() => {
     if (currentUser.id) {
@@ -69,8 +69,9 @@ export const App = () => {
         <div>
           <WrapContent
             currentRegion={currentRegion}
-            page={page}
-            setPage={setPage}
+            currentPlace={currentPlace}
+            appState={appState}
+            setAppState={setAppState}
           />
           <div className={animationOverlap}>
             <ModalWindow />
@@ -80,11 +81,11 @@ export const App = () => {
               tracks={tracks}
               trackNum={trackNum}
               map={map}
-              page={page}
+              appState={appState}
               setTracks={setTracks}
               setTrackNum={setTrackNum}
               setMap={setMap}
-              setPage={setPage}
+              setAppState={setAppState}
             />
             <Menu
               currentUser={currentUser}
