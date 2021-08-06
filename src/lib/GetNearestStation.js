@@ -12,7 +12,6 @@ export default async function GetNearestStation(lng, lat) {
     const distance = response.data.response.station[0].distance;
     return { name: name, distance: distance };
   } catch (err) {
-    alert(err);
     return { name: "", distance: "" };
   }
 }
