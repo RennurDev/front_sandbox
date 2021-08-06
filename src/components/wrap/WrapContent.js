@@ -45,9 +45,9 @@ export const WrapContent = ({
 }) => {
   const [station, setStation] = useState([{ name: "", distance: "" }]);
   useEffect(() => {
-    const response = getNearestStation(currentPos.lng, currentPos.lat);
-    response.then((r) => {
-      setStation(r);
+    const nearestStation = getNearestStation(currentPos.lng, currentPos.lat);
+    nearestStation.then((s) => {
+      setStation(s);
     });
   }, [currentPos]);
   const Content = () => {
@@ -70,9 +70,13 @@ export const WrapContent = ({
               </span>
             </h1>
             <p className="bg-wrap">
-              <span style={styles.text} className="slide-in">
-                {station.name}駅まで{station.distance}
-              </span>
+              {station.name !== "" && station.distance !== "" ? (
+                <span style={styles.text} className="slide-in">
+                  {station.name}駅まで{station.distance}
+                </span>
+              ) : (
+                <span />
+              )}
             </p>
           </div>
           <div style={styles.lower}>

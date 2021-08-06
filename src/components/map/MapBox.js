@@ -111,6 +111,7 @@ export const MapBox = ({
       alert("not saved distance(<50): " + distance);
     }
     showAllTracks(map, tracks.length);
+    setDistance(0);
   };
 
   const getAllTracks = (userId) => {
