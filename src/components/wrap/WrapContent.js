@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import getNearestStation from "../../lib/GetNearestStation";
 
 const styles = {
   root: {
@@ -42,7 +43,13 @@ export const WrapContent = ({
   currentPlace,
   currentPos,
 }) => {
-  useEffect(() => {}, [currentPos]);
+  const [station, setStation] = useState([{ name: "", distance: "" }]);
+  useEffect(() => {
+    const response = getNearestStation(currentPos.lng, currentPos.lat);
+    response.then((r) => {
+      setStation(r);
+    });
+  }, [currentPos]);
   const Content = () => {
     //TODO: 要素を追加
     if (appState === "beginApp") {
@@ -64,7 +71,7 @@ export const WrapContent = ({
             </h1>
             <p className="bg-wrap">
               <span style={styles.text} className="slide-in">
-                山形駅まで900m
+                {station.name}駅まで{station.distance}
               </span>
             </p>
           </div>

@@ -79,6 +79,10 @@ export const MapBox = ({
           position.coords.longitude,
           position.coords.latitude,
         ]);
+        setCurrentPos({
+          lng: position.coords.longitude,
+          lat: position.coords.latitude,
+        });
         setDistance(currentDistance);
         setPosHistory(currentPosHistory);
         prevPos = position;
