@@ -10,6 +10,7 @@ export default async function GetNearestStation(lng, lat) {
     const response = await axios.get(url);
     const name = response.data.response.station[0].name;
     const distance = response.data.response.station[0].distance;
+    alert("name: " + name + ", distance: " + distance);
     return { name: name, distance: distance };
   } catch (err) {
     console.log(err);
