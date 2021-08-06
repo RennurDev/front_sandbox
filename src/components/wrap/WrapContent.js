@@ -43,13 +43,24 @@ export const WrapContent = ({
   currentPlace,
   currentPos,
 }) => {
+  const [displayDistance, setDisplayDistance] = useState(0);
   const [station, setStation] = useState([{ name: "", distance: "" }]);
   useEffect(() => {
     const nearestStation = getNearestStation(currentPos.lng, currentPos.lat);
     nearestStation.then((s) => {
-      setStation(s);
+      if (station.distance !== s.distance) {
+        //変更があった場合のみsetStationを呼ぶ
+        setStation(s);
+      }
     });
   }, [currentPos]);
+  useEffect(() => {
+    const dist = Math.floor(distance / 100) / 10; //小数点第２位以下切り捨て
+    if (displayDistance !== dist) {
+      //変更があった場合のみsetDistanceを呼ぶ
+      setDisplayDistance(dist);
+    }
+  }, [distance]);
   const Content = () => {
     //TODO: 要素を追加
     if (appState === "beginApp") {
@@ -82,7 +93,7 @@ export const WrapContent = ({
           <div style={styles.lower}>
             <h1 className="bg-wrap">
               <span style={styles.text} className="slide-in">
-                {Math.floor(distance / 100) / 10 /* 小数点第２位以下切り捨て */}
+                {displayDistance}
                 km
               </span>
             </h1>
