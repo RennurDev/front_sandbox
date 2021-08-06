@@ -37,11 +37,12 @@ export const MapBox = ({
   currentUser,
   tracks,
   map,
+  page,
   setTracks,
   setTrackNum,
   setMap,
+  setPage,
 }) => {
-  const [isStarted, setIsStarted] = useState(false);
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
   const [posHistory, setPosHistory] = useState([]);
   const [watchId, setWatchId] = useState(-1);
@@ -169,11 +170,8 @@ export const MapBox = ({
     });
   };
 
-  const isFirstRender = useRef(false);
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(createMap);
-    isFirstRender.current = true;
     return () => {
       try {
         map.remove();
@@ -184,21 +182,28 @@ export const MapBox = ({
   }, []);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
-      if (isStarted) {
-        beginRecordTrack();
-      } else {
-        endRecordTrack(posHistory);
-      }
+    if (page === "running") {
+      beginRecordTrack();
+    } else if (page === "finishRunning") {
+      endRecordTrack(posHistory);
     }
-  }, [isStarted]);
+  }, [page]);
 
   return (
     <div>
       <div style={styles.root} ref={mapContainer}>
-        <RecordTrigger onClick={() => setIsStarted(!isStarted)} />
+        <RecordTrigger
+          onClick={() => {
+            if (page !== "running") {
+              setPage("running"); //ランニング開始
+            } else {
+              //ランニング終了.
+              //NOTE: 正常に動作している場合この分岐は機能しない.(終了時にこのボタンを押すことはできない)
+              //TODO: このonClick関数部分を抽象化して使いまわせるようにしたい.
+              setPage("finishRunning");
+            }
+          }}
+        />
       </div>
     </div>
   );

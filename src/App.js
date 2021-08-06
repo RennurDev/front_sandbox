@@ -13,14 +13,6 @@ const styles = {
   root: {
     overflow: "hidden",
   },
-  text: {
-    position: "absolute",
-    top: "calc(50% + 25vh)",
-    width: "100vw",
-    textAlign: "center",
-    margin: "auto",
-    color: "white",
-  },
 };
 
 export const App = () => {
@@ -35,8 +27,9 @@ export const App = () => {
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [map, setMap] = useState();
-
+  const [animationOverlap, setAnimationOverlap] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState();
+  const [page, setPage] = useState("beginApp");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -49,7 +42,18 @@ export const App = () => {
         setCurrentRegion(r);
       });
     });
+    /*ページ読み込み */
   }, []);
+
+  useEffect(() => {
+    if (page === "beginApp") {
+      setAnimationOverlap("inset");
+    } else if (page === "running") {
+      setAnimationOverlap("scale-and-stop");
+    } else if (page === "finishRunning") {
+      setAnimationOverlap("stop-and-scale");
+    }
+  }, [page]);
 
   useEffect(() => {
     if (currentUser.id) {
@@ -63,10 +67,12 @@ export const App = () => {
     <div className={styles.root}>
       {isLoggedIn ? (
         <div>
-          <div style={styles.text}>
-            <WrapContent currentRegion={currentRegion} />
-          </div>
-          <div className="inset">
+          <WrapContent
+            currentRegion={currentRegion}
+            page={page}
+            setPage={setPage}
+          />
+          <div className={animationOverlap}>
             <ModalWindow />
             <Header currentPlace={currentPlace} />
             <MapBox
@@ -74,9 +80,11 @@ export const App = () => {
               tracks={tracks}
               trackNum={trackNum}
               map={map}
+              page={page}
               setTracks={setTracks}
               setTrackNum={setTrackNum}
               setMap={setMap}
+              setPage={setPage}
             />
             <Menu
               currentUser={currentUser}
