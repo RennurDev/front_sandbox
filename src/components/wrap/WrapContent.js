@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const styles = {
   root: {
     position: "absolute",
@@ -38,7 +40,9 @@ export const WrapContent = ({
   appState,
   setAppState,
   currentPlace,
+  currentPos,
 }) => {
+  useEffect(() => {}, [currentPos]);
   const Content = () => {
     //TODO: 要素を追加
     if (appState === "beginApp") {
@@ -67,7 +71,8 @@ export const WrapContent = ({
           <div style={styles.lower}>
             <h1 className="bg-wrap">
               <span style={styles.text} className="slide-in">
-                {Math.floor(distance / 100) / 10}km
+                {Math.floor(distance / 100) / 10 /* 小数点第２位以下切り捨て */}
+                km
               </span>
             </h1>
             <div className="bg-wrap">
