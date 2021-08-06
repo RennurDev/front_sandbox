@@ -50,6 +50,7 @@ export const WrapContent = ({
     nearestStation.then((s) => {
       if (station.distance !== s.distance) {
         //変更があった場合のみsetStationを呼ぶ
+        alert("name: " + s.name + ", distance: " + s.distance);
         setStation(s);
       }
     });
@@ -81,7 +82,7 @@ export const WrapContent = ({
               </span>
             </h1>
             <p className="bg-wrap">
-              {station.name !== "" && station.distance !== "" ? (
+              {station.distance !== "" ? (
                 <span style={styles.text} className="slide-in">
                   {station.name}駅まで{station.distance}
                 </span>
