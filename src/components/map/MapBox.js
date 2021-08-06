@@ -37,16 +37,17 @@ export const MapBox = ({
   currentUser,
   tracks,
   map,
+  distance,
   appState,
   setTracks,
   setTrackNum,
   setMap,
   setAppState,
+  setDistance,
 }) => {
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
   const [posHistory, setPosHistory] = useState([]);
   const [watchId, setWatchId] = useState(-1);
-  const [distance, setDistance] = useState(0);
   const mapContainer = useRef(null);
 
   const beginRecordTrack = () => {

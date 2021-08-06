@@ -34,6 +34,7 @@ const styles = {
 
 export const WrapContent = ({
   currentRegion,
+  distance,
   appState,
   setAppState,
   currentPlace,
@@ -66,7 +67,7 @@ export const WrapContent = ({
           <div style={styles.lower}>
             <h1 className="bg-wrap">
               <span style={styles.text} className="slide-in">
-                0.0km
+                {Math.floor(distance / 100) / 10}km
               </span>
             </h1>
             <div className="bg-wrap">

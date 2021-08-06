@@ -26,6 +26,7 @@ export const App = () => {
   const [currentRegion, setCurrentRegion] = useState();
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
+  const [distance, setDistance] = useState(0);
   const [map, setMap] = useState();
   const [animationOverlap, setAnimationOverlap] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState();
@@ -70,6 +71,7 @@ export const App = () => {
           <WrapContent
             currentRegion={currentRegion}
             currentPlace={currentPlace}
+            distance={distance}
             appState={appState}
             setAppState={setAppState}
           />
@@ -81,9 +83,11 @@ export const App = () => {
               tracks={tracks}
               trackNum={trackNum}
               map={map}
+              distance={distance}
               appState={appState}
               setTracks={setTracks}
               setTrackNum={setTrackNum}
+              setDistance={setDistance}
               setMap={setMap}
               setAppState={setAppState}
             />
