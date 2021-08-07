@@ -76,13 +76,13 @@ export const WrapContent = ({
         <div>
           <div style={styles.upper}>
             <h1 className="bg-wrap">
-              <span style={styles.text} className="slide-in">
+              <span style={styles.text}>
                 {currentPlace}
               </span>
             </h1>
             <p className="bg-wrap">
               {station.distance !== "" ? (
-                <span style={styles.text} className="slide-in">
+                <span style={styles.text} >
                   {station.name}駅まで{station.distance}
                 </span>
               ) : (
@@ -92,7 +92,7 @@ export const WrapContent = ({
           </div>
           <div style={styles.lower}>
             <h1 className="bg-wrap">
-              <span style={styles.text} className="slide-in">
+              <span style={styles.text} >
                 {displayDistance}
                 km
               </span>
@@ -102,7 +102,7 @@ export const WrapContent = ({
                 type="submit"
                 value="FINISH RECORD"
                 style={styles.input}
-                className="slide-in"
+                
                 onClick={() => {
                   setAppState("finishRunning");
                 }}
