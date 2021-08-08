@@ -1,4 +1,4 @@
-export default function ProjectMercator(data) {
+export default function ProjectMercator(data, width) {
   if (data !== []) {
     const projectedData = [];
     let lng_min = data[0][0];
@@ -24,6 +24,8 @@ export default function ProjectMercator(data) {
       }
 
       lamda = (lng_min + lng_max) / 2;
+      const boxWidth = ((lng_max - lng_min) * Math.PI) / 180;
+      const scale = boxWidth !== 0 ? width / boxWidth : 1; //分母が0 の場合のエラーハンドリング
 
       /* 開始点の座標 */
       const x = (Math.PI * (lng_min - lamda)) / 180;
@@ -34,7 +36,7 @@ export default function ProjectMercator(data) {
       for (let i = 0; i < data.length; i++) {
         pos_x = (Math.PI * (data[i][0] - lamda)) / 180 - x; //各座標から開始点を引いて図形を原点から描画する
         pos_y = Math.log(Math.tan(Math.PI * (0.25 + data[i][1] / 360))) - y;
-        projectedData.push([pos_x, pos_y]);
+        projectedData.push([pos_x * scale, pos_y * scale]);
       }
       /* scale: x: x / (lng_max-lng_min) * scalor, x: y / (lat_max-lat_min) * scalor */
       return projectedData;
