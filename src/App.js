@@ -13,14 +13,6 @@ const styles = {
   root: {
     overflow: "hidden",
   },
-  text: {
-    position: "absolute",
-    top: "calc(50% + 25vh)",
-    width: "100vw",
-    textAlign: "center",
-    margin: "auto",
-    color: "white",
-  },
 };
 
 export const App = () => {
@@ -34,9 +26,12 @@ export const App = () => {
   const [currentRegion, setCurrentRegion] = useState();
   const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
+  const [distance, setDistance] = useState(0);
   const [map, setMap] = useState();
-
+  const [animationOverlap, setAnimationOverlap] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState();
+  const [appState, setAppState] = useState("beginApp");
+  const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -49,7 +44,18 @@ export const App = () => {
         setCurrentRegion(r);
       });
     });
+    /*ページ読み込み */
   }, []);
+
+  useEffect(() => {
+    if (appState === "beginApp") {
+      setAnimationOverlap("inset");
+    } else if (appState === "running") {
+      setAnimationOverlap("scale-and-stop");
+    } else if (appState === "finishRunning") {
+      setAnimationOverlap("stop-and-scale");
+    }
+  }, [appState]);
 
   useEffect(() => {
     if (currentUser.id) {
@@ -63,10 +69,15 @@ export const App = () => {
     <div className={styles.root}>
       {isLoggedIn ? (
         <div>
-          <div style={styles.text}>
-            <WrapContent currentRegion={currentRegion} />
-          </div>
-          <div className="inset">
+          <WrapContent
+            currentRegion={currentRegion}
+            currentPlace={currentPlace}
+            currentPos={currentPos}
+            distance={distance}
+            appState={appState}
+            setAppState={setAppState}
+          />
+          <div className={animationOverlap}>
             <ModalWindow />
             <Header currentPlace={currentPlace} />
             <MapBox
@@ -74,9 +85,14 @@ export const App = () => {
               tracks={tracks}
               trackNum={trackNum}
               map={map}
+              distance={distance}
+              appState={appState}
               setTracks={setTracks}
               setTrackNum={setTrackNum}
+              setDistance={setDistance}
+              setCurrentPos={setCurrentPos}
               setMap={setMap}
+              setAppState={setAppState}
             />
             <Menu
               currentUser={currentUser}

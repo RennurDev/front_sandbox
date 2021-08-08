@@ -37,15 +37,18 @@ export const MapBox = ({
   currentUser,
   tracks,
   map,
+  distance,
+  currentPos,
+  setCurrentPos,
+  appState,
   setTracks,
   setTrackNum,
   setMap,
+  setAppState,
+  setDistance,
 }) => {
-  const [isStarted, setIsStarted] = useState(false);
-  const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
   const [posHistory, setPosHistory] = useState([]);
   const [watchId, setWatchId] = useState(-1);
-  const [distance, setDistance] = useState(0);
   const mapContainer = useRef(null);
 
   const beginRecordTrack = () => {
@@ -76,6 +79,10 @@ export const MapBox = ({
           position.coords.longitude,
           position.coords.latitude,
         ]);
+        setCurrentPos({
+          lng: position.coords.longitude,
+          lat: position.coords.latitude,
+        });
         setDistance(currentDistance);
         setPosHistory(currentPosHistory);
         prevPos = position;
@@ -104,6 +111,7 @@ export const MapBox = ({
       alert("not saved distance(<50): " + distance);
     }
     showAllTracks(map, tracks.length);
+    setDistance(0);
   };
 
   const getAllTracks = (userId) => {
@@ -169,11 +177,8 @@ export const MapBox = ({
     });
   };
 
-  const isFirstRender = useRef(false);
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(createMap);
-    isFirstRender.current = true;
     return () => {
       try {
         map.remove();
@@ -184,21 +189,22 @@ export const MapBox = ({
   }, []);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
-      if (isStarted) {
-        beginRecordTrack();
-      } else {
-        endRecordTrack(posHistory);
-      }
+    //TODO: appStateを監視するuseEffectを一元化したい
+    if (appState === "running") {
+      beginRecordTrack();
+    } else if (appState === "finishRunning") {
+      endRecordTrack(posHistory);
     }
-  }, [isStarted]);
+  }, [appState]);
 
   return (
     <div>
       <div style={styles.root} ref={mapContainer}>
-        <RecordTrigger onClick={() => setIsStarted(!isStarted)} />
+        <RecordTrigger
+          onClick={() => {
+            setAppState("running");
+          }}
+        />
       </div>
     </div>
   );

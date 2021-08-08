@@ -26,16 +26,12 @@ body {
 /*transition*/
 
 .inset {
-  clip-path: circle(100%);
-  animation: scale 6s ease 0s 1 normal none running;
+  clip-path: circle(0%);
+  animation: scale 6s ease 0s 1 normal forwards running;
   /* アニメーション名, 実行時間, イベント発火から開始までの遅延, 繰り返し回数, 終了時の状態 */
 }
 
 @keyframes scale {
-  0% {
-    clip-path: circle(0%);
-  }
-
   50% {
     clip-path: circle(17vh);
   }
@@ -57,18 +53,14 @@ body {
 }
 
 .slide-in {
-  display: block;
   opacity: 0;
-  animation: slide-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.8s normal forwards
+  transform: matrix(1, 0, 0, 1, 0, 30);
+  display: block;
+  animation: slide-in 1.8s cubic-bezier(0.22, 1, 0.36, 1) 1s 1 normal forwards
     running;
 }
 
 @keyframes slide-in {
-  0% {
-    opacity: 0;
-    transform: matrix(1, 0, 0, 1, 0, 100);
-  }
-
   100% {
     opacity: 1;
     transform: matrix(1, 0, 0, 1, 0, 0);
@@ -84,5 +76,21 @@ body {
 @keyframes appear {
   100% {
     opacity: 1;
+  }
+}
+
+.scale-and-stop {
+  clip-path: circle(100%);
+  animation: scale-and-stop 2s ease 0s 1 normal forwards running;
+}
+
+.stop-and-scale {
+  clip-path: circle(100%);
+  animation: scale-and-stop 2s ease 0s 1 reverse forwards running;
+}
+
+@keyframes scale-and-stop {
+  100% {
+    clip-path: circle(17vh);
   }
 }
