@@ -21,9 +21,7 @@ const styles = {
 };
 
 export const Result = () => {
-  // contextを状態として持つ
-  const [context, setContext] = useState(null);
-  // 画像読み込み完了トリガー
+  const [context, setContext] = useState();
 
   useEffect(() => {
     const canvas = document.getElementById("canvas");
