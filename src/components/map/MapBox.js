@@ -159,7 +159,7 @@ export const MapBox = ({
   }, []);
 
   useEffect(() => {
-    //TODO: appStateを監視するuseEffectを一元化したい
+    //TODO: appStateを監視するuseEffectを一元化: Redux?
     if (appState === "running") {
       beginRecordTrack();
     } else if (appState === "finishRunning") {
