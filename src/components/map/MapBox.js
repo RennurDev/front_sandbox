@@ -189,7 +189,7 @@ export const MapBox = ({
   useEffect(() => {
     if (appState === "running") {
       setPosHistory(
-        posHistory.push([position.coords.longitude, position.coords.latitude])
+        posHistory.push([currentPos.longitude, currentPos.latitude])
       );
     }
   }, [currentPos]);
