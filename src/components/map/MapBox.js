@@ -77,9 +77,6 @@ export const MapBox = ({
           zoom: 15,
         });
       } else {
-        alert(
-          "Prev: " + prevPos.coords.longitude + ", " + prevPos.coords.latitude
-        );
         if (isValidPosition(prevPos, position)) {
           setCurrentPos({
             lng: position.coords.longitude,
