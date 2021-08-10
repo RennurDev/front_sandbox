@@ -195,7 +195,10 @@ export const MapBox = ({
   }, [currentPos]);
 
   useEffect(() => {
-    drawTrack(map, "current_track", posHistory);
+    if (posHistory) {
+      alert(posHistory);
+      drawTrack(map, "current_track", posHistory);
+    }
   }, [posHistory]);
 
   return (
