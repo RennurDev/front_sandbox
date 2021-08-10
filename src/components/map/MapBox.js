@@ -84,16 +84,16 @@ export const MapBox = ({
     setWatchId(id);
   };
 
-  const endRecordTrack = (track) => {
+  const endRecordTrack = () => {
     navigator.geolocation.clearWatch(watchId);
     hideTrackLayer(map, "current_track");
 
     if (distance >= 50) {
       const new_tracks = tracks;
-      new_tracks.push(track);
-      addTrackLayer(map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
+      new_tracks.push(posHistory);
+      addTrackLayer(map, "track_" + String(new_tracks.length - 1), posHistory); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       setTracks(new_tracks);
-      postTrack(track);
+      postTrack(posHistory, currentUser.id);
 
       alert("distance: " + distance);
     } else {
@@ -160,7 +160,7 @@ export const MapBox = ({
     if (appState === "running") {
       beginRecordTrack();
     } else if (appState === "finishRunning") {
-      endRecordTrack(posHistory);
+      endRecordTrack();
     }
   }, [appState]);
 
@@ -175,6 +175,7 @@ export const MapBox = ({
   useEffect(() => {
     if (appState === "running") {
       if (posHistory) {
+        alert(posHistory);
         drawTrack(map, "current_track", posHistory);
       }
     }
