@@ -46,6 +46,7 @@ export const WrapContent = ({
   const [displayDistance, setDisplayDistance] = useState(0);
   const [station, setStation] = useState([{ name: "", distance: "" }]);
   useEffect(() => {
+    alert("calledCurrentPos in wrapContent");
     const nearestStation = getNearestStation(currentPos.lng, currentPos.lat);
     nearestStation.then((s) => {
       if (station.distance !== s.distance) {
@@ -76,13 +77,11 @@ export const WrapContent = ({
         <div>
           <div style={styles.upper}>
             <h1 className="bg-wrap">
-              <span style={styles.text}>
-                {currentPlace}
-              </span>
+              <span style={styles.text}>{currentPlace}</span>
             </h1>
             <p className="bg-wrap">
               {station.distance !== "" ? (
-                <span style={styles.text} >
+                <span style={styles.text}>
                   {station.name}駅まで{station.distance}
                 </span>
               ) : (
@@ -92,7 +91,7 @@ export const WrapContent = ({
           </div>
           <div style={styles.lower}>
             <h1 className="bg-wrap">
-              <span style={styles.text} >
+              <span style={styles.text}>
                 {displayDistance}
                 km
               </span>
@@ -102,7 +101,6 @@ export const WrapContent = ({
                 type="submit"
                 value="FINISH RECORD"
                 style={styles.input}
-                
                 onClick={() => {
                   setAppState("finishRunning");
                 }}
