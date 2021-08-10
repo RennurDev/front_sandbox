@@ -59,10 +59,20 @@ export const MapBox = ({
     setDistance(0);
 
     const id = navigator.geolocation.watchPosition((position) => {
-      alert("calledWatchPosition");
+      alert(
+        "calledWatchPos: " +
+          position.coords.longitude +
+          ", " +
+          position.coords.latitude
+      );
       if (!prevPos) {
         //初期化
-        alert("initialized");
+        alert(
+          "initialized: " +
+            position.coords.longitude +
+            ", " +
+            position.coords.latitude
+        );
         prevPos = position;
         setCurrentPos({
           lng: position.coords.longitude,
@@ -198,10 +208,12 @@ export const MapBox = ({
   }, [currentPos]);
 
   useEffect(() => {
-    alert("calledPosHistory");
-    if (posHistory) {
-      alert(posHistory);
-      drawTrack(map, "current_track", posHistory);
+    if (appState === "running") {
+      alert("calledPosHistory");
+      if (posHistory) {
+        alert(posHistory);
+        drawTrack(map, "current_track", posHistory);
+      }
     }
   }, [posHistory]);
 
