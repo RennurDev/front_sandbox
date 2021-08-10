@@ -62,6 +62,7 @@ export const MapBox = ({
       alert("calledWatchPosition");
       if (!prevPos) {
         //初期化
+        alert("initialized");
         prevPos = position;
         setCurrentPos({
           lng: position.coords.longitude,
