@@ -78,6 +78,12 @@ export const MapBox = ({
         });
       } else {
         if (isValidPosition(prevPos, position)) {
+          alert(
+            "setCurrentPos: " +
+              position.coords.longitude +
+              ", " +
+              position.coords.latitude
+          );
           setCurrentPos({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
