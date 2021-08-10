@@ -59,12 +59,6 @@ export const MapBox = ({
     setDistance(0);
 
     const id = navigator.geolocation.watchPosition((position) => {
-      alert(
-        "calledWatchPos: " +
-          position.coords.longitude +
-          ", " +
-          position.coords.latitude
-      );
       if (!prevPos) {
         //初期化
         alert(
@@ -83,6 +77,9 @@ export const MapBox = ({
           zoom: 15,
         });
       } else {
+        alert(
+          "Prev: " + prevPos.coords.longitude + ", " + prevPos.coords.latitude
+        );
         if (isValidPosition(prevPos, position)) {
           setCurrentPos({
             lng: position.coords.longitude,
