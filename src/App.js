@@ -85,6 +85,7 @@ export const App = () => {
               tracks={tracks}
               trackNum={trackNum}
               map={map}
+              currentPos={currentPos}
               distance={distance}
               appState={appState}
               setTracks={setTracks}
