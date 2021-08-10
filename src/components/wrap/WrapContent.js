@@ -46,7 +46,6 @@ export const WrapContent = ({
   const [displayDistance, setDisplayDistance] = useState(0);
   const [station, setStation] = useState([{ name: "", distance: "" }]);
   useEffect(() => {
-    alert("calledCurrentPos in wrapContent");
     const nearestStation = getNearestStation(currentPos.lng, currentPos.lat);
     nearestStation.then((s) => {
       if (station.distance !== s.distance) {

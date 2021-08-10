@@ -61,12 +61,6 @@ export const MapBox = ({
     const id = navigator.geolocation.watchPosition((position) => {
       if (!prevPos) {
         //初期化
-        alert(
-          "initialized: " +
-            position.coords.longitude +
-            ", " +
-            position.coords.latitude
-        );
         prevPos = position;
         setCurrentPos({
           lng: position.coords.longitude,
@@ -78,12 +72,6 @@ export const MapBox = ({
         });
       } else {
         if (isValidPosition(prevPos, position)) {
-          alert(
-            "setCurrentPos: " +
-              position.coords.longitude +
-              ", " +
-              position.coords.latitude
-          );
           setCurrentPos({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
@@ -180,19 +168,16 @@ export const MapBox = ({
   }, [appState]);
 
   useEffect(() => {
-    alert("calledCurrentPos");
     if (appState === "running") {
-      setPosHistory(
-        posHistory.push([currentPos.longitude, currentPos.latitude])
-      );
+      const arr = posHistory;
+      arr.push([currentPos.lng, currentPos.lat]);
+      setPosHistory(arr);
     }
   }, [currentPos]);
 
   useEffect(() => {
     if (appState === "running") {
-      alert("calledPosHistory");
       if (posHistory) {
-        alert(posHistory);
         drawTrack(map, "current_track", posHistory);
       }
     }
