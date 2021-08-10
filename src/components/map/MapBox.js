@@ -59,6 +59,7 @@ export const MapBox = ({
     setDistance(0);
 
     const id = navigator.geolocation.watchPosition((position) => {
+      alert("calledWatchPosition");
       if (!prevPos) {
         //初期化
         prevPos = position;
