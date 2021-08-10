@@ -53,48 +53,39 @@ export const MapBox = ({
 
   const beginRecordTrack = () => {
     let prevPos;
-    let currentDistance = 0;
-    const currentPosHistory = [];
     setPosHistory([]);
     hideAllTracks(map, tracks.length);
     showTrackLayer(map, "current_track");
-    //初期化
-    navigator.geolocation.getCurrentPosition((position) => {
-      prevPos = position;
-      currentPosHistory.push([
-        position.coords.longitude,
-        position.coords.latitude,
-      ]);
-      setPosHistory(currentPosHistory);
-      map.flyTo({
-        center: [position.coords.longitude, position.coords.latitude],
-        zoom: 15,
-      });
-    });
+    setDistance(0);
 
     const id = navigator.geolocation.watchPosition((position) => {
-      if (isValidPosition(prevPos, position)) {
-        currentDistance += calcDistance(prevPos, position);
-        currentPosHistory.push([
-          position.coords.longitude,
-          position.coords.latitude,
-        ]);
+      if (!prevPos) {
+        //初期化
+        prevPos = position;
         setCurrentPos({
           lng: position.coords.longitude,
           lat: position.coords.latitude,
         });
-        setDistance(currentDistance);
-        setPosHistory(currentPosHistory);
-        prevPos = position;
+        map.flyTo({
+          center: [position.coords.longitude, position.coords.latitude],
+          zoom: 15,
+        });
+      } else {
+        if (isValidPosition(prevPos, position)) {
+          setCurrentPos({
+            lng: position.coords.longitude,
+            lat: position.coords.latitude,
+          });
+          setDistance(distance + calcDistance(prevPos, position));
+          prevPos = position;
+        }
       }
-
-      drawTrack(map, "current_track", currentPosHistory);
     });
+
     setWatchId(id);
   };
 
   const endRecordTrack = (track) => {
-    console.log(watchId);
     navigator.geolocation.clearWatch(watchId);
     hideTrackLayer(map, "current_track");
 
@@ -148,37 +139,35 @@ export const MapBox = ({
     });
   };
 
-  const createMap = (position) => {
-    const c_lng = position.coords.longitude;
-    const c_lat = position.coords.latitude;
-    // 現在地設定
-    setCurrentPos({
-      lng: c_lng,
-      lat: c_lat,
-    });
-
-    map = new mapboxgl.Map({
-      container: mapContainer.current,
-      center: [c_lng, c_lat],
-      style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
-      zoom: 12,
-    });
-
-    setMap(map);
-    map.addControl(geolocate);
-    map.on("load", function () {
-      getAllTracks(currentUser.id);
-
-      // 記録用のレイヤーの追加
-      addTrackLayer(map, "current_track");
-
-      //Next, Prev用のレイヤーの追加
-      addTrackLayer(map, "single_track");
-    });
-  };
-
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(createMap);
+    /* ComponentDidmount */
+    navigator.geolocation.getCurrentPosition((position) => {
+      const c_lng = position.coords.longitude;
+      const c_lat = position.coords.latitude;
+      // 現在地設定
+      setCurrentPos({
+        lng: c_lng,
+        lat: c_lat,
+      });
+
+      map = new mapboxgl.Map({
+        container: mapContainer.current,
+        center: [c_lng, c_lat],
+        style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
+        zoom: 12,
+      });
+      setMap(map);
+      map.addControl(geolocate);
+      map.on("load", function () {
+        getAllTracks(currentUser.id);
+
+        // 記録用のレイヤーの追加
+        addTrackLayer(map, "current_track");
+
+        //Next, Prev用のレイヤーの追加
+        addTrackLayer(map, "single_track");
+      });
+    });
     return () => {
       try {
         map.remove();
@@ -196,6 +185,18 @@ export const MapBox = ({
       endRecordTrack(posHistory);
     }
   }, [appState]);
+
+  useEffect(() => {
+    if (appState === "running") {
+      setPosHistory(
+        posHistory.push([position.coords.longitude, position.coords.latitude])
+      );
+    }
+  }, [currentPos]);
+
+  useEffect(() => {
+    drawTrack(map, "current_track", posHistory);
+  }, [posHistory]);
 
   return (
     <div>
