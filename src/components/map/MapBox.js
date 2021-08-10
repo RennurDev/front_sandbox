@@ -187,6 +187,7 @@ export const MapBox = ({
   }, [appState]);
 
   useEffect(() => {
+    alert("calledCurrentPos");
     if (appState === "running") {
       setPosHistory(
         posHistory.push([currentPos.longitude, currentPos.latitude])
@@ -195,6 +196,7 @@ export const MapBox = ({
   }, [currentPos]);
 
   useEffect(() => {
+    alert("calledPosHistory");
     if (posHistory) {
       alert(posHistory);
       drawTrack(map, "current_track", posHistory);
