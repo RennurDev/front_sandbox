@@ -42,7 +42,6 @@ export const MapBox = ({
   setCurrentPos,
   appState,
   setTracks,
-  setTrackNum,
   setMap,
   setAppState,
   setDistance,
@@ -90,11 +89,10 @@ export const MapBox = ({
     hideTrackLayer(map, "current_track");
 
     if (distance >= 50) {
-      let new_tracks = tracks;
+      const new_tracks = tracks;
       new_tracks.push(track);
       addTrackLayer(map, "track_" + String(new_tracks.length - 1), track); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       setTracks(new_tracks);
-      setTrackNum(new_tracks.length);
       postTrack(track);
 
       alert("distance: " + distance);
@@ -115,7 +113,6 @@ export const MapBox = ({
           addTrackLayer(map, "track_" + String(i), tracks[i]);
         }
         setTracks(tracks);
-        setTrackNum(tracks.length);
       }
     });
   };

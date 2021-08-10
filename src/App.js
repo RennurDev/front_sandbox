@@ -24,7 +24,6 @@ export const App = () => {
   ]);
   const [currentPlace, setCurrentPlace] = useState();
   const [currentRegion, setCurrentRegion] = useState();
-  const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [distance, setDistance] = useState(0);
   const [map, setMap] = useState();
@@ -83,13 +82,11 @@ export const App = () => {
             <MapBox
               currentUser={currentUser}
               tracks={tracks}
-              trackNum={trackNum}
               map={map}
               currentPos={currentPos}
               distance={distance}
               appState={appState}
               setTracks={setTracks}
-              setTrackNum={setTrackNum}
               setDistance={setDistance}
               setCurrentPos={setCurrentPos}
               setMap={setMap}
@@ -99,7 +96,6 @@ export const App = () => {
               currentUser={currentUser}
               map={map}
               tracks={tracks}
-              trackNum={trackNum}
             />
           </div>
         </div>
