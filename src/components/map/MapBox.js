@@ -169,7 +169,7 @@ export const MapBox = ({
 
   useEffect(() => {
     if (appState === "running") {
-      const arr = posHistory; //別の配列を作成する必要がある
+      const arr = posHistory;
       arr.push([currentPos.lng, currentPos.lat]);
       setPosHistory(arr);
     }
