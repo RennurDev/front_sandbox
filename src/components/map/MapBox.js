@@ -5,7 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import drawTrack from "../../lib/DrawTrack";
 import addTrackLayer from "../../lib/AddTrackLayer";
 import decodeTrack from "../../lib/DecodeTrack";
-import encodeTrack from "../../lib/EncodeTrack";
+import postTrack from "../../lib/PostTrack";
 import showTrackLayer from "../../lib/ShowTrackLayer";
 import hideTrackLayer from "../../lib/HideTrackLayer";
 import hideAllTracks from "../../lib/HideAllTracks";
@@ -122,25 +122,6 @@ export const MapBox = ({
         }
         setTracks(tracks);
         setTrackNum(tracks.length);
-      }
-    });
-  };
-
-  // PostTrack
-  const postTrack = (data) => {
-    const encoded_data = encodeTrack(data);
-    let body = {
-      track: {
-        data: encoded_data,
-        user_id: currentUser.id,
-      },
-    };
-    const url = "/tracks";
-    let response = RequestAxios(url, "post", body);
-    response.then((r) => {
-      if (r.data.length >= 1) {
-      } else {
-        console.log("error");
       }
     });
   };
