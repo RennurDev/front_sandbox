@@ -166,7 +166,7 @@ export const MapBox = ({
 
   useEffect(() => {
     if (appState === "running") {
-      setPosHistory(...posHistory, [currentPos.lng, currentPos.lat]);
+      setPosHistory([...posHistory, [currentPos.lng, currentPos.lat]]);
     }
   }, [currentPos]);
 
