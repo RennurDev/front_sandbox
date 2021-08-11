@@ -82,7 +82,6 @@ export const App = () => {
             <MapBox
               currentUser={currentUser}
               tracks={tracks}
-              map={map}
               currentPos={currentPos}
               distance={distance}
               appState={appState}
@@ -92,11 +91,7 @@ export const App = () => {
               setMap={setMap}
               setAppState={setAppState}
             />
-            <Menu
-              currentUser={currentUser}
-              map={map}
-              tracks={tracks}
-            />
+            <Menu currentUser={currentUser} map={map} tracks={tracks} />
           </div>
         </div>
       ) : (

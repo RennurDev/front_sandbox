@@ -36,7 +36,6 @@ const styles = {
 export const MapBox = ({
   currentUser,
   tracks,
-  map,
   distance,
   currentPos,
   setCurrentPos,
@@ -49,12 +48,13 @@ export const MapBox = ({
   const [posHistory, setPosHistory] = useState([]);
   const [watchId, setWatchId] = useState(-1);
   const mapContainer = useRef(null);
+  const map = useRef();
 
   const beginRecordTrack = () => {
     let prevPos;
     setPosHistory([]);
-    hideAllTracks(map, tracks.length);
-    showTrackLayer(map, "current_track");
+    hideAllTracks(map.current, tracks.length);
+    showTrackLayer(map.current, "current_track");
     setDistance(0);
 
     const id = navigator.geolocation.watchPosition((position) => {
@@ -65,7 +65,7 @@ export const MapBox = ({
           lng: position.coords.longitude,
           lat: position.coords.latitude,
         });
-        map.flyTo({
+        map.current.flyTo({
           center: [position.coords.longitude, position.coords.latitude],
           zoom: 15,
         });
@@ -86,12 +86,16 @@ export const MapBox = ({
 
   const endRecordTrack = () => {
     navigator.geolocation.clearWatch(watchId);
-    hideTrackLayer(map, "current_track");
+    hideTrackLayer(map.current, "current_track");
 
     if (distance >= 50) {
       const new_tracks = tracks;
       new_tracks.push(posHistory);
-      addTrackLayer(map, "track_" + String(new_tracks.length - 1), posHistory); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
+      addTrackLayer(
+        map.current,
+        "track_" + String(new_tracks.length - 1),
+        posHistory
+      ); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       setTracks(new_tracks);
       postTrack(posHistory, currentUser.id);
 
@@ -99,7 +103,7 @@ export const MapBox = ({
     } else {
       alert("not saved distance(<50): " + distance);
     }
-    showAllTracks(map, tracks.length);
+    showAllTracks(map.current, tracks.length);
     setDistance(0);
   };
 
@@ -110,7 +114,7 @@ export const MapBox = ({
       if (r.data.length >= 1) {
         for (let i = 0; i < r.data.length; i++) {
           tracks.push(decodeTrack(r.data[i].data));
-          addTrackLayer(map, "track_" + String(i), tracks[i]);
+          addTrackLayer(map.current, "track_" + String(i), tracks[i]);
         }
         setTracks(tracks);
       }
@@ -128,27 +132,27 @@ export const MapBox = ({
         lat: c_lat,
       });
 
-      map = new mapboxgl.Map({
+      map.current = new mapboxgl.Map({
         container: mapContainer.current,
         center: [c_lng, c_lat],
         style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
         zoom: 12,
       });
-      setMap(map);
-      map.addControl(geolocate);
-      map.on("load", function () {
+      setMap(map.current);
+      map.current.on("load", function () {
+        map.current.addControl(geolocate);
         getAllTracks(currentUser.id);
 
         // 記録用のレイヤーの追加
-        addTrackLayer(map, "current_track");
+        addTrackLayer(map.current, "current_track");
 
         //Next, Prev用のレイヤーの追加
-        addTrackLayer(map, "single_track");
+        addTrackLayer(map.current, "single_track");
       });
     });
     return () => {
       try {
-        map.remove();
+        map.current.remove();
       } catch (e) {
         console.log(e);
       }
@@ -173,8 +177,7 @@ export const MapBox = ({
   useEffect(() => {
     if (appState === "running") {
       if (posHistory) {
-        alert(posHistory);
-        drawTrack(map, "current_track", posHistory);
+        drawTrack(map.current, "current_track", posHistory);
       }
     }
   }, [posHistory]);
