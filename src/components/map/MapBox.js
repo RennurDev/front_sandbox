@@ -52,6 +52,7 @@ export const MapBox = ({
 
   const beginRecordTrack = () => {
     let prevPos;
+    let dist = 0;
     setPosHistory([]);
     hideAllTracks(map.current, tracks.length);
     showTrackLayer(map.current, "current_track");
@@ -75,7 +76,9 @@ export const MapBox = ({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           });
-          setDistance(distance + calcDistance(prevPos, position));
+          console.log(dist);
+          dist += calcDistance(prevPos, position);
+          setDistance(dist);
           prevPos = position;
         }
       }
