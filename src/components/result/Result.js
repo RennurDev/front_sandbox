@@ -24,7 +24,10 @@ const styles = {
 
 export const Result = ({ posHistory, distance, currentRegion }) => {
   const [context, setContext] = useState();
-
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDay();
   useEffect(() => {
     const canvas = document.getElementById("canvas");
     canvas.width = window.innerWidth * 0.9;
@@ -37,7 +40,7 @@ export const Result = ({ posHistory, distance, currentRegion }) => {
     if (context) {
       const projectedTrack = projectMercator(
         posHistory,
-        window.innerWidth * 0.9
+        window.innerWidth * 0.8
       );
 
       context.lineWidth = 5;
@@ -62,10 +65,10 @@ export const Result = ({ posHistory, distance, currentRegion }) => {
       <div style={styles.text}>
         <h1>{currentRegion}</h1>
         <p>
-          ALTITUDE: 3.4 m<br />
-          DISTANCE: {Math.floor(distance / 100) / 10} m
+          ALTITUDE: 0 m<br />
+          DISTANCE: {Math.floor(distance / 100) / 10} km
           <br />
-          2021.08.08
+          {year}.{month}.{day}
           <br />
         </p>
         <p>FINISH &gt;</p>
