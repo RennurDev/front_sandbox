@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import projectMercator from "../../lib/ProjectMercator";
 import "../../App.css";
 
@@ -23,45 +22,36 @@ const styles = {
 };
 
 export const Result = ({ posHistory, distance, currentRegion }) => {
-  const [context, setContext] = useState();
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
-  const day = date.getDay();
-  useEffect(() => {
-    const canvas = document.getElementById("canvas");
-    canvas.width = window.innerWidth * 0.9;
-    canvas.height = 500;
-    const canvasContext = canvas.getContext("2d");
-    setContext(canvasContext);
-  }, []);
+  const day = date.getDate();
 
-  useEffect(() => {
-    if (context) {
-      const projectedTrack = projectMercator(
-        posHistory,
-        window.innerWidth * 0.8
-      );
+  const projectedTrack = projectMercator(posHistory, 50);
 
-      context.lineWidth = 5;
-      context.strokeStyle = "white";
-      context.lineJoin = "round";
-      context.beginPath();
-      /* NOTE: canvas境界付近で描画したい軌跡が見切れてしまうのを防ぐために7px移動させている.
-      しかしこの7という数字は線幅に依存するため今後修正が必要. */
-      context.moveTo(projectedTrack[0][0] + 7, projectedTrack[0][1] + 7);
-
-      for (let i = 1; i < projectedTrack.length; i++) {
-        context.lineTo(projectedTrack[i][0] + 7, projectedTrack[i][1] + 7);
-      }
-
-      context.stroke();
-    }
-  }, [context]);
+  let dataString = "M " + projectedTrack[0][0] + " " + projectedTrack[0][1];
+  for (let i = 1; i < projectedTrack.length; i++) {
+    dataString += " L " + projectedTrack[i][0] + " " + projectedTrack[i][1];
+  }
 
   return (
     <div>
-      <canvas id="canvas" style={styles.canvas} />
+      <svg
+        version="1.1"
+        id="track"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        width="80vw"
+        viewBox="-10 -10 65 300"
+        xmlSpace="preserve"
+        style={styles.canvas}
+      >
+        <g>
+          <path className="path" d={dataString} />
+        </g>
+      </svg>
       <div style={styles.text}>
         <h1>{currentRegion}</h1>
         <p>
