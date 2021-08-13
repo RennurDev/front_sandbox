@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import getNearestStation from "../../lib/GetNearestStation";
-
+import { Result } from "../result/Result.js";
 const styles = {
   root: {
     position: "absolute",
@@ -76,13 +76,11 @@ export const WrapContent = ({
         <div>
           <div style={styles.upper}>
             <h1 className="bg-wrap">
-              <span style={styles.text}>
-                {currentPlace}
-              </span>
+              <span style={styles.text}>{currentPlace}</span>
             </h1>
             <p className="bg-wrap">
               {station.distance !== "" ? (
-                <span style={styles.text} >
+                <span style={styles.text}>
                   {station.name}駅まで{station.distance}
                 </span>
               ) : (
@@ -92,7 +90,7 @@ export const WrapContent = ({
           </div>
           <div style={styles.lower}>
             <h1 className="bg-wrap">
-              <span style={styles.text} >
+              <span style={styles.text}>
                 {displayDistance}
                 km
               </span>
@@ -102,7 +100,6 @@ export const WrapContent = ({
                 type="submit"
                 value="FINISH RECORD"
                 style={styles.input}
-                
                 onClick={() => {
                   setAppState("finishRunning");
                 }}
@@ -112,7 +109,7 @@ export const WrapContent = ({
         </div>
       );
     } else if (appState === "finishRunning") {
-      return <div />;
+      return <Result />;
     } else {
       return <div />;
     }

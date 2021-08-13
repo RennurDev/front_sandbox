@@ -1,6 +1,4 @@
-import Data from "./yamanotesen.json"; //テストデータ
 import { useState, useEffect } from "react";
-import decodeTrack from "../../lib/DecodeTrack";
 import projectMercator from "../../lib/ProjectMercator";
 
 const styles = {
@@ -20,7 +18,7 @@ const styles = {
   },
 };
 
-export const Result = () => {
+export const Result = ({ posHistory }) => {
   const [context, setContext] = useState();
 
   useEffect(() => {
@@ -33,8 +31,7 @@ export const Result = () => {
 
   useEffect(() => {
     if (context !== null) {
-      const decodedTrack = decodeTrack(Data.data);
-      const projectedTrack = projectMercator(decodedTrack, 220);
+      const projectedTrack = projectMercator(posHistory, 220);
 
       context.lineWidth = 5;
       context.strokeStyle = "white";

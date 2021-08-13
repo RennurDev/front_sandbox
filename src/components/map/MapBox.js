@@ -39,7 +39,9 @@ export const MapBox = ({
   map,
   distance,
   currentPos,
+  posHistory,
   setCurrentPos,
+  setPosHistory,
   appState,
   setTracks,
   setTrackNum,
@@ -47,7 +49,6 @@ export const MapBox = ({
   setAppState,
   setDistance,
 }) => {
-  const [posHistory, setPosHistory] = useState([]);
   const [watchId, setWatchId] = useState(-1);
   const mapContainer = useRef(null);
 
