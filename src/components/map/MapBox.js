@@ -56,6 +56,7 @@ export const MapBox = ({
     let prevPos;
     let currentDistance = 0;
     const currentPosHistory = [];
+    setDistance(0);
     setPosHistory([]);
     hideAllTracks(map, tracks.length);
     showTrackLayer(map, "current_track");
@@ -111,7 +112,6 @@ export const MapBox = ({
       // alert("not saved distance(<50): " + distance);
     }
     showAllTracks(map, tracks.length);
-    setDistance(0);
   };
 
   const getAllTracks = (userId) => {
