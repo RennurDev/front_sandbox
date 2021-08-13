@@ -30,7 +30,7 @@ export const Result = ({ posHistory }) => {
   }, []);
 
   useEffect(() => {
-    if (context !== null) {
+    if (context) {
       const projectedTrack = projectMercator(posHistory, 220);
 
       context.lineWidth = 5;

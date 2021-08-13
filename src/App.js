@@ -54,7 +54,6 @@ export const App = () => {
     } else if (appState === "running") {
       setAnimationOverlap("scale-and-stop");
     } else if (appState === "finishRunning") {
-      setAnimationOverlap("stop-and-scale");
     }
   }, [appState]);
 
