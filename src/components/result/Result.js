@@ -1,5 +1,9 @@
 import projectMercator from "../../lib/ProjectMercator";
+import { Grid } from "@material-ui/core";
 import "../../App.css";
+/*  testData: テスト時はこの場所にjsonファイルを追加すること */
+//import data from "./yamanotesen.json";
+//import decodeTrack from "../../lib/DecodeTrack";
 
 const styles = {
   root: {
@@ -10,11 +14,33 @@ const styles = {
     margin: "-80% auto 0",
   },
   text: {
-    textAlign: "center",
     fontFamily: "Kanit",
     color: "white",
-    position: "absolute",
-    top: "-20vh",
+    position: "fixed",
+    top: "5vh",
+    left: 0,
+    right: 0,
+    margin: "auto",
+  },
+  region: {
+    fontFamily: "Kanit",
+    color: "white",
+    position: "fixed",
+    textAlign: "right",
+    top: "70vh",
+    left: 0,
+    right: 0,
+    margin: "auto",
+  },
+  img: {
+    display: "block",
+    width: "20vw",
+  },
+  bottom: {
+    fontFamily: "Kanit",
+    color: "black",
+    position: "fixed",
+    top: "90vh",
     left: 0,
     right: 0,
     margin: "auto",
@@ -28,6 +54,7 @@ export const Result = ({ posHistory, distance, currentRegion }) => {
   const day = date.getDate();
 
   const projectedTrack = projectMercator(posHistory, 50);
+  //const projectedTrack = projectMercator(decodeTrack(data.data), 50);
 
   let dataString = "M " + projectedTrack[0][0] + " " + projectedTrack[0][1];
   for (let i = 1; i < projectedTrack.length; i++) {
@@ -44,7 +71,7 @@ export const Result = ({ posHistory, distance, currentRegion }) => {
         x="0px"
         y="0px"
         width="80vw"
-        viewBox="-10 -10 65 300"
+        viewBox="-10 -10 65 120"
         xmlSpace="preserve"
         style={styles.canvas}
       >
@@ -52,16 +79,48 @@ export const Result = ({ posHistory, distance, currentRegion }) => {
           <path className="path" d={dataString} />
         </g>
       </svg>
+      <div style={styles.region}>
+        <Grid container spacing={2}>
+          <Grid xs={1} />
+          <Grid xs={5}>
+            <img
+              style={styles.img}
+              src={process.env.PUBLIC_URL + "/petampEye.svg"}
+              alt="petampButton"
+            />
+          </Grid>
+          <Grid xs={5}>
+            <h1>{currentRegion}</h1>
+          </Grid>
+          <Grid xs={1} />
+        </Grid>
+      </div>
       <div style={styles.text}>
-        <h1>{currentRegion}</h1>
-        <p>
-          ALTITUDE: 0 m<br />
-          DISTANCE: {Math.floor(distance / 100) / 10} km
-          <br />
-          {year}.{month}.{day}
-          <br />
-        </p>
-        <p>FINISH &gt;</p>
+        <Grid container spacing={2}>
+          <Grid xs={1} />
+          <Grid xs={8}>
+            <h3>
+              ALTITUDE : 0m
+              <br />
+              DISTANCE : {Math.floor(distance / 100) / 10}km
+              <br />
+              {year}.{month}.{day}
+              <br />
+            </h3>
+          </Grid>
+        </Grid>
+      </div>
+      <div style={styles.bottom}>
+        <Grid container spacing={2}>
+          <Grid xs={1} />
+          <Grid xs={5}>
+            <p>SHARE</p>
+          </Grid>
+          <Grid xs={1} />
+          <Grid xs={5}>
+            <p>FINISH &gt;</p>
+          </Grid>
+        </Grid>
       </div>
     </div>
   );
