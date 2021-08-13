@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Kanit:wght@600&display=swap");
-* {
-  font-family: "Kosugi Maru", sans-serif;
-}
 
 body {
   margin: 0px;
@@ -92,5 +89,17 @@ body {
 @keyframes scale-and-stop {
   100% {
     clip-path: circle(17vh);
+  }
+}
+
+/*リザルト画面*/
+.iris-out {
+  clip-path: circle(17vh);
+  animation: iris-out 1s ease 0s 1 normal forwards running;
+}
+
+@keyframes iris-out {
+  100% {
+    clip-path: circle(0%);
   }
 }

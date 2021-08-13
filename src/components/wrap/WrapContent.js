@@ -110,7 +110,13 @@ export const WrapContent = ({
         </div>
       );
     } else if (appState === "finishRunning") {
-      return <Result posHistory={posHistory} />;
+      return (
+        <Result
+          posHistory={posHistory}
+          currentRegion={currentRegion}
+          distance={distance}
+        />
+      );
     } else {
       return <div />;
     }

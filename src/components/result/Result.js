@@ -1,29 +1,33 @@
 import { useState, useEffect } from "react";
 import projectMercator from "../../lib/ProjectMercator";
+import "../../App.css";
 
 const styles = {
+  root: {
+    position: "absolute",
+  },
   canvas: {
     display: "block",
-    margin: "20vh auto 0",
+    margin: "-80% auto 0",
   },
   text: {
     textAlign: "center",
     fontFamily: "Kanit",
     color: "white",
     position: "absolute",
-    top: "25vh",
+    top: "-20vh",
     left: 0,
     right: 0,
     margin: "auto",
   },
 };
 
-export const Result = ({ posHistory }) => {
+export const Result = ({ posHistory, distance, currentRegion }) => {
   const [context, setContext] = useState();
 
   useEffect(() => {
     const canvas = document.getElementById("canvas");
-    canvas.width = 250;
+    canvas.width = window.innerWidth * 0.9;
     canvas.height = 500;
     const canvasContext = canvas.getContext("2d");
     setContext(canvasContext);
@@ -31,7 +35,10 @@ export const Result = ({ posHistory }) => {
 
   useEffect(() => {
     if (context) {
-      const projectedTrack = projectMercator(posHistory, 220);
+      const projectedTrack = projectMercator(
+        posHistory,
+        window.innerWidth * 0.9
+      );
 
       context.lineWidth = 5;
       context.strokeStyle = "white";
@@ -53,10 +60,10 @@ export const Result = ({ posHistory }) => {
     <div>
       <canvas id="canvas" style={styles.canvas} />
       <div style={styles.text}>
-        <h1>TOKYO</h1>
+        <h1>{currentRegion}</h1>
         <p>
           ALTITUDE: 3.4 m<br />
-          DISTANCE: 7.44 km
+          DISTANCE: {Math.floor(distance / 100) / 10} m
           <br />
           2021.08.08
           <br />
