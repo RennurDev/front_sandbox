@@ -1,6 +1,6 @@
 export default function ProjectMercator(data, width) {
   if (data !== []) {
-    console.log(data);
+    alert(data);
     const projectedData = [];
     let lng_min = data[0][0];
     let lng_max = data[0][0];
