@@ -2,8 +2,8 @@ import projectMercator from "../../lib/ProjectMercator";
 import { Grid } from "@material-ui/core";
 import "../../App.css";
 /*  testData: テスト時はこの場所にjsonファイルを追加すること */
-//import data from "./yamanotesen.json";
-//import decodeTrack from "../../lib/DecodeTrack";
+import data from "./yamanotesen.json";
+import decodeTrack from "../../lib/DecodeTrack";
 
 const styles = {
   root: {
@@ -45,16 +45,28 @@ const styles = {
     right: 0,
     margin: "auto",
   },
+  input: {
+    fontFamily: "Kanit",
+    border: "none",
+    outline: "none",
+    backgroundColor: "transparent",
+    fontSize: 16,
+  },
 };
 
-export const Result = ({ posHistory, distance, currentRegion }) => {
+export const Result = ({
+  posHistory,
+  distance,
+  currentRegion,
+  setAppState,
+}) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  const projectedTrack = projectMercator(posHistory, 50);
-  //const projectedTrack = projectMercator(decodeTrack(data.data), 50);
+  //const projectedTrack = projectMercator(posHistory, 50);
+  const projectedTrack = projectMercator(decodeTrack(data.data), 50);
 
   let dataString = "M " + projectedTrack[0][0] + " " + projectedTrack[0][1];
   for (let i = 1; i < projectedTrack.length; i++) {
@@ -118,7 +130,16 @@ export const Result = ({ posHistory, distance, currentRegion }) => {
           </Grid>
           <Grid xs={1} />
           <Grid xs={5}>
-            <p>FINISH &gt;</p>
+            <p>
+              <input
+                type="submit"
+                value="FINISH >"
+                style={styles.input}
+                onClick={() => {
+                  setAppState("beginApp");
+                }}
+              />
+            </p>
           </Grid>
         </Grid>
       </div>

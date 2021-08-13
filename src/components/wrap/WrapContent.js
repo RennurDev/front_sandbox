@@ -8,7 +8,6 @@ const styles = {
     width: "100vw",
     margin: "auto",
     color: "white",
-    textAlign: "center",
   },
   text: {
     fontFamily: "Kanit",
@@ -112,6 +111,7 @@ export const WrapContent = ({
     } else if (appState === "finishRunning") {
       return (
         <Result
+          setAppState={setAppState}
           posHistory={posHistory}
           currentRegion={currentRegion}
           distance={distance}
