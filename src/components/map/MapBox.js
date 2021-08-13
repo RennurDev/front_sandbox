@@ -95,7 +95,6 @@ export const MapBox = ({
   };
 
   const endRecordTrack = (track) => {
-    console.log(watchId);
     navigator.geolocation.clearWatch(watchId);
     hideTrackLayer(map, "current_track");
 

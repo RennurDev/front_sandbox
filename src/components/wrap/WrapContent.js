@@ -42,6 +42,7 @@ export const WrapContent = ({
   setAppState,
   currentPlace,
   currentPos,
+  posHistory,
 }) => {
   const [displayDistance, setDisplayDistance] = useState(0);
   const [station, setStation] = useState([{ name: "", distance: "" }]);
@@ -109,7 +110,7 @@ export const WrapContent = ({
         </div>
       );
     } else if (appState === "finishRunning") {
-      return <Result />;
+      return <Result posHistory={posHistory} />;
     } else {
       return <div />;
     }
