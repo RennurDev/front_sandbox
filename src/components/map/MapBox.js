@@ -46,8 +46,8 @@ export const MapBox = ({
   setDistance,
 }) => {
   const [posHistory, setPosHistory] = useState([]);
-  const [watchId, setWatchId] = useState(-1);
-  const mapContainer = useRef(null);
+  const watchId = useRef();
+  const mapContainer = useRef();
   const map = useRef();
 
   const beginRecordTrack = () => {
@@ -58,7 +58,7 @@ export const MapBox = ({
     showTrackLayer(map.current, "current_track");
     setDistance(0);
 
-    const id = navigator.geolocation.watchPosition((position) => {
+    watchId.current = navigator.geolocation.watchPosition((position) => {
       if (!prevPos) {
         //初期化
         prevPos = position;
@@ -83,12 +83,10 @@ export const MapBox = ({
         }
       }
     });
-
-    setWatchId(id);
   };
 
   const endRecordTrack = () => {
-    navigator.geolocation.clearWatch(watchId);
+    navigator.geolocation.clearWatch(watchId.current);
     hideTrackLayer(map.current, "current_track");
 
     if (distance >= 50) {
