@@ -107,9 +107,9 @@ export const MapBox = ({
       setTrackNum(new_tracks.length);
       postTrack(track);
 
-      alert("distance: " + distance);
+      // alert("distance: " + distance);
     } else {
-      alert("not saved distance(<50): " + distance);
+      // alert("not saved distance(<50): " + distance);
     }
     showAllTracks(map, tracks.length);
     setDistance(0);
