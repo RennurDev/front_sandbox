@@ -38,14 +38,15 @@ export const MapBox = ({
   tracks,
   distance,
   currentPos,
+  posHistory,
   setCurrentPos,
+  setPosHistory,
   appState,
   setTracks,
   setMap,
   setAppState,
   setDistance,
 }) => {
-  const [posHistory, setPosHistory] = useState([]);
   const watchId = useRef();
   const mapContainer = useRef();
   const map = useRef();
@@ -100,12 +101,11 @@ export const MapBox = ({
       setTracks(new_tracks);
       postTrack(posHistory, currentUser.id);
 
-      alert("distance: " + distance);
+      // alert("distance: " + distance);
     } else {
-      alert("not saved distance(<50): " + distance);
+      // alert("not saved distance(<50): " + distance);
     }
     showAllTracks(map.current, tracks.length);
-    setDistance(0);
   };
 
   const getAllTracks = (userId) => {

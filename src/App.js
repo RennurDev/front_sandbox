@@ -31,6 +31,7 @@ export const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState();
   const [appState, setAppState] = useState("beginApp");
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
+  const [posHistory, setPosHistory] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -55,7 +56,7 @@ export const App = () => {
     } else if (appState === "running") {
       setAnimationOverlap("scale-and-stop");
     } else if (appState === "finishRunning") {
-      setAnimationOverlap("stop-and-scale");
+      setAnimationOverlap("iris-out");
     }
   }, [appState]);
 
@@ -77,6 +78,7 @@ export const App = () => {
             currentPos={currentPos}
             distance={distance}
             appState={appState}
+            posHistory={posHistory}
             setAppState={setAppState}
           />
           <div className={animationOverlap}>
@@ -88,9 +90,11 @@ export const App = () => {
               currentPos={currentPos}
               distance={distance}
               appState={appState}
+              posHistory={posHistory}
               setTracks={setTracks}
               setDistance={setDistance}
               setCurrentPos={setCurrentPos}
+              setPosHistory={setPosHistory}
               setMap={setMap}
               setAppState={setAppState}
             />

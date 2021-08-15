@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import getNearestStation from "../../lib/GetNearestStation";
-
+import { Result } from "../result/Result.js";
 const styles = {
   root: {
     position: "absolute",
@@ -8,7 +8,6 @@ const styles = {
     width: "100vw",
     margin: "auto",
     color: "white",
-    textAlign: "center",
   },
   text: {
     fontFamily: "Kanit",
@@ -42,6 +41,7 @@ export const WrapContent = ({
   setAppState,
   currentPlace,
   currentPos,
+  posHistory,
 }) => {
   const [station, setStation] = useState([{ name: "", distance: "" }]);
   useEffect(() => {
@@ -101,7 +101,14 @@ export const WrapContent = ({
         </div>
       );
     } else if (appState === "finishRunning") {
-      return <div />;
+      return (
+        <Result
+          setAppState={setAppState}
+          posHistory={posHistory}
+          currentRegion={currentRegion}
+          distance={distance}
+        />
+      );
     } else {
       return <div />;
     }

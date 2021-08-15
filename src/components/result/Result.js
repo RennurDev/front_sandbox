@@ -1,70 +1,147 @@
-import Data from "./yamanotesen.json"; //テストデータ
-import { useState, useEffect } from "react";
-import decodeTrack from "../../lib/DecodeTrack";
 import projectMercator from "../../lib/ProjectMercator";
+import { Grid } from "@material-ui/core";
+import "../../App.css";
+/*  testData: テスト時はこの場所にjsonファイルを追加すること */
+//import data from "./yamanotesen.json";
+//import decodeTrack from "../../lib/DecodeTrack";
 
 const styles = {
+  root: {
+    position: "absolute",
+  },
   canvas: {
     display: "block",
-    margin: "20vh auto 0",
+    margin: "-80% auto 0",
   },
   text: {
-    textAlign: "center",
     fontFamily: "Kanit",
     color: "white",
-    position: "absolute",
-    top: "25vh",
+    position: "fixed",
+    top: "5vh",
     left: 0,
     right: 0,
     margin: "auto",
   },
+  region: {
+    fontFamily: "Kanit",
+    color: "white",
+    position: "fixed",
+    textAlign: "right",
+    top: "70vh",
+    left: 0,
+    right: 0,
+    margin: "auto",
+  },
+  img: {
+    display: "block",
+    width: "20vw",
+  },
+  bottom: {
+    fontFamily: "Kanit",
+    color: "black",
+    position: "fixed",
+    top: "90vh",
+    left: 0,
+    right: 0,
+    margin: "auto",
+  },
+  input: {
+    fontFamily: "Kanit",
+    border: "none",
+    outline: "none",
+    backgroundColor: "transparent",
+    fontSize: 16,
+  },
 };
 
-export const Result = () => {
-  const [context, setContext] = useState();
+export const Result = ({
+  posHistory,
+  distance,
+  currentRegion,
+  setAppState,
+}) => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
 
-  useEffect(() => {
-    const canvas = document.getElementById("canvas");
-    canvas.width = 250;
-    canvas.height = 500;
-    const canvasContext = canvas.getContext("2d");
-    setContext(canvasContext);
-  }, []);
+  const projectedTrack = projectMercator(posHistory, 50);
+  //const projectedTrack = projectMercator(decodeTrack(data.data), 50);
 
-  useEffect(() => {
-    if (context !== null) {
-      const decodedTrack = decodeTrack(Data.data);
-      const projectedTrack = projectMercator(decodedTrack, 220);
-
-      context.lineWidth = 5;
-      context.strokeStyle = "white";
-      context.lineJoin = "round";
-      context.beginPath();
-      /* NOTE: canvas境界付近で描画したい軌跡が見切れてしまうのを防ぐために7px移動させている.
-      しかしこの7という数字は線幅に依存するため今後修正が必要. */
-      context.moveTo(projectedTrack[0][0] + 7, projectedTrack[0][1] + 7);
-
-      for (let i = 1; i < projectedTrack.length; i++) {
-        context.lineTo(projectedTrack[i][0] + 7, projectedTrack[i][1] + 7);
-      }
-
-      context.stroke();
-    }
-  }, [context]);
+  let dataString = "M " + projectedTrack[0][0] + " " + projectedTrack[0][1];
+  for (let i = 1; i < projectedTrack.length; i++) {
+    dataString += " L " + projectedTrack[i][0] + " " + projectedTrack[i][1];
+  }
 
   return (
     <div>
-      <canvas id="canvas" style={styles.canvas} />
+      <svg
+        version="1.1"
+        id="track"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        width="80vw"
+        viewBox="-10 -10 65 120"
+        xmlSpace="preserve"
+        style={styles.canvas}
+      >
+        <g style={styles.container}>
+          <path className="path" d={dataString} />
+        </g>
+      </svg>
       <div style={styles.text}>
-        <h1>TOKYO</h1>
-        <p>
-          ALTITUDE: 3.4 m<br />
-          DISTANCE: 7.44 km
-          <br />
-          2021.08.08
-          <br />
-        </p>
-        <p>FINISH &gt;</p>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid item xs={8}>
+            <h3>
+              ALTITUDE : 0m
+              <br />
+              DISTANCE : {Math.floor(distance / 100) / 10}km
+              <br />
+              {year}.{month}.{day}
+              <br />
+            </h3>
+          </Grid>
+        </Grid>
+      </div>
+      <div style={styles.region}>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid item xs={5}>
+            <img
+              style={styles.img}
+              src={process.env.PUBLIC_URL + "/petampEye.svg"}
+              alt="petampButton"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <h1>{currentRegion}</h1>
+          </Grid>
+          <Grid item xs={1} />
+        </Grid>
+      </div>
+      <div style={styles.bottom}>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid item xs={5}>
+            <p>SHARE</p>
+          </Grid>
+          <Grid item xs={1} />
+          <Grid item xs={5}>
+            <p>
+              <input
+                type="submit"
+                value="FINISH >"
+                style={styles.input}
+                onClick={() => {
+                  setAppState("beginApp");
+                }}
+              />
+            </p>
+          </Grid>
+        </Grid>
       </div>
     </div>
   );
