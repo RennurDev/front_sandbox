@@ -24,7 +24,6 @@ export const App = () => {
   ]);
   const [currentPlace, setCurrentPlace] = useState();
   const [currentRegion, setCurrentRegion] = useState();
-  const [trackNum, setTrackNum] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [distance, setDistance] = useState(0);
   const [map, setMap] = useState();
@@ -36,17 +35,20 @@ export const App = () => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
-      let place = getPlaceName(pos.coords.longitude, pos.coords.latitude);
-      place.then((p) => {
-        setCurrentPlace(p);
-      });
-      let region = getRegionName(pos.coords.longitude, pos.coords.latitude);
-      region.then((r) => {
-        setCurrentRegion(r);
-      });
+      setCurrentPos(pos.coords.longitude, pos.coords.latitude);
     });
-    /*ページ読み込み */
   }, []);
+
+  useEffect(() => {
+    let place = getPlaceName(currentPos.lng, currentPos.lat);
+    place.then((p) => {
+      setCurrentPlace(p);
+    });
+    let region = getRegionName(currentPos.lng, currentPos.lat);
+    region.then((r) => {
+      setCurrentRegion(r);
+    });
+  }, [currentPos]);
 
   useEffect(() => {
     if (appState === "beginApp") {
@@ -85,25 +87,18 @@ export const App = () => {
             <MapBox
               currentUser={currentUser}
               tracks={tracks}
-              trackNum={trackNum}
-              map={map}
+              currentPos={currentPos}
               distance={distance}
               appState={appState}
               posHistory={posHistory}
               setTracks={setTracks}
-              setTrackNum={setTrackNum}
               setDistance={setDistance}
               setCurrentPos={setCurrentPos}
               setPosHistory={setPosHistory}
               setMap={setMap}
               setAppState={setAppState}
             />
-            <Menu
-              currentUser={currentUser}
-              map={map}
-              tracks={tracks}
-              trackNum={trackNum}
-            />
+            <Menu currentUser={currentUser} map={map} tracks={tracks} />
           </div>
         </div>
       ) : (

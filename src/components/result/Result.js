@@ -2,8 +2,8 @@ import projectMercator from "../../lib/ProjectMercator";
 import { Grid } from "@material-ui/core";
 import "../../App.css";
 /*  testData: テスト時はこの場所にjsonファイルを追加すること */
-import data from "./yamanotesen.json";
-import decodeTrack from "../../lib/DecodeTrack";
+//import data from "./yamanotesen.json";
+//import decodeTrack from "../../lib/DecodeTrack";
 
 const styles = {
   root: {
@@ -65,8 +65,8 @@ export const Result = ({
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  //const projectedTrack = projectMercator(posHistory, 50);
-  const projectedTrack = projectMercator(decodeTrack(data.data), 50);
+  const projectedTrack = projectMercator(posHistory, 50);
+  //const projectedTrack = projectMercator(decodeTrack(data.data), 50);
 
   let dataString = "M " + projectedTrack[0][0] + " " + projectedTrack[0][1];
   for (let i = 1; i < projectedTrack.length; i++) {

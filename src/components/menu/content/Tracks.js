@@ -11,7 +11,7 @@ import {
 
 import drawTrack from "../../../lib/DrawTrack";
 
-const styles = (theme) => ({
+const styles = {
   root: {
     maxWidth: 360,
   },
@@ -21,15 +21,16 @@ const styles = (theme) => ({
   actions: {
     height: 30,
   },
-});
+};
 
-export const Tracks = ({ trackNum, tracks, map }) => {
+export const Tracks = ({ tracks, map }) => {
   const [trackID, setTrackID] = useState(0);
 
   useEffect(() => {
-    changeSelectedTrack(trackID, trackNum, tracks, map);
+    changeSelectedTrack(trackID, tracks, map);
   }, [trackID]);
-  const changeSelectedTrack = (trackID, trackNum, tracks, map) => {
+  const changeSelectedTrack = (trackID, tracks, map) => {
+    const trackNum = tracks.length;
     if (0 <= trackID) {
       let selectedCoords = tracks[trackID % trackNum];
       changeMapBound(selectedCoords, map);

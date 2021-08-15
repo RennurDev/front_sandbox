@@ -14,7 +14,7 @@ const styles = {
   },
 };
 
-export const Menu = ({ currentUser, map, tracks, trackNum }) => {
+export const Menu = ({ currentUser, map, tracks }) => {
   const [selectedAct, setSelectedAct] = useState();
 
   useEffect(() => {
@@ -23,9 +23,9 @@ export const Menu = ({ currentUser, map, tracks, trackNum }) => {
 
   const displayMapExeceptTracks = (action) => {
     if (action === "Tracks") {
-      HideAllTracks(map, trackNum);
+      HideAllTracks(map, tracks.length);
     } else {
-      ShowAllTracks(map, trackNum);
+      ShowAllTracks(map, tracks.length);
     }
   };
 
@@ -38,9 +38,7 @@ export const Menu = ({ currentUser, map, tracks, trackNum }) => {
       <Grid container justify="center" styles={styles.grid}>
         <Grid item xs={10}>
           {isProfile ? <Profile currentUser={currentUser} /> : null}
-          {isTracks ? (
-            <Tracks trackNum={trackNum} tracks={tracks} map={map} />
-          ) : null}
+          {isTracks ? <Tracks tracks={tracks} map={map} /> : null}
           {/* TODO: User API 完成後に 引数追加 */}
           {isSetting ? <Setting /> : null}
         </Grid>
