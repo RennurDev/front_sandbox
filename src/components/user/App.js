@@ -1,6 +1,5 @@
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import RequestAxios from "../../lib/RequestAxios";
 
 const styles = {
   signUpImg: {

@@ -66,6 +66,7 @@ export const Notifications = ({ setContent }) => {
           style={styles.button}
           onClick={() => setContent("none")}
           src={`${process.env.PUBLIC_URL}/button_close.svg`}
+          alt="close"
         />
         <div style={styles.textContent} className="hideScrollBar">
           <p>

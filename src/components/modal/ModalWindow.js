@@ -5,9 +5,9 @@ import { Notifications } from "./Notifications";
 export const ModalWindow = () => {
   const [content, setContent] = useState("how_to_play");
   const Modal = ({ content }) => {
-    if (content == "how_to_play") {
+    if (content === "how_to_play") {
       return <HowToPlay setContent={setContent} />;
-    } else if (content == "notifications") {
+    } else if (content === "notifications") {
       return <Notifications setContent={setContent} />;
     } else {
       //none

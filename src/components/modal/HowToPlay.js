@@ -71,12 +71,14 @@ export const HowToPlay = ({ setContent }) => {
           style={styles.button}
           onClick={() => setContent("notifications")}
           src={`${process.env.PUBLIC_URL}/button_next.svg`}
+          alt="next"
         />
         <div style={styles.textContent} className="hideScrollBar">
           <p>画面最下部にいるペタンプくんを押すと軌跡の記録が始まります.</p>
           <img
             src={`${process.env.PUBLIC_URL}/instruction01.png`}
             style={styles.instructionImage}
+            alt="instruction"
           />
           <p>
             終了するときはもう一度ペタンプくんを押すと記録が終了し,
