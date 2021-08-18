@@ -13,6 +13,7 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
+import animateTrack from "../../lib/AnimateTrack";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -115,7 +116,8 @@ export const MapBox = ({
       if (r.data.length >= 1) {
         for (let i = 0; i < r.data.length; i++) {
           tracks.push(decodeTrack(r.data[i].data));
-          addTrackLayer(map.current, "track_" + String(i), tracks[i]);
+          // addTrackLayer(map.current, "track_" + String(i), tracks[i]);
+          animateTrack(map.current, "anime_" + String(i), tracks[i]);
         }
         setTracks(tracks);
       }
