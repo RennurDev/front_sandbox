@@ -101,8 +101,6 @@ export const MapBox = ({
       ); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       setTracks(new_tracks);
       postTrack(posHistory, currentUser.id);
-
-      // alert("distance: " + distance);
     } else {
       // alert("not saved distance(<50): " + distance);
     }
@@ -116,7 +114,7 @@ export const MapBox = ({
       if (r.data.length >= 1) {
         for (let i = 0; i < r.data.length; i++) {
           tracks.push(decodeTrack(r.data[i].data));
-          // addTrackLayer(map.current, "track_" + String(i), tracks[i]);
+          addTrackLayer(map.current, "track_" + String(i), tracks[i]);
           animateTrack(map.current, "anime_" + String(i), tracks[i]);
         }
         setTracks(tracks);

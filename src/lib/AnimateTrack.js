@@ -1,22 +1,30 @@
 export default function AnimateTrack(map, id, data) {
-  const pointOfTrack = (i) => {
+  const posOnTrack = (t) => {
     try {
+      const i = parseInt(t) % data.length;
+      const delta = t - parseInt(t);
+      const pos = [];
+      if (i + 1 < data.length) {
+        //i+1が存在する場合
+        pos.push([
+          (data[i + 1][0] - data[i][0]) * delta + data[i][0],
+          (data[i + 1][1] - data[i][1]) * delta + data[i][1],
+        ]);
+      } else {
+        //i+1が存在しない場合
+        pos.push([data[i][0], data[i][1]]);
+      }
       return {
         type: "Point",
-        coordinates: [data[i][0], data[i][1]],
+        coordinates: [pos[0][0], pos[0][1]],
       };
     } catch (e) {
       console.log(e);
     }
   };
 
-  let i = 0;
-
   const animateMarker = (timestamp) => {
-    // Update the data to a new position based on the animation timestamp. The
-    // divisor in the expression `timestamp / 1000` controls the animation speed.
-    i = parseInt(timestamp / 100) % data.length;
-    map.getSource(id).setData(pointOfTrack(i));
+    map.getSource(id).setData(posOnTrack(timestamp / 100));
 
     // Request the next frame of the animation.
     requestAnimationFrame(animateMarker);
@@ -25,7 +33,7 @@ export default function AnimateTrack(map, id, data) {
   // Add a source and layer displaying a point which will be animated in a circle.
   map.addSource(id, {
     type: "geojson",
-    data: pointOfTrack(0),
+    data: posOnTrack(0),
   });
 
   map.addLayer({
@@ -34,7 +42,7 @@ export default function AnimateTrack(map, id, data) {
     type: "circle",
     paint: {
       "circle-radius": 5,
-      "circle-color": "#007cbf",
+      "circle-color": "#00a563",
     },
   });
 
