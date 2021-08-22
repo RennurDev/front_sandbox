@@ -1,4 +1,5 @@
-export default function ProjectMercator(data, width) {
+export default function ProjectMercator(data, imgWidth, imgHeight) {
+  //画像サイズ（width, height）を受け取り,
   if (data !== []) {
     const projectedData = [];
     let lng_min = data[0][0];
@@ -6,6 +7,9 @@ export default function ProjectMercator(data, width) {
     let lat_min = data[0][1];
     let lat_max = data[0][1];
     let lamda;
+    let scale;
+    /* 開始点の座標 */
+    let x, y;
     try {
       /*最大, 最小値およびlamdaの算出*/
       for (let i = 1; i < data.length; i++) {
@@ -24,12 +28,34 @@ export default function ProjectMercator(data, width) {
       }
 
       lamda = (lng_min + lng_max) / 2;
-      const boxWidth = ((lng_max - lng_min) * Math.PI) / 180;
-      const scale = boxWidth !== 0 ? width / boxWidth : 1; //分母が0 の場合のエラーハンドリング
 
-      /* 開始点の座標 */
-      const x = (Math.PI * (lng_min - lamda)) / 180;
-      const y = Math.log(Math.tan(Math.PI * (0.25 + lat_max / 360)));
+      const trackWidth = ((lng_max - lng_min) * Math.PI) / 180;
+      const trackHeight = Math.log(
+        Math.tan(Math.PI * (0.25 + lat_max / 360)) /
+          Math.tan(Math.PI * (0.25 + lat_min / 360))
+      );
+
+      //    console.log("trackWidth: " + trackWidth + " trackHeight: " + trackHeight);
+      //console.log("imgWidth: " + imgWidth + " imgHeight: " + imgHeight);
+
+      const trackRatio = trackHeight / trackWidth;
+      const imgRatio = imgHeight / imgWidth;
+      //      console.log("imgRatio: " + imgRatio + " trackRatio: " + trackRatio);
+
+      if (trackRatio > imgRatio) {
+        scale = imgHeight / trackHeight;
+        x =
+          (Math.PI * (lng_min - lamda)) / 180 -
+          (imgWidth / scale - trackWidth) / 2;
+        y = Math.log(Math.tan(Math.PI * (0.25 + lat_max / 360)));
+      } else {
+        scale = imgWidth / trackWidth;
+        x = (Math.PI * (lng_min - lamda)) / 180;
+        y = Math.log(Math.tan(Math.PI * (0.25 + lat_max / 360)));
+        y =
+          Math.log(Math.tan(Math.PI * (0.25 + lat_max / 360))) +
+          (imgHeight / scale - trackHeight) / 2;
+      }
 
       let pos_x, pos_y;
 

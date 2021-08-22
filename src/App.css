@@ -106,18 +106,18 @@ body {
 
 .path {
   fill: none;
-  stroke: #fff;
-  stroke-width: 2;
+  stroke: #ccc;
+  stroke-width: 5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 1000;
+  stroke-dasharray: 3000;
   stroke-dashoffset: 0;
   animation: draw-line 10s ease 0s 1 normal forwards running;
 }
 
 @keyframes draw-line {
   0% {
-    stroke-dashoffset: 1000;
+    stroke-dashoffset: 3000;
   }
   100% {
     stroke-dashoffset: 0;
