@@ -26,4 +26,4 @@ yarn-error.log*
 .env
 
 .vercel
-./src/trackData.json
+src/trackData.json
