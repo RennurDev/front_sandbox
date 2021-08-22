@@ -1,12 +1,6 @@
 import projectMercator from "../../lib/ProjectMercator";
 import "../../App.css";
 
-const styles = {
-  canvas: {
-    display: "block",
-  },
-};
-
 export const TrackSvg = (data, width, height) => {
   const projectedTrack = projectMercator(data, width, height); //本番環境設定
   //const projectedTrack = projectMercator(decodeTrack(data.data), width, height); //テスト時設定
@@ -27,7 +21,6 @@ export const TrackSvg = (data, width, height) => {
       width={width}
       height={height}
       xmlSpace="preserve"
-      style={styles.canvas}
     >
       <g>
         <path className="path" d={dataString} />

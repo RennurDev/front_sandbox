@@ -45,6 +45,7 @@ const styles = {
     backgroundColor: "transparent",
     fontSize: 16,
   },
+  svg: { textAlign: "center", marginTop: "-50%" },
 };
 
 export const Result = ({
@@ -62,11 +63,20 @@ export const Result = ({
 
   return (
     <div>
-      {TrackSvg(
-        decodeTrack(data.data),
-        window.innerWidth * 0.6,
-        window.innerHeight * 0.4
-      )}
+      <div style={styles.svg}>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid item xs={10}>
+            <div>
+              {TrackSvg(
+                decodeTrack(data.data),
+                window.innerWidth * 0.6,
+                window.innerHeight * 0.4
+              )}
+            </div>
+          </Grid>
+        </Grid>
+      </div>
       <div style={styles.text}>
         <Grid container spacing={2}>
           <Grid item xs={1} />

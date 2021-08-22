@@ -15,14 +15,9 @@ import { TrackSvg } from "../../result/TrackSvg";
 const styles = {
   root: {
     maxWidth: 360,
-    height: 500,
+    height: 140,
   },
-  media: {
-    position: "absolute",
-  },
-  actions: {
-    height: 30,
-  },
+  svg: { position: "absolute", left: 0, right: 0, textAlign: "center" },
 };
 
 export const Tracks = ({ tracks, map }) => {
@@ -69,18 +64,18 @@ export const Tracks = ({ tracks, map }) => {
   return (
     <div>
       <Grid container spacing={2} style={styles.root}>
-        <Grid style={styles.media} item xs={12}>
-          <div>{svg}</div>
-        </Grid>
         <Grid item xs={12}>
-          <Typography color="textSecondary">2021.5.1.sat</Typography>
-          <Typography align="center" variant="h5" component="h2">
+          <Typography align="center" color="textSecondary">
+            2021.5.1.sat
+          </Typography>
+          <Typography align="center" variant="h6" component="h6">
             DISTANCE 100.0km
           </Typography>
-          <Typography align="center" variant="h5" component="h2">
+          <Typography align="center" variant="h6" component="h6">
             ALTITUDE 300m
           </Typography>
         </Grid>
+        <div style={styles.svg}>{svg}</div>
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={6}>
