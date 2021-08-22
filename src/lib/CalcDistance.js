@@ -15,12 +15,4 @@ export default function CalcDistance(pos_prev, pos_current) {
   const M = (Rx * (1 - E ** 2)) / W ** 3;
 
   return Math.sqrt((dy * M) ** 2 + (dx * N * Math.cos(p)) ** 2);
-  //   6371 *
-  //   Math.acos(
-  //     Math.cos((lat_c / 180) * pi) *
-  //       Math.cos(((lng_p - lng_c) / 180) * pi) *
-  //       Math.cos((lat_p / 180) * pi) +
-  //       Math.sin((lat_c / 180) * pi) * Math.sin((lat_p / 180) * pi)
-  //   ) *
-  //   1000
 }
