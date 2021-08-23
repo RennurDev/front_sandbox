@@ -59,31 +59,35 @@ export const MapBox = ({
     showTrackLayer(map.current, "current_track");
     setDistance(0);
 
-    watchId.current = navigator.geolocation.watchPosition((position) => {
-      if (!prevPos) {
-        //初期化
-        prevPos = position;
-        setCurrentPos({
-          lng: position.coords.longitude,
-          lat: position.coords.latitude,
-        });
-        map.current.flyTo({
-          center: [position.coords.longitude, position.coords.latitude],
-          zoom: 15,
-        });
-      } else {
-        if (isValidPosition(prevPos, position)) {
+    watchId.current = navigator.geolocation.watchPosition(
+      (position) => {
+        if (!prevPos) {
+          //初期化
+          prevPos = position;
           setCurrentPos({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           });
-          console.log(dist);
-          dist += calcDistance(prevPos, position);
-          setDistance(dist);
-          prevPos = position;
+          map.current.flyTo({
+            center: [position.coords.longitude, position.coords.latitude],
+            zoom: 15,
+          });
+        } else {
+          if (isValidPosition(prevPos, position)) {
+            setCurrentPos({
+              lng: position.coords.longitude,
+              lat: position.coords.latitude,
+            });
+            console.log(dist);
+            dist += calcDistance(prevPos, position);
+            setDistance(dist);
+            prevPos = position;
+          }
         }
-      }
-    });
+      },
+      {},
+      { enableHighAccuracy: true }
+    );
   };
 
   const endRecordTrack = () => {
