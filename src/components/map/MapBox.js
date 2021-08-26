@@ -50,7 +50,7 @@ export const MapBox = ({
   const watchId = useRef();
   const mapContainer = useRef();
   const map = useRef();
-  const additional = useRef();
+  const addition = useRef();
 
   const beginRecordTrack = () => {
     let prevPos;
@@ -69,7 +69,7 @@ export const MapBox = ({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           });
-          additional.current = [
+          addition.current = [
             position.coords.altitude,
             position.coords.accuracy,
             position.coords.altitudeAccuracy,
@@ -87,8 +87,8 @@ export const MapBox = ({
               lat: position.coords.latitude,
             });
             console.log(dist);
-            additional.current = [
-              ...additional.current,
+            addition.current = [
+              ...addition.current,
               [
                 position.coords.altitude,
                 position.coords.accuracy,
@@ -123,7 +123,7 @@ export const MapBox = ({
       setTracks(new_tracks);
       const fulldata = [];
       for (let i = 0; i < posHistory.length; i++) {
-        fulldata.push(posHistory[i].concat(additional.current[i]));
+        fulldata.push(posHistory[i].concat(addition.current[i]));
       }
       postTrack(fulldata, currentUser.id);
 
