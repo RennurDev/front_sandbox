@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { RecordTrigger } from "./RecordTrigger";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -50,6 +50,7 @@ export const MapBox = ({
   const watchId = useRef();
   const mapContainer = useRef();
   const map = useRef();
+  const addition = useRef();
 
   const beginRecordTrack = () => {
     let prevPos;
@@ -68,6 +69,13 @@ export const MapBox = ({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           });
+          addition.current = [
+            position.coords.altitude,
+            position.coords.accuracy,
+            position.coords.altitudeAccuracy,
+            position.coords.speed,
+            position.timestamp,
+          ];
           map.current.flyTo({
             center: [position.coords.longitude, position.coords.latitude],
             zoom: 15,
@@ -79,6 +87,16 @@ export const MapBox = ({
               lat: position.coords.latitude,
             });
             console.log(dist);
+            addition.current = [
+              ...addition.current,
+              [
+                position.coords.altitude,
+                position.coords.accuracy,
+                position.coords.altitudeAccuracy,
+                position.coords.speed,
+                position.timestamp,
+              ],
+            ];
             dist += calcDistance(prevPos, position);
             setDistance(dist);
             prevPos = position;
@@ -103,7 +121,11 @@ export const MapBox = ({
         posHistory
       ); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       setTracks(new_tracks);
-      postTrack(posHistory, currentUser.id);
+      const fulldata = [];
+      for (let i = 0; i < posHistory.length; i++) {
+        fulldata.push(posHistory[i].concat(addition.current[i]));
+      }
+      postTrack(fulldata, currentUser.id);
 
       // alert("distance: " + distance);
     } else {
