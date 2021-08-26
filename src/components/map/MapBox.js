@@ -13,6 +13,7 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
+import GetAddition from "../../lib/GetAddition";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -55,6 +56,7 @@ export const MapBox = ({
   const beginRecordTrack = () => {
     let prevPos;
     let dist = 0;
+    addition.current = [];
     setPosHistory([]);
     hideAllTracks(map.current, tracks.length);
     showTrackLayer(map.current, "current_track");
@@ -69,13 +71,8 @@ export const MapBox = ({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           });
-          addition.current = [
-            position.coords.altitude,
-            position.coords.accuracy,
-            position.coords.altitudeAccuracy,
-            position.coords.speed,
-            position.timestamp,
-          ];
+          addition.current.push(GetAddition(position));
+          console.log(addition.current);
           map.current.flyTo({
             center: [position.coords.longitude, position.coords.latitude],
             zoom: 15,
@@ -86,17 +83,8 @@ export const MapBox = ({
               lng: position.coords.longitude,
               lat: position.coords.latitude,
             });
-            console.log(dist);
-            addition.current = [
-              ...addition.current,
-              [
-                position.coords.altitude,
-                position.coords.accuracy,
-                position.coords.altitudeAccuracy,
-                position.coords.speed,
-                position.timestamp,
-              ],
-            ];
+            addition.current.push(GetAddition(position));
+            console.log(addition.current);
             dist += calcDistance(prevPos, position);
             setDistance(dist);
             prevPos = position;
