@@ -30,6 +30,7 @@ export const App = () => {
   const [animationOverlap, setAnimationOverlap] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState();
   const [appState, setAppState] = useState("beginApp");
+  const [controlPointer, setControlPointer] = useState("");
   const [currentPos, setCurrentPos] = useState([{ lng: 0, lat: 0 }]);
   const [posHistory, setPosHistory] = useState([]);
 
@@ -53,8 +54,10 @@ export const App = () => {
   useEffect(() => {
     if (appState === "beginApp") {
       setAnimationOverlap("inset");
+      setControlPointer("");
     } else if (appState === "running") {
       setAnimationOverlap("scale-and-stop");
+      setControlPointer("disablePointerEvents");
     } else if (appState === "finishRunning") {
       setAnimationOverlap("iris-out");
     }
@@ -69,7 +72,7 @@ export const App = () => {
   }, [currentUser.id]);
 
   return (
-    <div className={styles.root}>
+    <div style={styles.root}>
       {isLoggedIn ? (
         <div>
           <WrapContent
@@ -82,23 +85,25 @@ export const App = () => {
             setAppState={setAppState}
           />
           <div className={animationOverlap}>
-            <ModalWindow />
-            <Header currentPlace={currentPlace} />
-            <MapBox
-              currentUser={currentUser}
-              tracks={tracks}
-              currentPos={currentPos}
-              distance={distance}
-              appState={appState}
-              posHistory={posHistory}
-              setTracks={setTracks}
-              setDistance={setDistance}
-              setCurrentPos={setCurrentPos}
-              setPosHistory={setPosHistory}
-              setMap={setMap}
-              setAppState={setAppState}
-            />
-            <Menu currentUser={currentUser} map={map} tracks={tracks} />
+            <div className={controlPointer}>
+              <ModalWindow />
+              <Header currentPlace={currentPlace} />
+              <MapBox
+                currentUser={currentUser}
+                tracks={tracks}
+                currentPos={currentPos}
+                distance={distance}
+                appState={appState}
+                posHistory={posHistory}
+                setTracks={setTracks}
+                setDistance={setDistance}
+                setCurrentPos={setCurrentPos}
+                setPosHistory={setPosHistory}
+                setMap={setMap}
+                setAppState={setAppState}
+              />
+              <Menu currentUser={currentUser} map={map} tracks={tracks} />
+            </div>
           </div>
         </div>
       ) : (

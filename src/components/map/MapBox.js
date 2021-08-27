@@ -72,11 +72,6 @@ export const MapBox = ({
             lat: position.coords.latitude,
           });
           addition.current.push(GetAddition(position));
-          console.log(addition.current);
-          map.current.flyTo({
-            center: [position.coords.longitude, position.coords.latitude],
-            zoom: 15,
-          });
         } else {
           if (isValidPosition(prevPos, position)) {
             setCurrentPos({
@@ -90,6 +85,11 @@ export const MapBox = ({
             prevPos = position;
           }
         }
+
+        map.current.flyTo({
+          center: [position.coords.longitude, position.coords.latitude],
+          zoom: 15,
+        });
       },
       () => {},
       { enableHighAccuracy: true }
