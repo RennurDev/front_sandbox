@@ -85,11 +85,6 @@ export const MapBox = ({
             prevPos = position;
           }
         }
-
-        map.current.flyTo({
-          center: [position.coords.longitude, position.coords.latitude],
-          zoom: 15,
-        });
       },
       () => {},
       { enableHighAccuracy: true }
@@ -186,6 +181,10 @@ export const MapBox = ({
   useEffect(() => {
     if (appState === "running") {
       setPosHistory([...posHistory, [currentPos.lng, currentPos.lat]]);
+      map.current.flyTo({
+        center: [currentPos.lng, currentPos.lat],
+        zoom: 15,
+      });
     }
   }, [currentPos]);
 
