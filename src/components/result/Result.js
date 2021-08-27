@@ -2,8 +2,8 @@ import { Grid } from "@material-ui/core";
 import "../../App.css";
 import { TrackSvg } from "./TrackSvg";
 /*  test時設定 */
-import data from "../../trackData.json";
-import decodeTrack from "../../lib/DecodeTrack";
+// import data from "../../trackData.json";
+// import decodeTrack from "../../lib/DecodeTrack";
 
 const styles = {
   text: {
@@ -69,7 +69,7 @@ export const Result = ({
           <Grid item xs={10}>
             <div>
               {TrackSvg(
-                decodeTrack(data.data),
+                posHistory,
                 window.innerWidth * 0.6,
                 window.innerHeight * 0.4
               )}
