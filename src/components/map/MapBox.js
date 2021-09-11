@@ -13,6 +13,7 @@ import showAllTracks from "../../lib/ShowAllTracks";
 import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
+import animateTrack from "../../lib/AnimateTrack";
 import GetAddition from "../../lib/GetAddition";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -125,6 +126,7 @@ export const MapBox = ({
         for (let i = 0; i < r.data.length; i++) {
           tracks.push(decodeTrack(r.data[i].data));
           addTrackLayer(map.current, "track_" + String(i), tracks[i]);
+          animateTrack(map.current, "anime_" + String(i), tracks[i]);
         }
         setTracks(tracks);
       }
