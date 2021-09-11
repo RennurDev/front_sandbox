@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { RecordTrigger } from "./RecordTrigger";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -14,6 +14,7 @@ import isValidPosition from "../../lib/IsValidPosition";
 import calcDistance from "../../lib/CalcDistance";
 import RequestAxios from "../../lib/RequestAxios";
 import animateTrack from "../../lib/AnimateTrack";
+import GetAddition from "../../lib/GetAddition";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -51,40 +52,44 @@ export const MapBox = ({
   const watchId = useRef();
   const mapContainer = useRef();
   const map = useRef();
+  const addition = useRef();
 
   const beginRecordTrack = () => {
     let prevPos;
     let dist = 0;
+    addition.current = [];
     setPosHistory([]);
     hideAllTracks(map.current, tracks.length);
     showTrackLayer(map.current, "current_track");
     setDistance(0);
 
-    watchId.current = navigator.geolocation.watchPosition((position) => {
-      if (!prevPos) {
-        //初期化
-        prevPos = position;
-        setCurrentPos({
-          lng: position.coords.longitude,
-          lat: position.coords.latitude,
-        });
-        map.current.flyTo({
-          center: [position.coords.longitude, position.coords.latitude],
-          zoom: 15,
-        });
-      } else {
-        if (isValidPosition(prevPos, position)) {
+    watchId.current = navigator.geolocation.watchPosition(
+      (position) => {
+        if (!prevPos) {
+          //初期化
+          prevPos = position;
           setCurrentPos({
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           });
-          console.log(dist);
-          dist += calcDistance(prevPos, position);
-          setDistance(dist);
-          prevPos = position;
+          addition.current.push(GetAddition(position));
+        } else {
+          if (isValidPosition(prevPos, position)) {
+            setCurrentPos({
+              lng: position.coords.longitude,
+              lat: position.coords.latitude,
+            });
+            addition.current.push(GetAddition(position));
+            console.log(addition.current);
+            dist += calcDistance(prevPos, position);
+            setDistance(dist);
+            prevPos = position;
+          }
         }
-      }
-    });
+      },
+      () => {},
+      { enableHighAccuracy: true }
+    );
   };
 
   const endRecordTrack = () => {
@@ -100,7 +105,13 @@ export const MapBox = ({
         posHistory
       ); //NOTE: track_layerに用いているidは0スタートなので,全トラック数-1を常に用いる
       setTracks(new_tracks);
-      postTrack(posHistory, currentUser.id);
+      const fulldata = [];
+      for (let i = 0; i < posHistory.length; i++) {
+        fulldata.push(posHistory[i].concat(addition.current[i]));
+      }
+      postTrack(fulldata, currentUser.id);
+
+      // alert("distance: " + distance);
     } else {
       // alert("not saved distance(<50): " + distance);
     }
@@ -172,6 +183,10 @@ export const MapBox = ({
   useEffect(() => {
     if (appState === "running") {
       setPosHistory([...posHistory, [currentPos.lng, currentPos.lat]]);
+      map.current.flyTo({
+        center: [currentPos.lng, currentPos.lat],
+        zoom: 15,
+      });
     }
   }, [currentPos]);
 
