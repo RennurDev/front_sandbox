@@ -19,7 +19,7 @@ import GetAddition from "../../lib/GetAddition";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 // アクセストークン
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KANATA_API_KEY;
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
@@ -147,7 +147,7 @@ export const MapBox = ({
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         center: [c_lng, c_lat],
-        style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
+        style: "mapbox://styles/kn5mr/cktinyajl364w18tcpuoqoasc", // mapのスタイル指定
         zoom: 12,
       });
       setMap(map.current);
