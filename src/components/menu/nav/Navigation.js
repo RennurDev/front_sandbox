@@ -1,8 +1,6 @@
 import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
-//Icons
-import PersonIcon from "@material-ui/icons/Person";
+//Icon
 import TimelineIcon from "@material-ui/icons/Timeline";
-import SettingsIcon from "@material-ui/icons/Settings";
 
 const styles = {
   root: {
@@ -20,19 +18,9 @@ export const Navigation = ({ selectedAct, setSelectedAct }) => {
       }}
     >
       <BottomNavigationAction
-        label="Profile"
-        value="Profile"
-        icon={<PersonIcon />}
-      />
-      <BottomNavigationAction
         label="Tracks"
         value="Tracks"
         icon={<TimelineIcon />}
-      />
-      <BottomNavigationAction
-        label="Setting"
-        value="Setting"
-        icon={<SettingsIcon />}
       />
     </BottomNavigation>
   );
