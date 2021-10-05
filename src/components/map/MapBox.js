@@ -19,7 +19,7 @@ import GetAddition from "../../lib/GetAddition";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 // アクセストークン
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KANATA_API_KEY;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
 const geolocate = new mapboxgl.GeolocateControl({
   positionOptions: {
