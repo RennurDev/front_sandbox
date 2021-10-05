@@ -123,14 +123,9 @@ export const Result = ({
         </Grid>
       </div>
       <div style={styles.bottom}>
-        <Grid container spacing={2}>
-          <Grid item xs={1} />
-          <Grid item xs={5}>
-            <p>SHARE</p>
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={5}>
-            <p>
+        <Grid container spacing={2} justify="flex-end" >
+          <Grid item xs={6}>
+            <p style="text-align:right"> 
               <input
                 type="submit"
                 value="FINISH >"
