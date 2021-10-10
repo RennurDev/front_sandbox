@@ -29,7 +29,7 @@ export const UserLocation = ({ currentPlace }) => {
         alignItems="center"
         justify="center"
       >
-        <Grid style={styles.grid} item xs={7}>
+        <Grid style={styles.grid} item xs={7} md={2}>
           <div style={styles.headerImg}>
             <img
               src={process.env.PUBLIC_URL + "/PetampAreaNameBackground-02.svg"}

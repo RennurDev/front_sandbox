@@ -26,7 +26,7 @@ export const RecordTrigger = ({ onClick }) => {
         alignItems="center"
         justify="center"
       >
-        <Grid item xs={4}>
+        <Grid item xs={4} md={1}>
           <Button style={styles.text} onClick={onClick}>
             <img
               style={styles.recordButtonImg}
