@@ -147,7 +147,7 @@ export const MapBox = ({
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         center: [c_lng, c_lat],
-        style: "mapbox/dark-v9", // mapのスタイル指定
+        style: "mapbox://styles/mapbox/dark-v9", // mapのスタイル指定
         zoom: 12,
       });
       setMap(map.current);

@@ -8,7 +8,9 @@ import {
   Typography,
   CardMedia,
 } from "@material-ui/core";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import drawTrack from "../../../lib/DrawTrack";
 
 const styles = {
@@ -87,7 +89,7 @@ export const Tracks = ({ tracks, map }) => {
             fullWidth={true}
             onClick={() => setTrackID(trackID - 1)}
           >
-            prev
+            <FontAwesomeIcon icon={faChevronLeft} />
           </Button>
         </Grid>
         <Grid item xs={6}>
@@ -96,7 +98,7 @@ export const Tracks = ({ tracks, map }) => {
             fullWidth={true}
             onClick={() => setTrackID(trackID + 1)}
           >
-            next
+            <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         </Grid>
       </Grid>
