@@ -15,12 +15,7 @@ const styles = {
 };
 
 export const App = () => {
-  const [currentUser, setCurrentUser] = useState([
-    {
-      id: "",
-      name: "",
-    },
-  ]);
+  const [currentUser] = useState({ id: 5 });
   const [currentPlace, setCurrentPlace] = useState();
   const [currentRegion, setCurrentRegion] = useState();
   const [tracks, setTracks] = useState([]);
