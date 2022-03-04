@@ -1,18 +1,11 @@
-import projectMercator from "../../lib/ProjectMercator";
 import { Grid } from "@material-ui/core";
 import "../../App.css";
-/*  testData: テスト時はこの場所にjsonファイルを追加すること */
-//import data from "./yamanotesen.json";
-//import decodeTrack from "../../lib/DecodeTrack";
+import { TrackSvg } from "./TrackSvg";
+/*  test時設定 */
+// import data from "../../trackData.json";
+// import decodeTrack from "../../lib/DecodeTrack";
 
 const styles = {
-  root: {
-    position: "absolute",
-  },
-  canvas: {
-    display: "block",
-    margin: "-80% auto 0",
-  },
   text: {
     fontFamily: "Kanit",
     color: "white",
@@ -52,6 +45,7 @@ const styles = {
     backgroundColor: "transparent",
     fontSize: 16,
   },
+  svg: { textAlign: "center", marginTop: "-50%" },
 };
 
 export const Result = ({
@@ -65,32 +59,24 @@ export const Result = ({
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  const projectedTrack = projectMercator(posHistory, 50);
-  //const projectedTrack = projectMercator(decodeTrack(data.data), 50);
-
-  let dataString = "M " + projectedTrack[0][0] + " " + projectedTrack[0][1];
-  for (let i = 1; i < projectedTrack.length; i++) {
-    dataString += " L " + projectedTrack[i][0] + " " + projectedTrack[i][1];
-  }
+  //WARN: 本番環境ではTrackSvgに渡すdataはposHistoryにすること.
 
   return (
     <div>
-      <svg
-        version="1.1"
-        id="track"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        x="0px"
-        y="0px"
-        width="80vw"
-        viewBox="-10 -10 65 120"
-        xmlSpace="preserve"
-        style={styles.canvas}
-      >
-        <g style={styles.container}>
-          <path className="path" d={dataString} />
-        </g>
-      </svg>
+      <div style={styles.svg}>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid item xs={10}>
+            <div>
+              {TrackSvg(
+                posHistory,
+                window.innerWidth * 0.6,
+                window.innerHeight * 0.4
+              )}
+            </div>
+          </Grid>
+        </Grid>
+      </div>
       <div style={styles.text}>
         <Grid container spacing={2}>
           <Grid item xs={1} />
